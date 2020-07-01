@@ -1,6 +1,6 @@
 /* Ethical ad publisher JavaScript client
  *
- * Loads placement form Ethical Ad decision API. Searches for elements with
+ * Loads placement from Ethical Ad decision API. Searches for elements with
  * `ethical-ad` data binding attributes and uses these attributes to query the
  * decision API.
  *
