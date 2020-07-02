@@ -23,6 +23,8 @@
  *     <div data-ea-publisher="foo" data-ea-type="text"></div>
  */
 
+import Promise from 'promise-polyfill';
+
 import "./styles.scss";
 
 const AD_DECISION_URL = "https://server.ethicalads.io/api/v1/decision/";
