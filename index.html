@@ -1,13 +1,184 @@
 <html>
   <head>
     <script async src="dist/ethicalads.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
+    />
+    <style>
+      .dark.column,
+      .dark.columns {
+        background: #333;
+        color: #f0f0f0;
+      }
+      .column,
+      .columns {
+        padding: 2rem;
+      }
+      .container {
+        margin-top: 5rem;
+      }
+    </style>
   </head>
   <body>
-    <h1>Test of Ethical Ads</h1>
+    <div class="container">
+      <h1>Ethical Ads</h1>
 
-    <div
-      data-ethical-ad-publisher="ethicaladsio"
-      data-ethical-ad-type="readthedocs-sidebar"
-    ></div>
+      <div data-ea-publisher="ethicaladsio" data-ea-type="text"></div>
+
+      <h2>Style tests</h2>
+
+      <span>
+        Switch ad display type:
+      </span>
+
+      <select id="display_change">
+        <option value="raise">Raised (default)</option>
+        <option value="flat">Flat</option>
+        <option value="bordered">Bordered</option>
+      </select>
+
+      <script>
+        const element = document.getElementById("display_change");
+        element.addEventListener("change", (event) => {
+          const nodes = document.querySelectorAll("[data-ea-type]");
+          const class_name = event.target.value;
+          for (const placement of nodes) {
+            if (!placement.hasAttribute("class_")) {
+              placement.setAttribute("class_", placement.className);
+            }
+            const old_classes = placement.getAttribute("class_");
+            placement.className = old_classes + " " + class_name;
+          }
+        });
+      </script>
+
+      <h3>Vertical image ad</h3>
+
+      <div class="row">
+        <div class="twelve columns">
+          <div class="light loaded" data-ea-type="image">
+            <div class="ea-content">
+              <a href="#" rel="nofollow" target="_blank"
+                ><img src="https://via.placeholder.com/240x180.png"
+              /></a>
+              <div class="ea-text">
+                <a href="#" rel="nofollow" target="_blank"
+                  ><strong>Ethical Ads</strong> A developer-focused,
+                  privacy-obsessed ad network from the fine folks at Read the
+                  Docs</a
+                >
+              </div>
+            </div>
+            <div class="ea-callout">
+              <a href="https://ethicalads.io/">Ads served ethically</a>
+            </div>
+          </div>
+        </div>
+        <div class="twelve dark columns">
+          <div class="dark loaded" data-ea-type="image">
+            <div class="ea-content">
+              <a href="#" rel="nofollow" target="_blank"
+                ><img src="https://via.placeholder.com/240x180.png"
+              /></a>
+              <div class="ea-text">
+                <a href="#" rel="nofollow" target="_blank"
+                  ><strong>Ethical Ads</strong> A developer-focused,
+                  privacy-obsessed ad network from the fine folks at Read the
+                  Docs</a
+                >
+              </div>
+            </div>
+            <div class="ea-callout">
+              <a href="https://ethicalads.io/">Ads served ethically</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h3>Horizontal image ad</h3>
+
+      <div class="row">
+        <div class="twelve columns">
+          <div class="horizontal light loaded" data-ea-type="image">
+            <div class="ea-content">
+              <a href="#" rel="nofollow" target="_blank"
+                ><img src="https://via.placeholder.com/240x180.png"
+              /></a>
+              <div class="ea-text">
+                <a href="#" rel="nofollow" target="_blank"
+                  ><strong>Ethical Ads</strong> A developer-focused,
+                  privacy-obsessed ad network from the fine folks at Read the
+                  Docs</a
+                >
+              </div>
+            </div>
+            <div class="ea-callout">
+              <a href="https://ethicalads.io/">Ads served ethically</a>
+            </div>
+          </div>
+        </div>
+        <div class="twelve dark columns">
+          <div class="horizontal dark loaded" data-ea-type="image">
+            <div class="ea-content">
+              <a href="#" rel="nofollow" target="_blank"
+                ><img src="https://via.placeholder.com/240x180.png"
+              /></a>
+              <div class="ea-text">
+                <a href="#" rel="nofollow" target="_blank"
+                  ><strong>Ethical Ads</strong> A developer-focused,
+                  privacy-obsessed ad network from the fine folks at Read the
+                  Docs</a
+                >
+              </div>
+            </div>
+            <div class="ea-callout">
+              <a href="https://ethicalads.io/">Ads served ethically</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h3>Text ad</h3>
+
+      <div class="row">
+        <div class="twelve columns">
+          <div class="light loaded" data-ea-type="text">
+            <div class="ea-content">
+              <div class="ea-text">
+                <a href="#" rel="nofollow" target="_blank"
+                  ><strong>Ethical Ads</strong> A developer-focused,
+                  privacy-obsessed ad network from the fine folks at Read the
+                  Docs</a
+                >
+              </div>
+            </div>
+            <div class="ea-callout">
+              <a href="https://ethicalads.io/">Ads served ethically</a>
+            </div>
+          </div>
+        </div>
+        <div class="twelve dark columns">
+          <div class="dark loaded" data-ea-type="text">
+            <div class="ea-content">
+              <div class="ea-text">
+                <a href="#" rel="nofollow" target="_blank"
+                  ><strong>Ethical Ads</strong> A developer-focused,
+                  privacy-obsessed ad network from the fine folks at Read the
+                  Docs</a
+                >
+              </div>
+            </div>
+            <div class="ea-callout">
+              <a href="https://ethicalads.io/">Ads served ethically</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

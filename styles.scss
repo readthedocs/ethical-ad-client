@@ -1,12 +1,202 @@
 /* Ad styles */
 
-[data-ethical-ad-publisher] {
-  background: #f0f0e0;
-  font-family: monospace;
-  margin: 1rem;
-  padding: 1rem;
+// Colors
+$color-background: rgba(0, 0, 0, 0.05);
+$color-background-dark: rgba(255, 255, 255, 0.05);
+$color-link: rgb(80, 80, 80);
+$color-link-callout: lighten($color-link, 10%);
+$color-link-dark: rgb(200, 200, 200);
+$color-link-callout-dark: darken($color-link-dark, 10%);
+
+// Common styles default to most themes
+[data-ea-publisher].loaded,
+[data-ea-type].loaded {
+  background: $color-background;
+  color: $color-link;
+
+  font-size: 14px;
+  line-height: 1.3em;
+
+  margin: 1em;
+  padding: 1em;
+
+  a {
+    text-decoration: none;
+  }
+
+  .ea-pixel {
+    display: none;
+  }
+
+  .ea-content {
+    a {
+      text-decoration: none;
+
+      &:link {
+        color: $color-link;
+      }
+      &:visited {
+        color: $color-link;
+      }
+      &:hover {
+        color: darken($color-link, 10%);
+      }
+      &:active {
+        color: darken($color-link, 10%);
+      }
+    }
+  }
+  .ea-callout {
+    a {
+      &:link {
+        color: $color-link-callout;
+      }
+      &:visited {
+        color: $color-link-callout;
+      }
+      &:hover {
+        color: darken($color-link-callout, 10%);
+      }
+      &:active {
+        color: darken($color-link-callout, 10%);
+      }
+    }
+  }
+
+  &.dark {
+    background: $color-background-dark;
+    color: $color-link-dark;
+
+    .ea-content {
+      a {
+        &:link {
+          color: $color-link-dark;
+        }
+        &:visited {
+          color: $color-link-dark;
+        }
+        &:hover {
+          color: darken($color-link-dark, 10%);
+        }
+        &:active {
+          color: darken($color-link-dark, 10%);
+        }
+      }
+    }
+
+    .ea-callout {
+      a {
+        &:link {
+          color: $color-link-callout-dark;
+        }
+        &:visited {
+          color: $color-link-callout-dark;
+        }
+        &:hover {
+          color: darken($color-link-callout-dark, 10%);
+        }
+        &:active {
+          color: darken($color-link-callout-dark, 10%);
+        }
+      }
+    }
+  }
 }
 
-[data-ethical-ad-type="readthedocs-sidebar"] {
-  background: red;
+// Themes
+@mixin theme-flat {
+  border: 0px;
+  border-radius: 3px;
+  box-shadow: none;
+}
+
+@mixin theme-raised {
+  border: 0px;
+  border-radius: 3px;
+  box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.1);
+}
+
+@mixin theme-bordered {
+  border: 1px solid opacify($color-background, 0.01);
+  border-radius: 3px;
+  box-shadow: none;
+  &.dark {
+    border: 1px solid opacify($color-background-dark, 0.01);
+  }
+}
+
+[data-ea-publisher].loaded,
+[data-ea-type].loaded {
+  @include theme-raised;
+
+  &.raised {
+    @include theme-raised;
+  }
+  &.bordered {
+    @include theme-bordered;
+  }
+  &.flat {
+    @include theme-flat;
+  }
+}
+
+// Explicit image ad type, or default image ad type not specified
+[data-ea-type="image"].loaded,
+[data-ea-publisher]:not([data-ea-type]).loaded {
+  max-width: 240px;
+
+  overflow: auto;
+
+  .ea-content {
+    text-align: center;
+
+    > a > img {
+      width: 120px;
+      height: 90px;
+      display: inline-block;
+    }
+
+    > .ea-text {
+      margin-top: 1em;
+      font-size: 1em;
+      text-align: center;
+    }
+  }
+
+  .ea-callout {
+    margin-top: 1em;
+    font-size: 0.8em;
+    font-style: italic;
+    text-align: center;
+  }
+
+  &.horizontal {
+    max-width: 480px;
+
+    .ea-content {
+      > a > img {
+        float: left;
+        margin-right: 1em;
+      }
+
+      .ea-text {
+        margin-top: 0em;
+        text-align: left;
+      }
+    }
+
+    .ea-callout {
+      text-align: right;
+    }
+  }
+}
+
+[data-ea-type="text"].loaded {
+  font-size: 14px;
+
+  .ea-callout {
+    font-size: 0.8em;
+    margin-top: 0.5em;
+    text-align: right;
+  }
 }
