@@ -97,22 +97,20 @@ export function load_placements() {
   // Find all elements matching required data binding attribute. We don't yet
   // support multiple placements on the ad-server. For now, this could result in
   // competing ad placements.
-  let elements = [];
-  const selector = "[" + ATTR_PREFIX + "publisher]";
-  if (SUPPORTS_MULTIPLE_PLACEMENTS) {
-    const node_list = document.querySelectorAll(selector);
-    elements = Array.prototype.slice.call(node_list);
-  } else {
-    const node = document.querySelector(selector);
-    elements = [node];
-  }
+  const node_list = document.querySelectorAll("[" + ATTR_PREFIX + "publisher]");
+  let elements = Array.prototype.slice.call(node_list);
 
   // Create main promise. Iterator `all()` Promise wil surround array of found
   // elements. If any of these elements have issues, this main promise will
   // reject.
   return new Promise((resolve, reject) => {
     if (elements.length === 0) {
-      return reject(new Error("No placements found."));
+      return reject(new Error("No ad placements found."));
+    } else if (!SUPPORTS_MULTIPLE_PLACEMENTS && elements.length > 1) {
+      console.error(
+        "Multiple ad placements are not supported, only using the first ad placement."
+      );
+      elements = elements.slice(0, 1);
     }
 
     Promise.all(
