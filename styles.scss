@@ -40,6 +40,13 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 [data-ea-publisher].loaded,
 [data-ea-type].loaded {
   font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  font-weight: normal;
+  font-style: normal;
+  leter-spacing: 0px;
+  vertical-align: baseline;
   line-height: 1.3em;
 
   a {
