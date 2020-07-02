@@ -31,6 +31,12 @@ const AD_DECISION_URL = "https://server.ethicalads.io/api/v1/decision/";
 const AD_CLIENT_VERSION = 1;
 const ATTR_PREFIX = "data-ea-";
 
+// Features
+//
+// Supports multiple ad placements? We don't support this yet, but the code is
+// here for future support.
+const SUPPORTS_MULTIPLE_PLACEMENTS = false;
+
 /* Placement object to query decision API and return an Element node
  *
  * @param publisher
@@ -88,16 +94,23 @@ export class Placement {
  * @returns Promise
  */
 export function load_placements() {
-  // Find all elements matching required data binding attribute
+  // Find all elements matching required data binding attribute. We don't yet
+  // support multiple placements on the ad-server. For now, this could result in
+  // competing ad placements.
   const node_list = document.querySelectorAll("[" + ATTR_PREFIX + "publisher]");
-  const elements = Array.prototype.slice.call(node_list);
+  let elements = Array.prototype.slice.call(node_list);
 
   // Create main promise. Iterator `all()` Promise wil surround array of found
   // elements. If any of these elements have issues, this main promise will
   // reject.
   return new Promise((resolve, reject) => {
     if (elements.length === 0) {
-      return reject(new Error("No placements found."));
+      return reject(new Error("No ad placements found."));
+    } else if (!SUPPORTS_MULTIPLE_PLACEMENTS && elements.length > 1) {
+      console.error(
+        "Multiple ad placements are not supported, only using the first ad placement."
+      );
+      elements = elements.slice(0, 1);
     }
 
     Promise.all(
