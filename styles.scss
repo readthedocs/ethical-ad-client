@@ -137,6 +137,8 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 // Explicit image ad type, or default image ad type not specified
 [data-ea-type="image"].loaded,
 [data-ea-publisher]:not([data-ea-type]).loaded {
+  display: inline-block;
+
   .ea-content {
     max-width: $width-image-vertical;
     overflow: auto;
@@ -191,6 +193,10 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 // Text ad type
 [data-ea-type="text"].loaded {
   font-size: 14px;
+
+  .ea-content {
+    text-align: left;
+  }
 
   .ea-callout {
     margin: 0.5em 1em 1em 1em;
