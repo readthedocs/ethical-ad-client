@@ -27,6 +27,7 @@ import "./styles.scss";
 
 const AD_DECISION_URL = "https://server.ethicalads.io/api/v1/decision/";
 const AD_CLIENT_VERSION = 1;
+const ATTR_PREFIX = "data-ea-";
 
 /* Placement object to query decision API and return an Element node
  *
@@ -86,7 +87,7 @@ export class Placement {
  */
 export function load_placements() {
   // Find all elements matching required data binding attribute
-  const node_list = document.querySelectorAll("[data-ea-publisher]");
+  const node_list = document.querySelectorAll("[" + ATTR_PREFIX + "publisher]");
   const elements = Array.prototype.slice.call(node_list);
 
   // Create main promise. Iterator `all()` Promise wil surround array of found
@@ -100,11 +101,11 @@ export function load_placements() {
     Promise.all(
       elements.map((element) => {
         // Get attributes from DOM node
-        const publisher = element.getAttribute("data-ea-publisher");
-        let ad_type = element.getAttribute("data-ea-type");
+        const publisher = element.getAttribute(ATTR_PREFIX + "publisher");
+        let ad_type = element.getAttribute(ATTR_PREFIX + "type");
         if (!ad_type) {
           ad_type = "image";
-          element.setAttribute("data-ea-type", "image");
+          element.setAttribute(ATTR_PREFIX + "type", "image");
         }
 
         // Add version to ad type to verison the HTML return
