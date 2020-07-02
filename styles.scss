@@ -1,24 +1,22 @@
 /* Ad styles */
 
+// Sizes
+$width-image-horizontal: 320px;
+$width-image-vertical: 180px;
+
 // Colors
-$color-background: rgba(0, 0, 0, 0.05);
+$color-background: rgba(0, 0, 0, 0.03);
 $color-background-dark: rgba(255, 255, 255, 0.05);
 $color-link: rgb(80, 80, 80);
 $color-link-callout: lighten($color-link, 10%);
-$color-link-dark: rgb(200, 200, 200);
+$color-link-dark: rgb(220, 220, 220);
 $color-link-callout-dark: darken($color-link-dark, 10%);
 
 // Common styles default to most themes
 [data-ea-publisher].loaded,
 [data-ea-type].loaded {
-  background: $color-background;
-  color: $color-link;
-
   font-size: 14px;
   line-height: 1.3em;
-
-  margin: 1em;
-  padding: 1em;
 
   a {
     text-decoration: none;
@@ -29,9 +27,13 @@ $color-link-callout-dark: darken($color-link-dark, 10%);
   }
 
   .ea-content {
-    a {
-      text-decoration: none;
+    margin: 1em 1em 0.5em 1em;
+    padding: 1em;
 
+    background: $color-background;
+    color: $color-link;
+
+    a {
       &:link {
         color: $color-link;
       }
@@ -48,6 +50,8 @@ $color-link-callout-dark: darken($color-link-dark, 10%);
   }
   .ea-callout {
     a {
+      font-size: 0.8em;
+
       &:link {
         color: $color-link-callout;
       }
@@ -64,10 +68,10 @@ $color-link-callout-dark: darken($color-link-dark, 10%);
   }
 
   &.dark {
-    background: $color-background-dark;
-    color: $color-link-dark;
-
     .ea-content {
+      background: $color-background-dark;
+      color: $color-link-dark;
+
       a {
         &:link {
           color: $color-link-dark;
@@ -76,10 +80,10 @@ $color-link-callout-dark: darken($color-link-dark, 10%);
           color: $color-link-dark;
         }
         &:hover {
-          color: darken($color-link-dark, 10%);
+          color: lighten($color-link-dark, 10%);
         }
         &:active {
-          color: darken($color-link-dark, 10%);
+          color: lighten($color-link-dark, 10%);
         }
       }
     }
@@ -93,10 +97,10 @@ $color-link-callout-dark: darken($color-link-dark, 10%);
           color: $color-link-callout-dark;
         }
         &:hover {
-          color: darken($color-link-callout-dark, 10%);
+          color: lighten($color-link-callout-dark, 10%);
         }
         &:active {
-          color: darken($color-link-callout-dark, 10%);
+          color: lighten($color-link-callout-dark, 10%);
         }
       }
     }
@@ -105,23 +109,29 @@ $color-link-callout-dark: darken($color-link-dark, 10%);
 
 // Themes
 @mixin theme-flat {
-  border: 0px;
-  border-radius: 3px;
-  box-shadow: none;
+  .ea-content {
+    border: 0px;
+    border-radius: 3px;
+    box-shadow: none;
+  }
 }
 
 @mixin theme-raised {
-  border: 0px;
-  border-radius: 3px;
-  box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.1);
+  .ea-content {
+    border: 0px;
+    border-radius: 3px;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.15);
+  }
 }
 
 @mixin theme-bordered {
-  border: 1px solid opacify($color-background, 0.01);
-  border-radius: 3px;
-  box-shadow: none;
-  &.dark {
-    border: 1px solid opacify($color-background-dark, 0.01);
+  .ea-content {
+    border: 1px solid opacify($color-background, 0.01);
+    border-radius: 3px;
+    box-shadow: none;
+  }
+  &.dark .ea-content {
+    border: 1px solid opacify($color-background-dark, 0.02);
   }
 }
 
@@ -143,11 +153,10 @@ $color-link-callout-dark: darken($color-link-dark, 10%);
 // Explicit image ad type, or default image ad type not specified
 [data-ea-type="image"].loaded,
 [data-ea-publisher]:not([data-ea-type]).loaded {
-  max-width: 240px;
-
-  overflow: auto;
-
   .ea-content {
+    max-width: $width-image-vertical;
+    overflow: auto;
+
     text-align: center;
 
     > a > img {
@@ -164,16 +173,18 @@ $color-link-callout-dark: darken($color-link-dark, 10%);
   }
 
   .ea-callout {
-    margin-top: 1em;
-    font-size: 0.8em;
+    max-width: $width-image-vertical;
+    margin: 0em 1em 1em 1em;
+    padding-left: 1em;
+    padding-right: 1em;
     font-style: italic;
-    text-align: center;
+    text-align: right;
   }
 
   &.horizontal {
-    max-width: 480px;
-
     .ea-content {
+      max-width: $width-image-horizontal;
+
       > a > img {
         float: left;
         margin-right: 1em;
@@ -182,21 +193,26 @@ $color-link-callout-dark: darken($color-link-dark, 10%);
       .ea-text {
         margin-top: 0em;
         text-align: left;
+        overflow: auto;
       }
     }
 
     .ea-callout {
+      max-width: $width-image-horizontal;
       text-align: right;
     }
   }
 }
 
+// Text ad type
 [data-ea-type="text"].loaded {
   font-size: 14px;
 
   .ea-callout {
-    font-size: 0.8em;
-    margin-top: 0.5em;
+    margin: 0.5em 1em 1em 1em;
+    padding-left: 1em;
+    padding-right: 1em;
     text-align: right;
+    font-style: italic;
   }
 }
