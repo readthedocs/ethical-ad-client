@@ -9,8 +9,32 @@ $color-background: rgba(0, 0, 0, 0.03);
 $color-background-dark: rgba(255, 255, 255, 0.05);
 $color-link: rgb(80, 80, 80);
 $color-link-callout: lighten($color-link, 10%);
+$color-link-bold: #088cdb;
 $color-link-dark: rgb(220, 220, 220);
 $color-link-callout-dark: darken($color-link-dark, 10%);
+$color-link-bold-dark: lighten($color-link-bold, 20%);
+
+// Utilities, mostly to reduce file size
+@mixin links($color-primary, $color-secondary, $color-highlight) {
+  a {
+    &:link {
+      color: $color-primary;
+    }
+    &:visited {
+      color: $color-primary;
+    }
+    &:hover {
+      color: $color-secondary;
+    }
+    &:active {
+      color: $color-secondary;
+    }
+    strong,
+    b {
+      color: $color-highlight;
+    }
+  }
+}
 
 // Common styles default to most themes
 [data-ea-publisher].loaded,
@@ -33,37 +57,16 @@ $color-link-callout-dark: darken($color-link-dark, 10%);
     background: $color-background;
     color: $color-link;
 
-    a {
-      &:link {
-        color: $color-link;
-      }
-      &:visited {
-        color: $color-link;
-      }
-      &:hover {
-        color: darken($color-link, 10%);
-      }
-      &:active {
-        color: darken($color-link, 10%);
-      }
-    }
+    @include links($color-link, darken($color-link, 10%), $color-link-bold);
   }
   .ea-callout {
+    @include links(
+      $color-link-callout,
+      darken($color-link-callout, 10%),
+      $color-link-bold
+    );
     a {
       font-size: 0.8em;
-
-      &:link {
-        color: $color-link-callout;
-      }
-      &:visited {
-        color: $color-link-callout;
-      }
-      &:hover {
-        color: darken($color-link-callout, 10%);
-      }
-      &:active {
-        color: darken($color-link-callout, 10%);
-      }
     }
   }
 
@@ -71,38 +74,19 @@ $color-link-callout-dark: darken($color-link-dark, 10%);
     .ea-content {
       background: $color-background-dark;
       color: $color-link-dark;
-
-      a {
-        &:link {
-          color: $color-link-dark;
-        }
-        &:visited {
-          color: $color-link-dark;
-        }
-        &:hover {
-          color: lighten($color-link-dark, 10%);
-        }
-        &:active {
-          color: lighten($color-link-dark, 10%);
-        }
-      }
+      @include links(
+        $color-link-dark,
+        lighten($color-link-dark, 10%),
+        $color-link-bold-dark
+      );
     }
 
     .ea-callout {
-      a {
-        &:link {
-          color: $color-link-callout-dark;
-        }
-        &:visited {
-          color: $color-link-callout-dark;
-        }
-        &:hover {
-          color: lighten($color-link-callout-dark, 10%);
-        }
-        &:active {
-          color: lighten($color-link-callout-dark, 10%);
-        }
-      }
+      @include links(
+        $color-link-callout-dark,
+        lighten($color-link-callout-dark, 10%),
+        $color-link-bold-dark
+      );
     }
   }
 }
