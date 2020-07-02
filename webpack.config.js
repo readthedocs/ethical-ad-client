@@ -17,7 +17,7 @@ module.exports = (env, argv) => {
       rules: [
         {
           test: /\.scss$/,
-          use: ["to-string-loader", "css-loader", "sass-loader"],
+          use: ["style-loader", "css-loader", "sass-loader"],
         },
         {
           test: /\.js$/,

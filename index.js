@@ -13,18 +13,21 @@
  * id and the place type. All of this is determined by the server and this
  * client so far only renders the API return HTML.
  *
- * This can be loaded async. CSS styles are preloaded via webpack
- * `to-string-loader`.
+ * This can be loaded async. CSS styles are preloaded via webpack `style-loader`.
+ * There is some potential for problems if CSP rules disallow inline
+ * stylesheets, but webpack does allow for a hardcoded nonce.
  *
  * Usage:
  *
  *     <script async src="ethicalads.min.js"></script>
- *     <div data-ethical-ad-publisher="foo" data-ethical-ad-type="text"></div>
+ *     <div data-ea-publisher="foo" data-ea-type="text"></div>
  */
 
-import * as ad_css from "./styles.scss";
+import "./styles.scss";
 
 const AD_DECISION_URL = "https://server.ethicalads.io/api/v1/decision/";
+const AD_CLIENT_VERSION = 1;
+const ATTR_PREFIX = "data-ea-";
 
 /* Placement object to query decision API and return an Element node
  *
@@ -32,7 +35,7 @@ const AD_DECISION_URL = "https://server.ethicalads.io/api/v1/decision/";
  * @param ad_type
  */
 export class Placement {
-  constructor(publisher, ad_type = "readthedocs-sidebar") {
+  constructor(publisher, ad_type = "image") {
     this.publisher = publisher;
     this.ad_type = ad_type;
   }
@@ -69,16 +72,9 @@ export class Placement {
       script.addEventListener("error", reject);
       document.getElementsByTagName("head")[0].appendChild(script);
     }).then((response) => {
-      const element = document.createElement("div", { id: this.id });
+      const element = document.createElement("div");
       element.innerHTML = response.html;
-
-      var impression_view = document.createElement("img", {
-        src: response.view_url,
-        style: "display: none;",
-      });
-      element.appendChild(impression_view);
-
-      return element;
+      return element.firstChild;
     });
 
     return promise;
@@ -91,7 +87,7 @@ export class Placement {
  */
 export function load_placements() {
   // Find all elements matching required data binding attribute
-  const node_list = document.querySelectorAll("[data-ethical-ad-publisher]");
+  const node_list = document.querySelectorAll("[" + ATTR_PREFIX + "publisher]");
   const elements = Array.prototype.slice.call(node_list);
 
   // Create main promise. Iterator `all()` Promise wil surround array of found
@@ -102,21 +98,25 @@ export function load_placements() {
       return reject(new Error("No placements found."));
     }
 
-    // Preload CSS from webpack string instead of a secondary request
-    const styles = document.createElement("style");
-    styles.innerHTML = ad_css;
-    document.getElementsByTagName("head")[0].appendChild(styles);
-
     Promise.all(
       elements.map((element) => {
         // Get attributes from DOM node
-        const publisher = element.getAttribute("data-ethical-ad-publisher");
-        const ad_type =
-          element.getAttribute("data-ethical-ad-type") || "readthedocs-sidebar";
+        const publisher = element.getAttribute(ATTR_PREFIX + "publisher");
+        let ad_type = element.getAttribute(ATTR_PREFIX + "type");
+        if (!ad_type) {
+          ad_type = "image";
+          element.setAttribute(ATTR_PREFIX + "type", "image");
+        }
+
+        // Add version to ad type to verison the HTML return
+        ad_type += "-v" + AD_CLIENT_VERSION;
 
         const placement = new Placement(publisher, ad_type);
         return placement.load().then((element_inner) => {
           element.appendChild(element_inner);
+          let classes = element.className || "";
+          classes += " loaded";
+          element.className += classes.trim();
         });
       })
     )
