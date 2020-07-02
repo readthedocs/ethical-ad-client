@@ -23,7 +23,7 @@
  *     <div data-ea-publisher="foo" data-ea-type="text"></div>
  */
 
-import Promise from 'promise-polyfill';
+import Promise from "promise-polyfill";
 
 import "./styles.scss";
 
@@ -71,12 +71,12 @@ export class Placement {
       script.src = url;
       script.type = "text/javascript";
       script.async = true;
-      script.addEventListener("error", reject);
+      script.addEventListener("error", (err) => {
+        // There was a problem loading this request, likely this was blocked by
+        // an ad blocker. We'll resolve with an empty response.
+        resolve({});
+      });
       document.getElementsByTagName("head")[0].appendChild(script);
-    }).then((response) => {
-      const element = document.createElement("div");
-      element.innerHTML = response.html;
-      return element.firstChild;
     });
 
     return promise;
@@ -114,11 +114,26 @@ export function load_placements() {
         ad_type += "-v" + AD_CLIENT_VERSION;
 
         const placement = new Placement(publisher, ad_type);
-        return placement.load().then((element_inner) => {
-          element.appendChild(element_inner);
-          let classes = element.className || "";
-          classes += " loaded";
-          element.className += classes.trim();
+        return placement.load().then((response) => {
+          // This promise expects an API response. The response can be empty, in
+          // which case we won't load a placement, but will alter the display.
+          if (response.hasOwnProperty("html")) {
+            // Convert HTML string to DOM node
+            const node_convert = document.createElement("div");
+            node_convert.innerHTML = response.html;
+            element.appendChild(node_convert.firstChild);
+            let classes = element.className || "";
+            classes += " loaded";
+            element.className += classes.trim();
+          } else {
+            // If we don't have an `response.html`, it's most likely because the
+            // request was blocked. We don't use this currently, but could do
+            // something significant with display here later.
+            element.setAttribute(
+              ATTR_PREFIX + "error",
+              "Ad decision request blocked"
+            );
+          }
         });
       })
     )
