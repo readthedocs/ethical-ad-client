@@ -1,1 +1,5 @@
 /node_modules/
+/docs/build/
+/docs/_build/
+.ropeproject/
+*.pyc

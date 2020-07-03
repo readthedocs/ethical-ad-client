@@ -1,0 +1,30 @@
+.container {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.container.row {
+    display: flex;
+    margin-bottom: 1em;
+}
+
+.container.dark {
+    background: #443;
+}
+
+.container.row .container.column {
+    text-align: center;
+    flex: 1;
+}
+
+.container.row .container.left {
+    flex: 3;
+}
+.container.row .container.right {
+    flex: 2;
+    text-align: right;
+}
+
+.container.row .container.column p:first-child {
+    margin-bottom: 0.25em;
+}

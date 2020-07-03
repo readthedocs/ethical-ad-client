@@ -1,7 +1,7 @@
 {
   "name": "ethical-ad-client",
   "version": "1.0.0",
-  "description": "Ethical Ads client",
+  "description": "EthicalAds client",
   "main": "dist/client.js",
   "scripts": {
     "build": "npm ci && npm run build-min && npm run build-unmin",
