@@ -39,20 +39,83 @@ const SUPPORTS_MULTIPLE_PLACEMENTS = false;
 
 /* Placement object to query decision API and return an Element node
  *
- * @param publisher
- * @param ad_type
+ * @param {string} publisher - Publisher ID
+ * @param {string} ad_type - Placement ad type id
+ * @param {Element} target - Target element
  */
 export class Placement {
-  constructor(publisher, ad_type = "image") {
+  constructor(publisher, ad_type = "image", target) {
     this.publisher = publisher;
     this.ad_type = ad_type;
+    this.target = target;
   }
 
-  /* Load placement from decision API and create DOM element
+  /* Create a placement from an element
    *
-   * @returns Promise
+   * @static
+   * @param {Element} element - Load placement and append to this Element
+   * @returns {Placement}
+   */
+  static from_element(element) {
+    // Get attributes from DOM node
+    const publisher = element.getAttribute(ATTR_PREFIX + "publisher");
+    let ad_type = element.getAttribute(ATTR_PREFIX + "type");
+    if (!ad_type) {
+      ad_type = "image";
+      element.setAttribute(ATTR_PREFIX + "type", "image");
+    }
+
+    // Add version to ad type to verison the HTML return
+    ad_type += "-v" + AD_CLIENT_VERSION;
+
+    return new Placement(publisher, ad_type, element);
+  }
+
+  /* Transforms target element into a placement
+   *
+   * This method organizes all of the operations to transform the placement
+   * configuration wrapper `div` into an ad placement -- including starting the
+   * API transaction, displaying the ad element, and eventually handling the
+   * viewport detection.
+   *
+   * @returns {Promise}
    */
   load() {
+    return this.fetch().then((element) => {
+      // If element is not defined, it's likely the underlying API call was
+      // blocked by an ad blocker. Don't show an error in this case, but tuck
+      // away an error in the DOM for debug purposes.
+      if (element === undefined) {
+        this.target.setAttribute(
+          ATTR_PREFIX + "error",
+          "Ad decision request blocked"
+        );
+        return;
+      }
+
+      // Add `loaded` class, signifying that the CSS styles should finally be
+      // applied to the target element.
+      let classes = this.target.className || "";
+      classes += " loaded";
+      this.target.className += classes.trim();
+
+      // Make this element the only child element of the target element
+      while (this.target.firstChild) {
+        this.target.removeChild(this.target.firstChild);
+      }
+      this.target.appendChild(element);
+    });
+    // To then chain our viewport detection, have a method that returns a
+    // promise and a pattern like the following:
+    //}).then(this.wait_for_viewport());
+  }
+
+  /* Get placement data from decision API
+   *
+   * @returns {Promise<Element>} Resolves with an Element converted from an HTML
+   * string from API response. Can also be null, indicating a noop action.
+   */
+  fetch() {
     const id = "ad_" + Date.now();
     const url_params = new URLSearchParams({
       publisher: this.publisher,
@@ -62,10 +125,13 @@ export class Placement {
       format: "jsonp",
     });
     const url = new URL(AD_DECISION_URL + "?" + url_params.toString());
-    const promise = new Promise((resolve, reject) => {
+
+    return new Promise((resolve, reject) => {
       window[id] = (response) => {
-        if (response && response.id) {
-          return resolve(response);
+        if (response && response.html) {
+          const node_convert = document.createElement("div");
+          node_convert.innerHTML = response.html;
+          return resolve(node_convert.firstChild);
         } else {
           return reject(
             new Error("Placement is configured with invalid parameters.")
@@ -79,19 +145,18 @@ export class Placement {
       script.async = true;
       script.addEventListener("error", (err) => {
         // There was a problem loading this request, likely this was blocked by
-        // an ad blocker. We'll resolve with an empty response.
-        resolve({});
+        // an ad blocker. We'll resolve with an empty response instead of
+        // throwing an error.
+        resolve();
       });
       document.getElementsByTagName("head")[0].appendChild(script);
     });
-
-    return promise;
   }
 }
 
 /* Find all placement DOM elements and hot load HTML as child nodes
  *
- * @returns Promise
+ * @returns {Promise<[Placement]>} Resolves to a list of Placement instances
  */
 export function load_placements() {
   // Find all elements matching required data binding attribute. We don't yet
@@ -103,60 +168,25 @@ export function load_placements() {
   // Create main promise. Iterator `all()` Promise wil surround array of found
   // elements. If any of these elements have issues, this main promise will
   // reject.
-  return new Promise((resolve, reject) => {
-    if (elements.length === 0) {
-      return reject(new Error("No ad placements found."));
-    } else if (!SUPPORTS_MULTIPLE_PLACEMENTS && elements.length > 1) {
-      console.error(
-        "Multiple ad placements are not supported, only using the first ad placement."
-      );
-      elements = elements.slice(0, 1);
-    }
+  if (elements.length === 0) {
+    throw new Error("No ad placements found.");
+  } else if (!SUPPORTS_MULTIPLE_PLACEMENTS && elements.length > 1) {
+    console.error(
+      "Multiple ad placements are not supported, only using the first ad placement."
+    );
+    elements = elements.slice(0, 1);
+  }
 
-    Promise.all(
-      elements.map((element) => {
-        // Get attributes from DOM node
-        const publisher = element.getAttribute(ATTR_PREFIX + "publisher");
-        let ad_type = element.getAttribute(ATTR_PREFIX + "type");
-        if (!ad_type) {
-          ad_type = "image";
-          element.setAttribute(ATTR_PREFIX + "type", "image");
-        }
-
-        // Add version to ad type to verison the HTML return
-        ad_type += "-v" + AD_CLIENT_VERSION;
-
-        const placement = new Placement(publisher, ad_type);
-        return placement.load().then((response) => {
-          // This promise expects an API response. The response can be empty, in
-          // which case we won't load a placement, but will alter the display.
-          if (response.hasOwnProperty("html")) {
-            // Convert HTML string to DOM node
-            const node_convert = document.createElement("div");
-            node_convert.innerHTML = response.html;
-            element.appendChild(node_convert.firstChild);
-            let classes = element.className || "";
-            classes += " loaded";
-            element.className += classes.trim();
-          } else {
-            // If we don't have an `response.html`, it's most likely because the
-            // request was blocked. We don't use this currently, but could do
-            // something significant with display here later.
-            element.setAttribute(
-              ATTR_PREFIX + "error",
-              "Ad decision request blocked"
-            );
-          }
-        });
-      })
-    )
-      .then((placements) => {
-        resolve();
-      })
-      .catch((err) => {
-        reject(err);
+  return Promise.all(
+    elements.map((element) => {
+      const placement = Placement.from_element(element);
+      return placement.load().then(() => {
+        // This promise function is used just to resolve to a list of Placement
+        // instances
+        return placement;
       });
-  });
+    })
+  );
 }
 
 /* If importing this as a module, do not automatically process DOM and fetch the
@@ -189,8 +219,12 @@ if (require.main !== module) {
   });
 
   wait_dom.then(() => {
-    load_placements().catch((err) => {
-      console.error(err);
-    });
+    load_placements()
+      .then((placements) => {
+        // Any post processing on placement list can go here
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   });
 }
