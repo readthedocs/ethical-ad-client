@@ -144,7 +144,7 @@ image placements are the default ad type. To use the horizontal variant, use
 
 .. code:: html
 
-    <div data-ea-publisher="..." data-ad-type="image"></div>
+    <div data-ea-publisher="..." data-ea-type="image"></div>
 
 
 .. container:: row
@@ -168,7 +168,7 @@ This variant can be used with the ``horizontal`` theme variant class:
 
 .. code:: html
 
-    <div class="horizontal" data-ea-publisher="..." data-ad-type="image"></div>
+    <div class="horizontal" data-ea-publisher="..." data-ea-type="image"></div>
 
 .. container:: row
 
@@ -187,11 +187,11 @@ This variant can be used with the ``horizontal`` theme variant class:
 Text placement
 --------------
 
-Text placements can be defined using ``data-ad-type="text"``:
+Text placements can be defined using ``data-ea-type="text"``:
 
 .. code:: html
 
-    <div data-ea-publisher="..." data-ad-type="text"></div>
+    <div data-ea-publisher="..." data-ea-type="text"></div>
 
 .. example::
     :ad_type: text
