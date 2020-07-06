@@ -96,7 +96,7 @@ The following themes are available on all ad placement types:
 
         .. code:: html
 
-            <div class="borderd" data-ea-publisher="..."></div>
+            <div class="bordered" data-ea-publisher="..."></div>
 
     .. container:: right
 
