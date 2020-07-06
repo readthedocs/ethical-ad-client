@@ -238,15 +238,13 @@ Handling errors
 If there are any errors while loading EthicalAds ad placements, the promise
 ``ethicalads.wait`` will eventually resolve to an empty array.
 
-.. code:: html
+.. code:: javascript
 
-    <script>
     ethicalads.wait.catch((placements) => {
       if (!placements.length) {
         console.log('Ads were not able to load');
       }
     });
-    </script>
 
 Becoming a Publisher
 ====================
