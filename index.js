@@ -98,6 +98,11 @@ export class Placement {
       let classes = this.target.className || "";
       classes += " loaded";
       this.target.className += classes.trim();
+
+      // Make this element the only child element of the target element
+      while (this.target.firstChild) {
+        this.target.removeChild(this.target.firstChild);
+      }
       this.target.appendChild(element);
     });
     // To then chain our viewport detection, have a method that returns a
