@@ -28,15 +28,16 @@
       <div data-ea-publisher="ethicaladsio" data-ea-type="text" id="ad"></div>
 
       <script>
-var fn = (placements) => {
-  if (!placements.length) {
-    var elem = document.querySelector('#ad');
-    elem.innerHTML = "Requests to ethicalads.io are blocked. Check your ad blocker";
-  }
-};
-setTimeout(() => {
-  ethicalads.wait.then(fn);
-}, 1000);
+        var fn = (placements) => {
+          if (!placements.length) {
+            var elem = document.querySelector("#ad");
+            elem.innerHTML =
+              "Requests to ethicalads.io are blocked. Check your ad blocker";
+          }
+        };
+        setTimeout(() => {
+          ethicalads.wait.then(fn);
+        }, 1000);
       </script>
 
       <h2>Style tests</h2>

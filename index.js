@@ -37,7 +37,6 @@ const ATTR_PREFIX = "data-ea-";
 // here for future support.
 const SUPPORTS_MULTIPLE_PLACEMENTS = false;
 
-
 /* Placement object to query decision API and return an Element node
  *
  * @param {string} publisher - Publisher ID
@@ -84,7 +83,7 @@ export class Placement {
   load() {
     return this.fetch().then((element) => {
       if (element === undefined) {
-        throw new EthicalAdsWarning('Ad decision request blocked');
+        throw new EthicalAdsWarning("Ad decision request blocked");
       }
 
       // Add `loaded` class, signifying that the CSS styles should finally be
@@ -182,7 +181,7 @@ export function load_placements() {
 }
 
 // An error class that we will not surface to clients normally.
-class EthicalAdsWarning extends Error {};
+class EthicalAdsWarning extends Error {}
 
 /* Wrapping Promise to allow for handling of errors by user
  *
@@ -241,20 +240,19 @@ if (require.main !== module) {
   wait = new Promise((resolve) => {
     wait_dom.then(() => {
       load_placements()
-      .then((placements) => {
-        resolve(placements);
-      })
-      .catch((err) => {
-        resolve([]);
-        if (err instanceof Error) {
-          if (err instanceof EthicalAdsWarning && !is_debug) {
-            // Skip reporting these warnings for now, unless debugging.
+        .then((placements) => {
+          resolve(placements);
+        })
+        .catch((err) => {
+          resolve([]);
+          if (err instanceof Error) {
+            if (err instanceof EthicalAdsWarning && !is_debug) {
+              // Skip reporting these warnings for now, unless debugging.
+            } else {
+              console.error(err.message);
+            }
           }
-          else {
-            console.error(err.message);
-          }
-        }
-      });
+        });
     });
   });
 }
