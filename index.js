@@ -82,15 +82,8 @@ export class Placement {
    */
   load() {
     return this.fetch().then((element) => {
-      // If element is not defined, it's likely the underlying API call was
-      // blocked by an ad blocker. Don't show an error in this case, but tuck
-      // away an error in the DOM for debug purposes.
       if (element === undefined) {
-        this.target.setAttribute(
-          ATTR_PREFIX + "error",
-          "Ad decision request blocked"
-        );
-        return;
+        throw new EthicalAdsWarning("Ad decision request blocked");
       }
 
       // Add `loaded` class, signifying that the CSS styles should finally be
@@ -104,6 +97,8 @@ export class Placement {
         this.target.removeChild(this.target.firstChild);
       }
       this.target.appendChild(element);
+
+      return this;
     });
     // To then chain our viewport detection, have a method that returns a
     // promise and a pattern like the following:
@@ -147,7 +142,7 @@ export class Placement {
         // There was a problem loading this request, likely this was blocked by
         // an ad blocker. We'll resolve with an empty response instead of
         // throwing an error.
-        resolve();
+        return resolve();
       });
       document.getElementsByTagName("head")[0].appendChild(script);
     });
@@ -180,14 +175,36 @@ export function load_placements() {
   return Promise.all(
     elements.map((element) => {
       const placement = Placement.from_element(element);
-      return placement.load().then(() => {
-        // This promise function is used just to resolve to a list of Placement
-        // instances
-        return placement;
-      });
+      return placement.load();
     })
   );
 }
+
+// An error class that we will not surface to clients normally.
+class EthicalAdsWarning extends Error {}
+
+/* Wrapping Promise to allow for handling of errors by user
+ *
+ * This promise currently does not reject on error as this will emit a console
+ * warning if the user hasn't added a promise rejection handler (which is most
+ * cases).
+ *
+ * This promise resolves to an aray of Placement instances, or an empty list if
+ * there was any error configuring the placements.
+ *
+ * For example, to perform an action when no placements are loaded:
+ *
+ *   <script>
+ *   ethicalads.wait.then((placements) => {
+ *     if (!placements.length) {
+ *       console.log('Ads were not able to load');
+ *     }
+ *   }
+ *   </script>
+ *
+ * @type {Promise<[Placement]>}
+ */
+export var wait;
 
 /* If importing this as a module, do not automatically process DOM and fetch the
  * ad placement. Only do this if using the module directly, from a `script`
@@ -202,7 +219,7 @@ if (require.main !== module) {
       document.readyState === "interactive" ||
       document.readyState === "complete"
     ) {
-      resolve();
+      return resolve();
     } else {
       document.addEventListener(
         "DOMContentLoaded",
@@ -218,13 +235,25 @@ if (require.main !== module) {
     }
   });
 
-  wait_dom.then(() => {
-    load_placements()
-      .then((placements) => {
-        // Any post processing on placement list can go here
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+  wait = new Promise((resolve) => {
+    wait_dom.then(() => {
+      load_placements()
+        .then((placements) => {
+          resolve(placements);
+        })
+        .catch((err) => {
+          resolve([]);
+
+          const is_debug = global.debug || window.debug || false;
+
+          if (err instanceof Error) {
+            if (err instanceof EthicalAdsWarning && !is_debug) {
+              // Skip reporting these warnings for now, unless debugging.
+              return;
+            }
+            console.error(err.message);
+          }
+        });
+    });
   });
 }

@@ -12,6 +12,8 @@ module.exports = (env, argv) => {
     output: {
       path: path.resolve(__dirname, "dist"),
       filename: production ? "ethicalads.min.js" : "ethicalads.js",
+      library: ["ethicalads"],
+      globalObject: "this",
     },
     module: {
       rules: [

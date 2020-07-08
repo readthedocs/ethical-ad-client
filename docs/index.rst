@@ -205,6 +205,47 @@ Text placements can be defined using ``data-ea-type="text"``:
 
 .. _signup:
 
+Customization
+=============
+
+It's possible to extend the ad client, even if you are loading the client in
+your browser through a request. After loading the script, there will be an
+``ethicalads`` global/window instance that can be used to extend the ad client
+interface.
+
+The easiest place to extend is the ``ethicalads.wait`` promise instance. This
+resolves to an array of placements that were successfully configured -- if no
+placements were loaded successfully, this will be an empty array.
+
+The ``ethicalads`` object needs to be instantiated first. If you aren't loading
+the ad client library asynchronously, you can delay execution by loading your
+additional script after loading the ad client.
+
+If you are loading the ad client library asynchronously, you should wait for a
+document ready event. For example, using jQuery:
+
+.. code:: javascript
+
+    $(document).ready(() => {
+      ethicalads.wait.then((placements) => {
+        console.log('Ads are loaded');
+      });
+    });
+
+Handling errors
+---------------
+
+If there are any errors while loading EthicalAds ad placements, the promise
+``ethicalads.wait`` will eventually resolve to an empty array.
+
+.. code:: javascript
+
+    ethicalads.wait.catch((placements) => {
+      if (!placements.length) {
+        console.log('Ads were not able to load');
+      }
+    });
+
 Becoming a Publisher
 ====================
 
