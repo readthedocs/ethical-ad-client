@@ -90,7 +90,7 @@ export class Placement {
       // applied to the target element.
       let classes = this.target.className || "";
       classes += " loaded";
-      this.target.className += classes.trim();
+      this.target.className = classes.trim();
 
       // Make this element the only child element of the target element
       while (this.target.firstChild) {
