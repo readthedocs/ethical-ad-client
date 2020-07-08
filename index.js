@@ -235,8 +235,6 @@ if (require.main !== module) {
     }
   });
 
-  const is_debug = global.debug || window.debug || false;
-
   wait = new Promise((resolve) => {
     wait_dom.then(() => {
       load_placements()
@@ -245,12 +243,15 @@ if (require.main !== module) {
         })
         .catch((err) => {
           resolve([]);
+
+          const is_debug = global.debug || window.debug || false;
+
           if (err instanceof Error) {
             if (err instanceof EthicalAdsWarning && !is_debug) {
               // Skip reporting these warnings for now, unless debugging.
-            } else {
-              console.error(err.message);
+              return;
             }
+            console.error(err.message);
           }
         });
     });
