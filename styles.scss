@@ -143,7 +143,8 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 
 // Explicit image ad type, or default image ad type not specified
 [data-ea-type="image"].loaded,
-[data-ea-publisher]:not([data-ea-type]).loaded {
+[data-ea-publisher]:not([data-ea-type]).loaded,
+.ea-type-image {
   display: inline-block;
 
   .ea-content {
@@ -198,7 +199,8 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 }
 
 // Text ad type
-[data-ea-type="text"].loaded {
+[data-ea-type="text"].loaded,
+.ea-type-text {
   font-size: 14px;
 
   .ea-content {
