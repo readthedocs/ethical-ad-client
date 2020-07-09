@@ -240,7 +240,7 @@ If there are any errors while loading EthicalAds ad placements, the promise
 
 .. code:: javascript
 
-    ethicalads.wait.catch((placements) => {
+    ethicalads.wait.then((placements) => {
       if (!placements.length) {
         console.log('Ads were not able to load');
       }
