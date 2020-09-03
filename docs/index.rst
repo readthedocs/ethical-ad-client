@@ -1,3 +1,6 @@
+.. All the top-level TOC items are at the H1 level to make the sidebar show them all..
+.. I tried with `collapse_navigation` set to False, but it didn't solve anything
+
 EthicalAds Client
 -----------------
 
