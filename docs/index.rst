@@ -259,7 +259,7 @@ You can show backup content with a code snippet like this:
   });
   </script>
 
-.. warning:: You need to have ``Allow house campaigns`` disabled in the ads dashboard. Go to :guilabel:`Settings > Control advertiser campaign types` to disable it.
+.. warning:: You need to have ``Allow house campaigns`` disabled in the ads dashboard, otherwise we will always return a house ad. Go to :guilabel:`Settings > Control advertiser campaign types` to disable it.
 
 Becoming a Publisher
 --------------------
