@@ -238,7 +238,7 @@ document ready event. For example, using jQuery:
 Showing content when there isn't an ad
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The biggest use-case for customizing is to show backup content or another ad.
+The biggest use-case is to show backup content when we don't have an ad to show.
 Many of our publishers prefer to serve EthicalAds,
 but while we're still building the network we might not have a 100% fill rate.
 
@@ -259,6 +259,7 @@ You can show backup content with a code snippet like this:
   });
   </script>
 
+.. warning:: You need to have ``Allow house campaigns`` disabled in the ads dashboard. Go to :guilabel:`Settings > Control advertiser campaign types` to disable it.
 
 Becoming a Publisher
 --------------------
