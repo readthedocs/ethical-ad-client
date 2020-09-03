@@ -9,7 +9,7 @@ and then you can :ref:`configure your site <Configuration>`.
     :align: center
 
 Usage
-=====
+-----
 
 There are two pieces required to add an ad placement to your site. You will need
 to create an empty ``<div>`` element where you would like to place a new ad
@@ -31,7 +31,7 @@ some added data attributes to configure the ad placement:
 .. _configuration:
 
 Configuration
-=============
+-------------
 
 The following data attributes are supported on the ad placement element:
 
@@ -43,7 +43,7 @@ The following data attributes are supported on the ad placement element:
     default is ``image``.
 
 Themes
-======
+------
 
 The following themes are available on all ad placement types:
 
@@ -132,10 +132,10 @@ used with the ``dark`` class:
             :classes: dark bordered
 
 Ad Types
-========
+--------
 
 Image placement
----------------
+~~~~~~~~~~~~~~~
 
 The image ad placement type has two variants: horizontal and veritcal. Vertical
 image placements are the default ad type. To use the horizontal variant, use
@@ -185,7 +185,7 @@ This variant can be used with the ``horizontal`` theme variant class:
             :classes: dark horizontal raised
 
 Text placement
---------------
+~~~~~~~~~~~~~~
 
 Text placements can be defined using ``data-ea-type="text"``:
 
@@ -206,7 +206,7 @@ Text placements can be defined using ``data-ea-type="text"``:
 .. _signup:
 
 Customization
-=============
+-------------
 
 It's possible to extend the ad client, even if you are loading the client in
 your browser through a request. After loading the script, there will be an
@@ -232,8 +232,33 @@ document ready event. For example, using jQuery:
       });
     });
 
+Showing content when there isn't an ad
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The biggest use-case for this is to show backup content or another ad when we can't show ads.
+Many of our publishers prefer to serve EthicalAds,
+but while we're still building the network we might not have a 100% fill rate.
+
+You can show backup content with a code snippet like this:
+
+.. code:: javascript
+
+  <script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+  <script>
+  ethicalads.wait.then((placements) => {
+    if (placements === undefined || placements.length == 0) {
+      // No placement, show backup content
+      div = document.querySelector('[data-ea-publisher]')
+      div.innerHTML = '<p>Check out our first-party ad content.</p>'
+      console.debug('Loading backup content');
+    } else {
+      console.debug('EthicalAds are loaded');
+    }
+  });
+  </script>
+
 Handling errors
----------------
+~~~~~~~~~~~~~~~
 
 If there are any errors while loading EthicalAds ad placements, the promise
 ``ethicalads.wait`` will eventually resolve to an empty array.
@@ -247,7 +272,7 @@ If there are any errors while loading EthicalAds ad placements, the promise
     });
 
 Becoming a Publisher
-====================
+--------------------
 
 Visit `EthicalAds`_ to apply to be a publisher.
 
