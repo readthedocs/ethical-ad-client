@@ -238,7 +238,7 @@ document ready event. For example, using jQuery:
 Showing content when there isn't an ad
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The biggest use-case for this is to show backup content or another ad when we can't show ads.
+The biggest use-case for customizing is to show backup content or another ad.
 Many of our publishers prefer to serve EthicalAds,
 but while we're still building the network we might not have a 100% fill rate.
 
@@ -249,30 +249,16 @@ You can show backup content with a code snippet like this:
   <script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
   <script>
   ethicalads.wait.then((placements) => {
-    if (placements === undefined || placements.length == 0) {
-      // No placement, show backup content
+    if (!placements.length) {
+      console.debug('Loading backup content');
       div = document.querySelector('[data-ea-publisher]')
       div.innerHTML = '<p>Check out our first-party ad content.</p>'
-      console.debug('Loading backup content');
     } else {
       console.debug('EthicalAds are loaded');
     }
   });
   </script>
 
-Handling errors
-~~~~~~~~~~~~~~~
-
-If there are any errors while loading EthicalAds ad placements, the promise
-``ethicalads.wait`` will eventually resolve to an empty array.
-
-.. code:: javascript
-
-    ethicalads.wait.then((placements) => {
-      if (!placements.length) {
-        console.log('Ads were not able to load');
-      }
-    });
 
 Becoming a Publisher
 --------------------
