@@ -1,5 +1,5 @@
 EthicalAds Client
-=================
+-----------------
 
 This is the client library used to add an ad placement from EthicalAds_ to your
 site. To get started, you will need to first :ref:`become a publisher <signup>`,
