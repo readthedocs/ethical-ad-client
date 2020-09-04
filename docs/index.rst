@@ -244,7 +244,7 @@ but while we're still building the network we might not have a 100% fill rate.
 
 You can show backup content with a code snippet like this:
 
-.. code:: javascript
+.. code:: html
 
   <script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
   <script>
