@@ -1,5 +1,8 @@
+.. All the top-level TOC items are at the H1 level to make the sidebar show them all..
+.. I tried with `collapse_navigation` set to False, but it didn't solve anything
+
 EthicalAds Client
-=================
+-----------------
 
 This is the client library used to add an ad placement from EthicalAds_ to your
 site. To get started, you will need to first :ref:`become a publisher <signup>`,
@@ -9,7 +12,7 @@ and then you can :ref:`configure your site <Configuration>`.
     :align: center
 
 Usage
-=====
+-----
 
 There are two pieces required to add an ad placement to your site. You will need
 to create an empty ``<div>`` element where you would like to place a new ad
@@ -31,7 +34,7 @@ some added data attributes to configure the ad placement:
 .. _configuration:
 
 Configuration
-=============
+-------------
 
 The following data attributes are supported on the ad placement element:
 
@@ -43,7 +46,7 @@ The following data attributes are supported on the ad placement element:
     default is ``image``.
 
 Themes
-======
+------
 
 The following themes are available on all ad placement types:
 
@@ -132,10 +135,10 @@ used with the ``dark`` class:
             :classes: dark bordered
 
 Ad Types
-========
+--------
 
 Image placement
----------------
+~~~~~~~~~~~~~~~
 
 The image ad placement type has two variants: horizontal and veritcal. Vertical
 image placements are the default ad type. To use the horizontal variant, use
@@ -185,7 +188,7 @@ This variant can be used with the ``horizontal`` theme variant class:
             :classes: dark horizontal raised
 
 Text placement
---------------
+~~~~~~~~~~~~~~
 
 Text placements can be defined using ``data-ea-type="text"``:
 
@@ -206,7 +209,7 @@ Text placements can be defined using ``data-ea-type="text"``:
 .. _signup:
 
 Customization
-=============
+-------------
 
 It's possible to extend the ad client, even if you are loading the client in
 your browser through a request. After loading the script, there will be an
@@ -232,22 +235,34 @@ document ready event. For example, using jQuery:
       });
     });
 
-Handling errors
----------------
+Showing content when there isn't an ad
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If there are any errors while loading EthicalAds ad placements, the promise
-``ethicalads.wait`` will eventually resolve to an empty array.
+The biggest use-case is to show backup content when we don't have an ad to show.
+Many of our publishers prefer to serve EthicalAds,
+but while we're still building the network we might not have a 100% fill rate.
 
-.. code:: javascript
+You can show backup content with a code snippet like this:
 
-    ethicalads.wait.then((placements) => {
-      if (!placements.length) {
-        console.log('Ads were not able to load');
-      }
-    });
+.. code:: html
+
+  <script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+  <script>
+  ethicalads.wait.then((placements) => {
+    if (!placements.length) {
+      console.debug('Loading backup content');
+      div = document.querySelector('[data-ea-publisher]')
+      div.innerHTML = '<p>Check out our first-party ad content.</p>'
+    } else {
+      console.debug('EthicalAds are loaded');
+    }
+  });
+  </script>
+
+.. warning:: You need to have ``Allow house campaigns`` disabled in the ads dashboard, otherwise we will always return a house ad. Go to :guilabel:`Settings > Control advertiser campaign types` to disable it.
 
 Becoming a Publisher
-====================
+--------------------
 
 Visit `EthicalAds`_ to apply to be a publisher.
 
