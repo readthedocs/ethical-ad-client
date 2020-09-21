@@ -106,7 +106,7 @@ export class Placement {
       // Detect when the ad is in the viewport
       // Add the view pixel to the DOM to count the view
 
-      var viewport_detection = setInterval((element) => {
+      let viewport_detection = setInterval((element) => {
         // Verge can be off by 1-2 pixels
         // A fudge factor of ~3 is needed for the case where the ad
         // is hidden off the side of the screen by a sliding sidebar
@@ -114,7 +114,7 @@ export class Placement {
         // or the left side of the ad is at the right side of the viewport
         if (placement.response && placement.response.view_url && verge.inViewport(element, -3)) {
           // This ad was seen!
-          var pixel = document.createElement("img");
+          let pixel = document.createElement("img");
           pixel.src = placement.response.view_url;
           pixel.className = "ea-pixel";
           element.appendChild(pixel);
