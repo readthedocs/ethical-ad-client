@@ -112,17 +112,22 @@ export class Placement {
    */
   fetch() {
     const callback = "ad_" + Date.now();
+    if (typeof this.target.id === 'undefined') {
+      const div_id = 'undefined'
+    } else {
+      const div_id = this.target.id
+    }
     const url_params = new URLSearchParams({
       publisher: this.publisher,
       ad_types: this.ad_type,
-      div_ids: this.target.id,
+      div_ids: div_id,
       callback: callback,
       format: "jsonp",
     });
     const url = new URL(AD_DECISION_URL + "?" + url_params.toString());
 
     return new Promise((resolve, reject) => {
-      window[wallback] = (response) => {
+      window[callback] = (response) => {
         if (response && response.html) {
           const node_convert = document.createElement("div");
           node_convert.innerHTML = response.html;
