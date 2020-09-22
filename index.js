@@ -111,18 +111,18 @@ export class Placement {
    * string from API response. Can also be null, indicating a noop action.
    */
   fetch() {
-    const id = "ad_" + Date.now();
+    const callback = "ad_" + Date.now();
     const url_params = new URLSearchParams({
       publisher: this.publisher,
       ad_types: this.ad_type,
-      div_ids: id,
-      callback: id,
+      div_ids: this.target.id,
+      callback: callback,
       format: "jsonp",
     });
     const url = new URL(AD_DECISION_URL + "?" + url_params.toString());
 
     return new Promise((resolve, reject) => {
-      window[id] = (response) => {
+      window[wallback] = (response) => {
         if (response && response.html) {
           const node_convert = document.createElement("div");
           node_convert.innerHTML = response.html;
