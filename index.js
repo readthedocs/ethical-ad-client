@@ -27,6 +27,8 @@ import Promise from "promise-polyfill";
 
 import "./styles.scss";
 
+// For local testing, set this
+// const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
 const AD_DECISION_URL = "https://server.ethicalads.io/api/v1/decision/";
 const AD_CLIENT_VERSION = 1;
 const ATTR_PREFIX = "data-ea-";
@@ -112,10 +114,9 @@ export class Placement {
    */
   fetch() {
     const callback = "ad_" + Date.now();
-    if (typeof this.target.id === 'undefined') {
-      const div_id = 'undefined'
-    } else {
-      const div_id = this.target.id
+    var div_id = callback;
+    if (typeof this.target.id !== 'undefined') {
+      div_id = this.target.id;
     }
     const url_params = new URLSearchParams({
       publisher: this.publisher,
