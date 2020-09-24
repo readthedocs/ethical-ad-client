@@ -115,7 +115,7 @@ export class Placement {
   fetch() {
     const callback = "ad_" + Date.now();
     var div_id = callback;
-    if (typeof this.target.id !== 'undefined') {
+    if (this.target.id) {
       div_id = this.target.id;
     }
     const url_params = new URLSearchParams({
