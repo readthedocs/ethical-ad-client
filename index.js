@@ -27,6 +27,8 @@ import Promise from "promise-polyfill";
 
 import "./styles.scss";
 
+// For local testing, set this
+// const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
 const AD_DECISION_URL = "https://server.ethicalads.io/api/v1/decision/";
 const AD_CLIENT_VERSION = 1;
 const ATTR_PREFIX = "data-ea-";
@@ -121,20 +123,24 @@ export class Placement {
    * string from API response. Can also be null, indicating a noop action.
    */
   fetch() {
-    const id = "ad_" + Date.now();
+    const callback = "ad_" + Date.now();
+    var div_id = callback;
+    if (this.target.id) {
+      div_id = this.target.id;
+    }
     const url_params = new URLSearchParams({
       publisher: this.publisher,
       ad_types: this.ad_type,
-      div_ids: id,
+      div_ids: div_id,
+      callback: callback,
       keywords: this.keywords,
       campaign_types: this.campaign_types,
-      callback: id,
       format: "jsonp",
     });
     const url = new URL(AD_DECISION_URL + "?" + url_params.toString());
 
     return new Promise((resolve, reject) => {
-      window[id] = (response) => {
+      window[callback] = (response) => {
         if (response && response.html) {
           const node_convert = document.createElement("div");
           node_convert.innerHTML = response.html;
