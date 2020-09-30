@@ -208,6 +208,28 @@ Text placements can be defined using ``data-ea-type="text"``:
 
 .. _signup:
 
+Ad placement tracking
+---------------------
+
+EthicalAds allows you to track all the different ad placements that you have on your site.
+This means that if you have an ad on your homepage template,
+blog listing template,
+and blog post template you can track them all seperately.
+
+This is enabled by adding an ``id`` to the ``ethicalads div`` on your site:
+
+.. code:: html
+
+    <div data-ea-publisher="..." id="blog-sidebar"></div>
+
+
+.. tip:: We recommend that you provide an ``id`` for each of your different ad placements.
+         This will enable you to track the performance of each placement,
+         and make adjustments that increase your :abbr:`CTR (click-through rate)`.
+
+This feature is disabled by default,
+you can go to :guilabel:`Settings > Record placements` to enable this feature.
+
 Customization
 -------------
 
