@@ -222,13 +222,12 @@ This is enabled by adding an ``id`` to the ``ethicalads div`` on your site:
 
     <div data-ea-publisher="..." id="blog-sidebar"></div>
 
+This feature is disabled by default,
+you can go to :guilabel:`Settings > Record placements` to enable this feature.
 
 .. tip:: We recommend that you provide an ``id`` for each of your different ad placements.
          This will enable you to track the performance of each placement,
          and make adjustments that increase your :abbr:`CTR (click-through rate)`.
-
-This feature is disabled by default,
-you can go to :guilabel:`Settings > Record placements` to enable this feature.
 
 Customization
 -------------
