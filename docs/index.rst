@@ -242,6 +242,23 @@ you can go to :guilabel:`Settings > Record placements` to enable this feature.
          This will enable you to track the performance of each placement,
          and make adjustments that increase your :abbr:`CTR (click-through rate)`.
 
+Page-specific keywords
+----------------------
+
+EthicalAds allows our advertisers to target ads based on the content of pages.
+This provides value for everyone, giving users more relevent ads while still respecting their privacy.
+
+Publishers can set page-specific keywords dynamically on each page of their site based on the content of the pages.
+For example, if you have a blog post about Kubernetes, you could set tags of `devops` and `kubernetes`.
+
+
+This is enabled by adding an ``data-ea-keywords`` to the EthicalAds ``div`` on your site.
+They are ``|``-seperated, so you can include multiple for a single page.
+
+.. code:: html
+
+    <div data-ea-publisher="..." data-ea-keywords="devops|kubernetes"></div>
+
 Customization
 -------------
 
