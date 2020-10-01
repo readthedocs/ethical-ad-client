@@ -45,6 +45,10 @@ The following data attributes are supported on the ad placement element:
     The ad placement type. This value can be either ``image`` or ``text`` -- the
     default is ``image``.
 
+``id`` (optional)
+    A placement identifier. If you define an ``id`` and :ref:`enable placements reporting <Ad placement tracking>`,
+    this will allow you to see reports for each ``id``.
+
 ``data-ea-keywords`` (optional)
     A pipe (``|``) separated array of keywords for this ad placement.
     This is page-specific (not publisher-specific) keywords related to where the ad is shown.
