@@ -44,12 +44,17 @@ const SUPPORTS_MULTIPLE_PLACEMENTS = false;
  * @param {string} publisher - Publisher ID
  * @param {string} ad_type - Placement ad type id
  * @param {Element} target - Target element
+ * @param {string} keywords - An optional | separated array of keywords
+ * @param {string} campaign_types - An optional | separated array of campaign types
  */
 export class Placement {
-  constructor(publisher, ad_type = "image", target) {
+  constructor(publisher, ad_type = "image", target, keywords, campaign_types) {
     this.publisher = publisher;
     this.ad_type = ad_type;
     this.target = target;
+
+    this.keywords = keywords || "";
+    this.campaign_types = campaign_types || "paid|community|house";
   }
 
   /* Create a placement from an element
@@ -67,10 +72,15 @@ export class Placement {
       element.setAttribute(ATTR_PREFIX + "type", "image");
     }
 
-    // Add version to ad type to verison the HTML return
-    ad_type += "-v" + AD_CLIENT_VERSION;
+    const keywords = element.getAttribute(ATTR_PREFIX + "keywords");
+    const campaign_types = element.getAttribute(ATTR_PREFIX + "campaign-types");
 
-    return new Placement(publisher, ad_type, element);
+    // Add version to ad type to verison the HTML return
+    if (ad_type === "image" || ad_type === "text") {
+      ad_type += "-v" + AD_CLIENT_VERSION;
+    }
+
+    return new Placement(publisher, ad_type, element, keywords, campaign_types);
   }
 
   /* Transforms target element into a placement
@@ -123,6 +133,8 @@ export class Placement {
       ad_types: this.ad_type,
       div_ids: div_id,
       callback: callback,
+      keywords: this.keywords,
+      campaign_types: this.campaign_types,
       format: "jsonp",
     });
     const url = new URL(AD_DECISION_URL + "?" + url_params.toString());
