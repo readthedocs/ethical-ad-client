@@ -251,7 +251,6 @@ This provides value for everyone, giving users more relevent ads while still res
 Publishers can set page-specific keywords dynamically on each page of their site based on the content of the pages.
 For example, if you have a blog post about Kubernetes, you could set tags of `devops` and `kubernetes`.
 
-
 This is enabled by adding an ``data-ea-keywords`` to the EthicalAds ``div`` on your site.
 They are ``|``-seperated, so you can include multiple for a single page.
 
