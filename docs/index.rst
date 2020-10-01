@@ -45,6 +45,10 @@ The following data attributes are supported on the ad placement element:
     The ad placement type. This value can be either ``image`` or ``text`` -- the
     default is ``image``.
 
+``id`` (optional)
+    A placement identifier. If you define an ``id`` and :ref:`enable placements reporting <placements>`,
+    this will allow you to see reports for each ``id``.
+
 ``data-ea-keywords`` (optional)
     A pipe (``|``) separated array of keywords for this ad placement.
     This is page-specific (not publisher-specific) keywords related to where the ad is shown.
@@ -215,7 +219,28 @@ Text placements can be defined using ``data-ea-type="text"``:
         :ad_type: text
         :classes: dark raised
 
-.. _signup:
+.. _placements:
+
+Ad placement reporting
+----------------------
+
+EthicalAds allows you to track all the different ad placements that you have on your site.
+This means that if you have an ad on your homepage template,
+blog listing template,
+and blog post template you can track them all seperately.
+
+This is enabled by adding an ``id`` to the EthicalAds ``div`` on your site:
+
+.. code:: html
+
+    <div data-ea-publisher="..." id="blog-sidebar"></div>
+
+This feature is disabled by default,
+you can go to :guilabel:`Settings > Record placements` to enable this feature.
+
+.. tip:: We recommend that you provide an ``id`` for each of your different ad placements.
+         This will enable you to track the performance of each placement,
+         and make adjustments that increase your :abbr:`CTR (click-through rate)`.
 
 Customization
 -------------
@@ -269,6 +294,8 @@ You can show backup content with a code snippet like this:
   </script>
 
 .. warning:: You need to have ``Allow house campaigns`` disabled in the ads dashboard, otherwise we will always return a house ad. Go to :guilabel:`Settings > Control advertiser campaign types` to disable it.
+
+.. _signup:
 
 Becoming a Publisher
 --------------------
