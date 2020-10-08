@@ -58,6 +58,11 @@ The following data attributes are supported on the ad placement element:
     This can only further reduce campaign types, not allow ones prohibited for the publisher.
     This is useful when you want certain users to not get certain types of ads.
 
+``data-ea-manual`` (optional)
+    Set to ``true`` if you want to :ref:`manually load ads <load manually>` at a specific future time for your app.
+    This is useful if you want to conditionally load advertising for some users but not others
+    or only load advertising when specific actions are performed.
+
 Themes
 ------
 
@@ -310,6 +315,25 @@ You can show backup content with a code snippet like this:
   </script>
 
 .. warning:: You need to have ``Allow house campaigns`` disabled in the ads dashboard, otherwise we will always return a house ad. Go to :guilabel:`Settings > Control advertiser campaign types` to disable it.
+
+
+.. _load manually:
+
+Manually loading ads
+--------------------
+
+You can precisely determine when an ad will be loaded by setting the ``data-ea-manual`` attribute to ``true``.
+This is useful if you want to conditionally show advertising or only show advertising when specific actions occur.
+
+.. code:: html
+
+    <div data-ea-publisher="..." data-ea-manual="true"></div>
+    <script>
+    $(document).ready(() => {
+      ethicalads.load();
+    });
+    </script>
+
 
 .. _signup:
 
