@@ -28,6 +28,8 @@ import verge from "verge";
 
 import "./styles.scss";
 
+// For local testing, set this
+// const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
 const AD_DECISION_URL = "https://server.ethicalads.io/api/v1/decision/";
 const AD_CLIENT_VERSION = 1;
 const ATTR_PREFIX = "data-ea-";
@@ -43,14 +45,19 @@ const SUPPORTS_MULTIPLE_PLACEMENTS = false;
  * @param {string} publisher - Publisher ID
  * @param {string} ad_type - Placement ad type id
  * @param {Element} target - Target element
+ * @param {string} keywords - An optional | separated array of keywords
+ * @param {string} campaign_types - An optional | separated array of campaign types
  */
 export class Placement {
-  constructor(publisher, ad_type = "image", target) {
+  constructor(publisher, ad_type = "image", target, keywords, campaign_types) {
     this.publisher = publisher;
     this.ad_type = ad_type;
     this.target = target;
 
     this.response = null;
+
+    this.keywords = keywords || "";
+    this.campaign_types = campaign_types || "paid|community|house";
   }
 
   /* Create a placement from an element
@@ -68,10 +75,15 @@ export class Placement {
       element.setAttribute(ATTR_PREFIX + "type", "image");
     }
 
-    // Add version to ad type to verison the HTML return
-    ad_type += "-v" + AD_CLIENT_VERSION;
+    const keywords = element.getAttribute(ATTR_PREFIX + "keywords");
+    const campaign_types = element.getAttribute(ATTR_PREFIX + "campaign-types");
 
-    return new Placement(publisher, ad_type, element);
+    // Add version to ad type to verison the HTML return
+    if (ad_type === "image" || ad_type === "text") {
+      ad_type += "-v" + AD_CLIENT_VERSION;
+    }
+
+    return new Placement(publisher, ad_type, element, keywords, campaign_types);
   }
 
   /* Transforms target element into a placement
@@ -131,20 +143,24 @@ export class Placement {
    * string from API response. Can also be null, indicating a noop action.
    */
   fetch() {
-    const id = "ad_" + Date.now();
+    const callback = "ad_" + Date.now();
+    var div_id = callback;
+    if (this.target.id) {
+      div_id = this.target.id;
+    }
     const url_params = new URLSearchParams({
       publisher: this.publisher,
       ad_types: this.ad_type,
-      div_ids: id,
-      callback: id,
+      div_ids: div_id,
+      callback: callback,
+      keywords: this.keywords,
+      campaign_types: this.campaign_types,
       format: "jsonp",
     });
     const url = new URL(AD_DECISION_URL + "?" + url_params.toString());
 
     return new Promise((resolve, reject) => {
-      window[id] = (response) => {
-        this.response = response;
-
+      window[callback] = (response) => {
         if (response && response.html && response.view_url) {
           const node_convert = document.createElement("div");
           node_convert.innerHTML = response.html;

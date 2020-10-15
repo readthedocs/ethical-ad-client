@@ -45,6 +45,19 @@ The following data attributes are supported on the ad placement element:
     The ad placement type. This value can be either ``image`` or ``text`` -- the
     default is ``image``.
 
+``id`` (optional)
+    A placement identifier. If you define an ``id`` and :ref:`enable placements reporting <placements>`,
+    this will allow you to see reports for each ``id``.
+
+``data-ea-keywords`` (optional)
+    A pipe (``|``) separated array of keywords for this ad placement.
+    This is page-specific (not publisher-specific) keywords related to where the ad is shown.
+
+``data-ea-campaign-types`` (optional)
+    A pipe (``|``) separated array of campaign types ("paid", "community", "house").
+    This can only further reduce campaign types, not allow ones prohibited for the publisher.
+    This is useful when you want certain users to not get certain types of ads.
+
 Themes
 ------
 
@@ -206,7 +219,44 @@ Text placements can be defined using ``data-ea-type="text"``:
         :ad_type: text
         :classes: dark raised
 
-.. _signup:
+.. _placements:
+
+Ad placement reporting
+----------------------
+
+EthicalAds allows you to track all the different ad placements that you have on your site.
+This means that if you have an ad on your homepage template,
+blog listing template,
+and blog post template you can track them all seperately.
+
+This is enabled by adding an ``id`` to the EthicalAds ``div`` on your site:
+
+.. code:: html
+
+    <div data-ea-publisher="..." id="blog-sidebar"></div>
+
+This feature is disabled by default,
+you can go to :guilabel:`Settings > Record placements` to enable this feature.
+
+.. tip:: We recommend that you provide an ``id`` for each of your different ad placements.
+         This will enable you to track the performance of each placement,
+         and make adjustments that increase your :abbr:`CTR (click-through rate)`.
+
+Page-specific keywords
+----------------------
+
+EthicalAds allows our advertisers to target ads based on the content of pages.
+This provides value for everyone, giving users more relevent ads while still respecting their privacy.
+
+Publishers can set page-specific keywords dynamically on each page of their site based on the content of the pages.
+For example, if you have a blog post about Kubernetes, you could set tags of `devops` and `kubernetes`.
+
+This is enabled by adding an ``data-ea-keywords`` to the EthicalAds ``div`` on your site.
+They are ``|``-seperated, so you can include multiple for a single page.
+
+.. code:: html
+
+    <div data-ea-publisher="..." data-ea-keywords="devops|kubernetes"></div>
 
 Customization
 -------------
@@ -260,6 +310,8 @@ You can show backup content with a code snippet like this:
   </script>
 
 .. warning:: You need to have ``Allow house campaigns`` disabled in the ads dashboard, otherwise we will always return a house ad. Go to :guilabel:`Settings > Control advertiser campaign types` to disable it.
+
+.. _signup:
 
 Becoming a Publisher
 --------------------
