@@ -130,7 +130,6 @@ export class Placement {
     }).then((placement) => {
       // Detect when the ad is in the viewport
       // Add the view pixel to the DOM to count the view
-
       let viewport_detection = setInterval((element) => {
         // Verge can be off by 1-2 pixels
         // A fudge factor of ~3 is needed for the case where the ad
@@ -175,6 +174,7 @@ export class Placement {
     return new Promise((resolve, reject) => {
       window[callback] = (response) => {
         if (response && response.html && response.view_url) {
+          this.response = response;
           const node_convert = document.createElement("div");
           node_convert.innerHTML = response.html;
           return resolve(node_convert.firstChild);
