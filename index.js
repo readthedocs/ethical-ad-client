@@ -162,6 +162,7 @@ export class Placement {
     return new Promise((resolve, reject) => {
       window[callback] = (response) => {
         if (response && response.html && response.view_url) {
+          this.response = response;
           const node_convert = document.createElement("div");
           node_convert.innerHTML = response.html;
           return resolve(node_convert.firstChild);
