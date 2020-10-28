@@ -47,9 +47,10 @@ const SUPPORTS_MULTIPLE_PLACEMENTS = false;
  * @param {Element} target - Target element
  * @param {string} keywords - An optional | separated array of keywords
  * @param {string} campaign_types - An optional | separated array of campaign types
+ * @param {boolean} load_manually - whether this placement will be loaded manually later
  */
 export class Placement {
-  constructor(publisher, ad_type = "image", target, keywords, campaign_types) {
+  constructor(publisher, ad_type = "image", target, keywords, campaign_types, load_manually) {
     this.publisher = publisher;
     this.ad_type = ad_type;
     this.target = target;
@@ -58,9 +59,13 @@ export class Placement {
 
     this.keywords = keywords || "";
     this.campaign_types = campaign_types || "paid|community|house";
+
+    this.load_manually = load_manually;
   }
 
   /* Create a placement from an element
+   *
+   * Returns null if the placement is already loaded.
    *
    * @static
    * @param {Element} element - Load placement and append to this Element
@@ -78,12 +83,20 @@ export class Placement {
     const keywords = element.getAttribute(ATTR_PREFIX + "keywords");
     const campaign_types = element.getAttribute(ATTR_PREFIX + "campaign-types");
 
+    const load_manually = element.getAttribute(ATTR_PREFIX + "manual") === "true";
+
     // Add version to ad type to verison the HTML return
     if (ad_type === "image" || ad_type === "text") {
       ad_type += "-v" + AD_CLIENT_VERSION;
     }
 
-    return new Placement(publisher, ad_type, element, keywords, campaign_types);
+    let classes = (element.className || "").split(" ");
+    if (classes.includes("loaded")) {
+      console.error("EthicalAd already loaded.");
+      return null;
+    }
+
+    return new Placement(publisher, ad_type, element, keywords, campaign_types, load_manually);
   }
 
   /* Transforms target element into a placement
@@ -190,9 +203,10 @@ export class Placement {
 
 /* Find all placement DOM elements and hot load HTML as child nodes
  *
+ * @param {boolean} force_load - load placements even if they are set to load manually
  * @returns {Promise<[Placement]>} Resolves to a list of Placement instances
  */
-export function load_placements() {
+export function load_placements(force_load = false) {
   // Find all elements matching required data binding attribute. We don't yet
   // support multiple placements on the ad-server. For now, this could result in
   // competing ad placements.
@@ -214,7 +228,12 @@ export function load_placements() {
   return Promise.all(
     elements.map((element) => {
       const placement = Placement.from_element(element);
-      return placement.load();
+      if (placement && (force_load || !placement.load_manually)) {
+        return placement.load();
+      } else {
+        // This will be manually loaded later or has already been loaded
+        return null;
+      }
     })
   );
 }
@@ -244,6 +263,17 @@ class EthicalAdsWarning extends Error {}
  * @type {Promise<[Placement]>}
  */
 export var wait;
+
+/* Loading placements manually rather than the normal way
+ *
+ *   <div data-ea-publisher="..." data-ea-manual="true"></div>
+ *   <script>
+ *     ethicalads.load();
+ *   </script>
+ *
+ * @type function
+ */
+export var load;
 
 /* If importing this as a module, do not automatically process DOM and fetch the
  * ad placement. Only do this if using the module directly, from a `script`
@@ -295,4 +325,9 @@ if (require.main !== module) {
         });
     });
   });
+
+  load = () => {
+    console.log("Loading placements manually")
+    load_placements(true);
+  };
 }
