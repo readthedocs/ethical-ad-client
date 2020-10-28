@@ -24,6 +24,7 @@
  */
 
 import Promise from "promise-polyfill";
+import verge from "verge";
 
 import "./styles.scss";
 
@@ -52,6 +53,8 @@ export class Placement {
     this.publisher = publisher;
     this.ad_type = ad_type;
     this.target = target;
+
+    this.response = null;
 
     this.keywords = keywords || "";
     this.campaign_types = campaign_types || "paid|community|house";
@@ -87,8 +90,8 @@ export class Placement {
    *
    * This method organizes all of the operations to transform the placement
    * configuration wrapper `div` into an ad placement -- including starting the
-   * API transaction, displaying the ad element, and eventually handling the
-   * viewport detection.
+   * API transaction, displaying the ad element,
+   * and handling the viewport detection.
    *
    * @returns {Promise}
    */
@@ -111,10 +114,27 @@ export class Placement {
       this.target.appendChild(element);
 
       return this;
+    }).then((placement) => {
+      // Detect when the ad is in the viewport
+      // Add the view pixel to the DOM to count the view
+
+      let viewport_detection = setInterval((element) => {
+        // Verge can be off by 1-2 pixels
+        // A fudge factor of ~3 is needed for the case where the ad
+        // is hidden off the side of the screen by a sliding sidebar
+        // For example, if the right side of the ad is at x=0
+        // or the left side of the ad is at the right side of the viewport
+        if (placement.response && placement.response.view_url && verge.inViewport(element, -3)) {
+          // This ad was seen!
+          let pixel = document.createElement("img");
+          pixel.src = placement.response.view_url;
+          pixel.className = "ea-pixel";
+          element.appendChild(pixel);
+
+          clearInterval(viewport_detection);
+        }
+      }, 100, placement.target);
     });
-    // To then chain our viewport detection, have a method that returns a
-    // promise and a pattern like the following:
-    //}).then(this.wait_for_viewport());
   }
 
   /* Get placement data from decision API
@@ -141,7 +161,8 @@ export class Placement {
 
     return new Promise((resolve, reject) => {
       window[callback] = (response) => {
-        if (response && response.html) {
+        if (response && response.html && response.view_url) {
+          this.response = response;
           const node_convert = document.createElement("div");
           node_convert.innerHTML = response.html;
           return resolve(node_convert.firstChild);
