@@ -286,7 +286,7 @@ export function load_placements(force_load = false) {
         placement.detectABP(ABP_DETECTION_PX, function (usesABP) {
           placement.uplifted = usesABP;
           if (usesABP) {
-            console.log("Uses ABP");
+            console.debug("Acceptable Ads enabled. Thanks for allowing our non-tracking ads :)");
           }
         });
       }
