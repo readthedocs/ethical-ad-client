@@ -33,7 +33,7 @@ import "./styles.scss";
 const AD_DECISION_URL = "https://server.ethicalads.io/api/v1/decision/";
 const AD_CLIENT_VERSION = 1;
 const ATTR_PREFIX = "data-ea-";
-const ABP_DETECTION_PX = "https://media.ethicalads.io/media/px.gif";
+const ABP_DETECTION_PX = "https://media.ethicalads.io/abp/px.gif";
 
 // Features
 //
