@@ -62,9 +62,6 @@ export class Placement {
     this.campaign_types = campaign_types || "paid|community|house";
 
     this.load_manually = load_manually;
-
-    // Whether this ad impression resulted from being on the Acceptable Ads list
-    this.uplifted = false;
   }
 
   /* Create a placement from an element
@@ -145,7 +142,7 @@ export class Placement {
           // This ad was seen!
           let pixel = document.createElement("img");
           pixel.src = placement.response.view_url;
-          if (placement.uplifted) {
+          if (uplifted) {
             pixel.src += "?uplift=true";
           }
           pixel.className = "ea-pixel";
@@ -286,7 +283,7 @@ export function load_placements(force_load = false) {
 
       if (placement && !force_load) {
         placement.detectABP(ABP_DETECTION_PX, function (usesABP) {
-          placement.uplifted = usesABP;
+          uplifted = usesABP;
           if (usesABP) {
             console.debug("Acceptable Ads enabled. Thanks for allowing our non-tracking ads :)");
           }
@@ -339,6 +336,11 @@ export var wait;
  * @type function
  */
 export var load;
+
+/* Whether this ad impression is attributed to being on the Acceptable Ads list.
+ * @type boolean
+ */
+export var uplifted = false;
 
 /* If importing this as a module, do not automatically process DOM and fetch the
  * ad placement. Only do this if using the module directly, from a `script`
