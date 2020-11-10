@@ -212,6 +212,8 @@ export class Placement {
    * Calls the provided callback passing a boolean whether this ad is uplifted.
    * We need this data to provide back to the AcceptableAds folks.
    *
+   * This code comes directly from Eyeo/AdblockPlus team to measure Acceptable Ads.
+   *
    * @static
    * @param {string} px - A URL of a pixel to test
    * @param {function) callback - A callback to call when finished
