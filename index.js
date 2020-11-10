@@ -33,6 +33,7 @@ import "./styles.scss";
 const AD_DECISION_URL = "https://server.ethicalads.io/api/v1/decision/";
 const AD_CLIENT_VERSION = 1;
 const ATTR_PREFIX = "data-ea-";
+const ABP_DETECTION_PX = "https://media.ethicalads.io/media/px.gif";
 
 // Features
 //
@@ -61,6 +62,9 @@ export class Placement {
     this.campaign_types = campaign_types || "paid|community|house";
 
     this.load_manually = load_manually;
+
+    // Whether this ad impression resulted from being on the Acceptable Ads list
+    this.uplifted = false;
   }
 
   /* Create a placement from an element
@@ -141,6 +145,9 @@ export class Placement {
           // This ad was seen!
           let pixel = document.createElement("img");
           pixel.src = placement.response.view_url;
+          if (placement.uplifted) {
+            pixel.src += "?uplift=true";
+          }
           pixel.className = "ea-pixel";
           element.appendChild(pixel);
 
@@ -199,6 +206,52 @@ export class Placement {
       document.getElementsByTagName("head")[0].appendChild(script);
     });
   }
+
+  /* Detect whether this ad is "uplifted" meaning allowed by ABP's Acceptable Ads list
+   *
+   * Calls the provided callback passing a boolean whether this ad is uplifted.
+   * We need this data to provide back to the AcceptableAds folks.
+   *
+   * @static
+   * @param {string} px - A URL of a pixel to test
+   * @param {function) callback - A callback to call when finished
+   */
+  detectABP(px, callback) {
+    var detected = false;
+    var checksRemain = 2;
+    var error1 = false;
+    var error2 = false;
+    if (typeof callback != "function") return;
+    px += "?ch=*&rn=*";
+
+    function beforeCheck(callback, timeout) {
+      if (checksRemain == 0 || timeout > 1E3) callback(checksRemain == 0 && detected);
+      else setTimeout(function() {
+        beforeCheck(callback, timeout * 2)
+      }, timeout * 2)
+    }
+
+    function checkImages() {
+      if (--checksRemain) return;
+      detected = !error1 && error2
+    }
+    var random = Math.random() * 11;
+    var img1 = new Image;
+    img1.onload = checkImages;
+    img1.onerror = function() {
+      error1 = true;
+      checkImages()
+    };
+    img1.src = px.replace(/\*/, 1).replace(/\*/, random);
+    var img2 = new Image;
+    img2.onload = checkImages;
+    img2.onerror = function() {
+      error2 = true;
+      checkImages()
+    };
+    img2.src = px.replace(/\*/, 2).replace(/\*/, random);
+    beforeCheck(callback, 250)
+  }
 }
 
 /* Find all placement DOM elements and hot load HTML as child nodes
@@ -228,6 +281,16 @@ export function load_placements(force_load = false) {
   return Promise.all(
     elements.map((element) => {
       const placement = Placement.from_element(element);
+
+      if (placement && !force_load) {
+        placement.detectABP(ABP_DETECTION_PX, function (usesABP) {
+          placement.uplifted = usesABP;
+          if (usesABP) {
+            console.log("Uses ABP");
+          }
+        });
+      }
+
       if (placement && (force_load || !placement.load_manually)) {
         return placement.load();
       } else {
