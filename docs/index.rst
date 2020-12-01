@@ -125,6 +125,9 @@ The following themes are available on all ad placement types:
             :ad_type: image
             :classes: bordered
 
+Dark mode
+~~~~~~~~~
+
 There are also dark variants for all of the themes. The dark variants can be
 used with the ``dark`` class:
 
