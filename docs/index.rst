@@ -152,6 +152,28 @@ used with the ``dark`` class:
             :ad_type: image
             :classes: dark bordered
 
+If your site varies based on the user's color scheme (using ``prefers-color-scheme``),
+set the ``adaptive`` class:
+
+.. code:: html
+
+    <div class="adaptive raised" data-ea-publisher="..."></div>
+
+.. container:: row adaptive
+
+    .. container:: column
+
+        .. example::
+            :ad_type: image
+            :classes: adaptive raised
+
+    .. container:: column
+
+        .. example::
+            :ad_type: image
+            :classes: adaptive bordered
+
+
 Ad Types
 --------
 
