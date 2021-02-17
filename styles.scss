@@ -99,6 +99,7 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 
   &.adaptive {
     // For adaptive color schemes, the default is light
+    // TODO: Find a way to reuse these definitions from dark class above
     @media (prefers-color-scheme: dark) {
       .ea-content {
         background: $color-background-dark;
