@@ -96,6 +96,30 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
       );
     }
   }
+
+  &.adaptive {
+    // For adaptive color schemes, the default is light
+    // TODO: Find a way to reuse these definitions from dark class above
+    @media (prefers-color-scheme: dark) {
+      .ea-content {
+        background: $color-background-dark;
+        color: $color-link-dark;
+        @include links(
+          $color-link-dark,
+          lighten($color-link-dark, 10%),
+          $color-link-bold-dark
+        );
+      }
+
+      .ea-callout {
+        @include links(
+          $color-link-callout-dark,
+          lighten($color-link-callout-dark, 10%),
+          $color-link-bold-dark
+        );
+      }
+    }
+  }
 }
 
 // Themes
@@ -123,6 +147,14 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
   }
   &.dark .ea-content {
     border: 1px solid opacify($color-background-dark, 0.02);
+  }
+
+  &.adaptive {
+    @media (prefers-color-scheme: dark) {
+      .ea-content {
+        border: 1px solid opacify($color-background-dark, 0.02);
+      }
+    }
   }
 }
 
