@@ -23,6 +23,7 @@
  *     <div data-ea-publisher="foo" data-ea-type="text"></div>
  */
 
+import polyfills from "./polyfills";
 import Promise from "promise-polyfill";
 import verge from "verge";
 
@@ -41,13 +42,136 @@ const ABP_DETECTION_PX = "https://media.ethicalads.io/abp/px.gif";
 // here for future support.
 const SUPPORTS_MULTIPLE_PLACEMENTS = false;
 
+// Keywords and topics
+//
+// This allows us to categorize pages simply and have better content targeting.
+// Additional categorization can be done on the server side for pages
+// that request ads commonly but this quick and easy categorization
+// works decently well most of the time.
+const KEYWORDS = {
+  // Topics
+  "android": "android",
+  "ios": "ios",
+  "iphone": "ios",
+  "blockchain": "blockchain",
+  "bitcoin": "bitcoin",
+  "ethereum": "ethereum",
+  "hyperledger": "hyperledger",
+  "solidity": "solidity",
+  "cryptography": "cryptography",
+  "security": "security",
+  "infosec": "security",
+  "privacy": "privacy",
+  "frontend": "frontend",
+  "backend": "backend",
+  "full-stack": "backend",
+  "devops": "devops",
+  "ai": "artificial-intelligence",
+  "nlp": "nlp",
+  "ml": "machine-learning",
+  "cloud": "cloud",
+  "docker": "docker",
+  "kubernetes": "kubernetes",
+  "container": "containers",
+  "containers": "containers",
+  "ansible": "ansible",
+  "serverless": "serverless",
+  "openshift": "openshift",
+  "terraform": "terraform",
+  "aws": "aws",
+  "azure": "azure",
+  "gcp": "gcp",
+  "linux": "linux",
+  "ubuntu": "ubuntu",
+  "monitoring": "monitoring",
+  "redis": "redis",
+  "rabbitmq": "rabbitmq",
+  "nosql": "nosql",
+  "postgres": "postgresql",
+  "postgresql": "postgresql",
+  "mysql": "mysql",
+  "database": "database",
+  "testing": "testing",
+  "elasticsearch": "elasticsearch",
+  "lucene": "lucene",
+  "solr": "solr",
+  "nginx": "nginx",
+
+  // Frameworks amd modules
+  "django": "django",
+  "rails": "rails",
+  "angular": "angular",
+  "angularjs": "angular",
+  "laravel": "laravel",
+  "react": "reactjs",
+  "reactjs": "reactjs",
+  "react-native": "reactjs",
+  "jupyter": "jupyter",
+  "matplotlib": "matplotlib",
+  "pytorch": "pytorch",
+  "pydata": "pydata",
+  "pandas": "pandas",
+  "numpy": "numpy",
+  "wsgi": "wsgi",
+  "celery": "celery",
+  "jinja": "jinja",
+  "jinja2": "jinja",
+  "flask": "flask",
+  "oauth": "oauth",
+  "vuejs": "vuejs",
+  "vue": "vuejs",
+  "tensorflow": "tensorflow",
+  "tensor": "tensor",
+  "webpack": "webpack",
+
+  // Programming & markup languages
+  "dotnet": "dotnet",
+  ".net": "dotnet",
+  "c#": "c-sharp",
+  "c++": "cplusplus",
+  "erlang": "erlang",
+  "f#": "fsharp",
+  "golang": "golang",
+  "haskell": "haskell",
+  "java": "java",
+  "javascript": "javascript",
+  "js": "javascript",
+  "julia": "julia",
+  "kotlin": "kotlin",
+  "obj-c": "obj-c",
+  "objective-c": "obj-c",
+  "php": "php",
+  "python": "python",
+  "perl": "perl",
+  "sql": "sql",
+  "ruby": "ruby",
+  "rust": "rust",
+  "scala": "scala",
+  "swift": "swift",
+  "css": "css",
+  "scss": "scss",
+  "typescript": "typescript",
+  "rust": "rust",
+
+  // Phrases (not currently implemented)
+  //"data science": "datascience",
+  //"machine learning": "machine-learning",
+};
+
+// Maximum number of words of a document to analyze looking for keywords
+// This is simply a check against taking too much time on very long documents
+const MAX_WORDS_ANALYZED = 9999;
+// Max number of keywords to send
+const MAX_KEYWORDS = 10;
+
+
 /* Placement object to query decision API and return an Element node
  *
  * @param {string} publisher - Publisher ID
  * @param {string} ad_type - Placement ad type id
  * @param {Element} target - Target element
- * @param {string} keywords - An optional | separated array of keywords
- * @param {string} campaign_types - An optional | separated array of campaign types
+ * @param {Array[string]} keywords - An optional array of keywords
+ * @param {Array[string]} campaign_types - An optional array of campaign types
  * @param {boolean} load_manually - whether this placement will be loaded manually later
  */
 export class Placement {
@@ -58,8 +182,11 @@ export class Placement {
 
     this.response = null;
 
-    this.keywords = keywords || "";
-    this.campaign_types = campaign_types || "paid|community|house";
+    this.keywords = (keywords || []).concat(this.detectKeywords());
+    this.campaign_types = campaign_types || [];
+    if (!this.campaign_types.length) {
+      this.campaign_types = ["paid", "community", "house"];
+    }
 
     this.load_manually = load_manually;
   }
@@ -81,8 +208,8 @@ export class Placement {
       element.setAttribute(ATTR_PREFIX + "type", "image");
     }
 
-    const keywords = element.getAttribute(ATTR_PREFIX + "keywords");
-    const campaign_types = element.getAttribute(ATTR_PREFIX + "campaign-types");
+    const keywords = (element.getAttribute(ATTR_PREFIX + "keywords") || "").split("|").filter(word => word.length > 1);
+    const campaign_types = (element.getAttribute(ATTR_PREFIX + "campaign-types") || "").split("|").filter(word => word.length > 1);
 
     const load_manually = element.getAttribute(ATTR_PREFIX + "manual") === "true";
 
@@ -92,7 +219,7 @@ export class Placement {
     }
 
     let classes = (element.className || "").split(" ");
-    if (classes.includes("loaded")) {
+    if (classes.indexOf("loaded") >= 0) {
       console.error("EthicalAd already loaded.");
       return null;
     }
@@ -170,8 +297,8 @@ export class Placement {
       ad_types: this.ad_type,
       div_ids: div_id,
       callback: callback,
-      keywords: this.keywords,
-      campaign_types: this.campaign_types,
+      keywords: this.keywords.join("|"),
+      campaign_types: this.campaign_types.join("|"),
       format: "jsonp",
     });
     const url = new URL(AD_DECISION_URL + "?" + url_params.toString());
@@ -250,6 +377,39 @@ export class Placement {
     };
     img2.src = px.replace(/\*/, 2).replace(/\*/, random);
     beforeCheck(callback, 250)
+  }
+
+  /* Returns an array of keywords (strings) found on the page
+   *
+   * @returns {Array[string]} Advertising keywords found on the page
+   */
+  detectKeywords() {
+    var keywordHist = {};  // Keywords found => count of keyword
+    const mainContent = document.querySelector("main") ||
+      document.querySelector("[role='main']") ||
+      document.querySelector("body");
+
+    const words = mainContent.textContent.split(/\s+/);
+    const wordTrimmer = /^[\('"]?(.*?)[,\.\?\!:;\)'"]?$/g
+    for (let x = 0; x < words.length && x < MAX_WORDS_ANALYZED; x++) {
+      // Remove certain punctuation from beginning and end of the word
+      let word = words[x].replace(wordTrimmer, "$1").toLowerCase();
+      if (KEYWORDS[word]) {
+        keywordHist[KEYWORDS[word]] = (keywordHist[KEYWORDS[word]] || 0) + 1;
+      }
+    }
+
+    // Sort the hist with the most common items first
+    // Grab only the MAX_KEYWORDS most common
+    const keywords = Object.entries(keywordHist).sort(
+      (a, b) => {
+        if (a[1] > b[1]) return -1;
+        if (a[1] < b[1]) return 1;
+        return 0;
+      }
+    ).slice(0, MAX_KEYWORDS).map((x) => x[0]);
+
+    return keywords;
   }
 }
 
