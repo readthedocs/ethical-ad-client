@@ -240,7 +240,7 @@ export class Placement {
    */
   load() {
     // Detect the keywords
-    this.keywords.concat(this.detectKeywords());
+    this.keywords = this.keywords.concat(this.detectKeywords());
 
     return this.fetch().then((element) => {
       if (element === undefined) {
@@ -404,7 +404,9 @@ export class Placement {
       }
     }
 
-    console.debug("EthicalAds keywords:", keywordHist);
+    // This logs all keywords found,
+    // even if they weren't found MIN_KEYWORD_OCCURRENCES
+    console.debug("EthicalAds detected keywords:", keywordHist);
 
     // Sort the hist with the most common items first
     // Grab only the MAX_KEYWORDS most common
