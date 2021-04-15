@@ -163,6 +163,8 @@ const KEYWORDS = {
 const MAX_WORDS_ANALYZED = 9999;
 // Max number of keywords to send
 const MAX_KEYWORDS = 10;
+// Minimum number of occurrences of a keyword to consider it
+const MIN_KEYWORD_OCCURRENCES = 2;
 
 
 /* Placement object to query decision API and return an Element node
@@ -385,12 +387,12 @@ export class Placement {
    */
   detectKeywords() {
     var keywordHist = {};  // Keywords found => count of keyword
-    const mainContent = document.querySelector("main") ||
-      document.querySelector("[role='main']") ||
+    const mainContent = document.querySelector("[role='main']") ||
+      document.querySelector("main") ||
       document.querySelector("body");
 
     const words = mainContent.textContent.split(/\s+/);
-    const wordTrimmer = /^[\('"]?(.*?)[,\.\?\!:;\)'"]?$/g
+    const wordTrimmer = /^[\('"]?(.*?)[,\.\?\!:;\)'"]?$/g;
     for (let x = 0; x < words.length && x < MAX_WORDS_ANALYZED; x++) {
       // Remove certain punctuation from beginning and end of the word
       let word = words[x].replace(wordTrimmer, "$1").toLowerCase();
@@ -401,7 +403,10 @@ export class Placement {
 
     // Sort the hist with the most common items first
     // Grab only the MAX_KEYWORDS most common
-    const keywords = Object.entries(keywordHist).sort(
+    const keywords = Object.entries(keywordHist).filter(
+      // Only consider a keyword with at least this many occurrences
+      a => a[1] >= MIN_KEYWORD_OCCURRENCES
+    ).sort(
       (a, b) => {
         if (a[1] > b[1]) return -1;
         if (a[1] < b[1]) return 1;
