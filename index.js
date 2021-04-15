@@ -184,7 +184,7 @@ export class Placement {
 
     this.response = null;
 
-    this.keywords = (keywords || []).concat(this.detectKeywords());
+    this.keywords = keywords || [];
     this.campaign_types = campaign_types || [];
     if (!this.campaign_types.length) {
       this.campaign_types = ["paid", "community", "house"];
@@ -239,6 +239,9 @@ export class Placement {
    * @returns {Promise}
    */
   load() {
+    // Detect the keywords
+    this.keywords.concat(this.detectKeywords());
+
     return this.fetch().then((element) => {
       if (element === undefined) {
         throw new EthicalAdsWarning("Ad decision request blocked");
@@ -401,6 +404,8 @@ export class Placement {
       }
     }
 
+    console.debug("EthicalAds keywords:", keywordHist);
+
     // Sort the hist with the most common items first
     // Grab only the MAX_KEYWORDS most common
     const keywords = Object.entries(keywordHist).filter(
@@ -559,7 +564,7 @@ if (require.main !== module) {
   });
 
   load = () => {
-    console.log("Loading placements manually")
+    console.debug("Loading placements manually")
     load_placements(true);
   };
 }
