@@ -161,8 +161,11 @@ const KEYWORDS = {
 // Maximum number of words of a document to analyze looking for keywords
 // This is simply a check against taking too much time on very long documents
 const MAX_WORDS_ANALYZED = 9999;
-// Max number of keywords to send
-const MAX_KEYWORDS = 10;
+
+// Max number of detected keywords to send
+// Lowering this number means that only major topics of the page get sent on long pages
+const MAX_KEYWORDS = 3;
+
 // Minimum number of occurrences of a keyword to consider it
 const MIN_KEYWORD_OCCURRENCES = 2;
 
