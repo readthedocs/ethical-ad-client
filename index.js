@@ -297,6 +297,9 @@ export class Placement {
     if (this.target.id) {
       div_id = this.target.id;
     }
+
+    // There's no hard maximum on URL lengths (all of these get added to the query params)
+    // but ideally we want to keep our URLs below ~2k which should work basically everywhere
     const url_params = new URLSearchParams({
       publisher: this.publisher,
       ad_types: this.ad_type,
@@ -305,6 +308,8 @@ export class Placement {
       keywords: this.keywords.join("|"),
       campaign_types: this.campaign_types.join("|"),
       format: "jsonp",
+      // location.href includes query params (possibly sensitive) and fragments (unnecessary)
+      url: (window.location.origin + window.location.pathname).slice(0, 256),
     });
     const url = new URL(AD_DECISION_URL + "?" + url_params.toString());
 
