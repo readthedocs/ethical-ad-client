@@ -407,7 +407,7 @@ export class Placement {
     for (let x = 0; x < words.length && x < MAX_WORDS_ANALYZED; x++) {
       // Remove certain punctuation from beginning and end of the word
       let word = words[x].replace(wordTrimmer, "$1").toLowerCase();
-      if (KEYWORDS[word]) {
+      if (KEYWORDS.hasOwnProperty(word)) {
         keywordHist[KEYWORDS[word]] = (keywordHist[KEYWORDS[word]] || 0) + 1;
       }
     }
