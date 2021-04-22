@@ -135,7 +135,6 @@ const KEYWORDS = {
   "haskell": "haskell",
   "java": "java",
   "javascript": "javascript",
-  "js": "javascript",
   "julia": "julia",
   "kotlin": "kotlin",
   "obj-c": "obj-c",
