@@ -186,7 +186,8 @@ Image placement
 The image ad placement type has two variants: horizontal and veritcal. Vertical
 image placements are the default ad type. To use the horizontal variant, use
 
-**Vertical image**
+Vertical image
+``````````````
 
 .. code:: html
 
@@ -208,7 +209,8 @@ image placements are the default ad type. To use the horizontal variant, use
             :classes: dark raised
 
 
-**Horizontal image**
+Horizontal image
+````````````````
 
 This variant can be used with the ``horizontal`` theme variant class:
 
