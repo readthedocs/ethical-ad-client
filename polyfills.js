@@ -22,12 +22,13 @@ if (!Object.entries) {
 }
 
 
-/**
- * URL Polyfill
- * Draft specification: https://url.spec.whatwg.org
- * https://polyfill.io/
- */
+// Protect against double loading the URL polyfill which fails under some contexts
 if (!window.URL || !window.URLSearchParams) {
+  /**
+   * URL Polyfill
+   * Draft specification: https://url.spec.whatwg.org
+   * https://polyfill.io/
+   */
   (function (global) {
     'use strict';
 
