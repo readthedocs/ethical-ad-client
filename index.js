@@ -29,10 +29,13 @@ import verge from "verge";
 
 import "./styles.scss";
 
+
+const AD_CLIENT_VERSION = "1.1.0";  // Sent with the ad request
+
+
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
 const AD_DECISION_URL = "https://server.ethicalads.io/api/v1/decision/";
-const AD_CLIENT_VERSION = 1;  // Sent with the ad request
 const AD_TYPES_VERSION = 1;  // Used with the ad type slugs
 const ATTR_PREFIX = "data-ea-";
 const ABP_DETECTION_PX = "https://media.ethicalads.io/abp/px.gif";
