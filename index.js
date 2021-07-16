@@ -32,7 +32,8 @@ import "./styles.scss";
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
 const AD_DECISION_URL = "https://server.ethicalads.io/api/v1/decision/";
-const AD_CLIENT_VERSION = 1;
+const AD_CLIENT_VERSION = 1;  // Sent with the ad request
+const AD_TYPES_VERSION = 1;  // Used with the ad type slugs
 const ATTR_PREFIX = "data-ea-";
 const ABP_DETECTION_PX = "https://media.ethicalads.io/abp/px.gif";
 
@@ -219,7 +220,7 @@ export class Placement {
 
     // Add version to ad type to verison the HTML return
     if (ad_type === "image" || ad_type === "text") {
-      ad_type += "-v" + AD_CLIENT_VERSION;
+      ad_type += "-v" + AD_TYPES_VERSION;
     }
 
     let classes = (element.className || "").split(" ");
@@ -310,6 +311,7 @@ export class Placement {
       keywords: this.keywords.join("|"),
       campaign_types: this.campaign_types.join("|"),
       format: "jsonp",
+      client_version: AD_CLIENT_VERSION,
       // location.href includes query params (possibly sensitive) and fragments (unnecessary)
       url: (window.location.origin + window.location.pathname).slice(0, 256),
     });
