@@ -341,7 +341,7 @@ export class Placement {
         // Send the time the ad was viewed to the server
         if (document.visibilityState === "hidden" || document.visibilityState === "unloaded") {
           let pixel = document.createElement("img");
-          pixel.src = placement.response.view_url + "?view_time=" + parseInt(placement.view_time);
+          pixel.src = placement.response.view_url + "?view_time=" + placement.view_time;
           pixel.className = "ea-pixel";
           placement.target.appendChild(pixel);
 
