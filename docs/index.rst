@@ -370,3 +370,30 @@ Becoming a Publisher
 Visit `EthicalAds`_ to apply to be a publisher.
 
 .. _`EthicalAds`: https://ethicalads.io
+
+
+Developing
+----------
+
+This section is for developers of the client itself.
+Development occurs on `GitHub <https://github.com/readthedocs/ethical-ad-client>`_.
+
+* `Issues <https://github.com/readthedocs/ethical-ad-client/issues>`_
+* `Pull requests <https://github.com/readthedocs/ethical-ad-client/pulls>`_
+
+
+Releasing
+~~~~~~~~~
+
+This is the release process for the client itself.
+
+* First update the version in ``package.json`` **and** ``index.js``.
+  The versions use `semantic versioning <https://semver.org/>`_.
+* Run ``npm install && npm run build``.
+  This ensures you have the latest dependencies and you've built
+  the latest version of the documentation.
+* Release the `beta client`_ and purge the client from the CDN.
+* Release the `release client`_ and purge the CDN.
+
+.. _beta client: https://media.ethicalads.io/media/client/beta/ethicalads.min.js
+.. _release client: https://media.ethicalads.io/media/client/ethicalads.min.js
