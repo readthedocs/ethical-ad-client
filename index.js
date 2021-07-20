@@ -336,7 +336,7 @@ export class Placement {
       }, VIEW_TIME_INTERVAL * 1000, placement.target);
 
       document.addEventListener("visibilitychange", () => {
-        // Check if the tab has gone out of focus or the browser/app is minimized
+        // Check if the tab loses focus/is closed or the browser/app is minimized/closed
         // In that case, no longer count further time that the ad is in view
         // Send the time the ad was viewed to the server
         if (document.visibilityState === "hidden" || document.visibilityState === "unloaded") {
