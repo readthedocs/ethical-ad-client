@@ -63,6 +63,15 @@ The following data attributes are supported on the ad placement element:
     This is useful if you want to conditionally load advertising for some users but not others
     or only load advertising when specific actions are performed.
 
+``data-ea-force-ad`` (optional)
+    This parameter can be used to test the ad client on a specific ad.
+    When used, any impressions will not be counted for billing purposes.
+
+``data-ea-force-campaign`` (optional)
+    This parameter can be used to test the ad client on a specific campaign (group of ads).
+    When used, any impressions will not be counted for billing purposes.
+
+
 Themes
 ------
 

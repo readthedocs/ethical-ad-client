@@ -201,9 +201,11 @@ const MIN_KEYWORD_OCCURRENCES = 2;
  * @param {Array[string]} keywords - An optional array of keywords
  * @param {Array[string]} campaign_types - An optional array of campaign types
  * @param {boolean} load_manually - whether this placement will be loaded manually later
+ * @param {string} force_ad - force the client to show a specific ad
+ * @param {string} force_campaign - force the client to show an ad from a specific campaign
  */
 export class Placement {
-  constructor(publisher, ad_type = "image", target, keywords, campaign_types, load_manually) {
+  constructor(publisher, ad_type = "image", target, keywords, campaign_types, load_manually, force_ad, force_campaign) {
     this.publisher = publisher;
     this.ad_type = ad_type;
     this.target = target;
@@ -217,6 +219,8 @@ export class Placement {
     }
 
     this.load_manually = load_manually;
+    this.force_ad = force_ad;
+    this.force_campaign = force_campaign;
   }
 
   /* Create a placement from an element
@@ -240,6 +244,8 @@ export class Placement {
     const campaign_types = (element.getAttribute(ATTR_PREFIX + "campaign-types") || "").split("|").filter(word => word.length > 1);
 
     const load_manually = element.getAttribute(ATTR_PREFIX + "manual") === "true";
+    const force_ad = element.getAttribute(ATTR_PREFIX + "force-ad");
+    const force_campaign = element.getAttribute(ATTR_PREFIX + "force-campaign");
 
     // Add version to ad type to verison the HTML return
     if (ad_type === "image" || ad_type === "text") {
@@ -252,7 +258,7 @@ export class Placement {
       return null;
     }
 
-    return new Placement(publisher, ad_type, element, keywords, campaign_types, load_manually);
+    return new Placement(publisher, ad_type, element, keywords, campaign_types, load_manually, force_ad, force_campaign);
   }
 
   /* Transforms target element into a placement
@@ -326,7 +332,7 @@ export class Placement {
 
     // There's no hard maximum on URL lengths (all of these get added to the query params)
     // but ideally we want to keep our URLs below ~2k which should work basically everywhere
-    const url_params = new URLSearchParams({
+    let params = {
       publisher: this.publisher,
       ad_types: this.ad_type,
       div_ids: div_id,
@@ -337,7 +343,14 @@ export class Placement {
       client_version: AD_CLIENT_VERSION,
       // location.href includes query params (possibly sensitive) and fragments (unnecessary)
       url: (window.location.origin + window.location.pathname).slice(0, 256),
-    });
+    };
+    if (this.force_ad) {
+      params["force_ad"] = this.force_ad;
+    }
+    if (this.force_campaign) {
+      params["force_campaign"] = this.force_campaign;
+    }
+    const url_params = new URLSearchParams(params);
     const url = new URL(AD_DECISION_URL + "?" + url_params.toString());
 
     return new Promise((resolve, reject) => {
