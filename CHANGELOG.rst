@@ -6,6 +6,16 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.1.1
+---------------
+
+There was a minor fix to new code that sends the amount of time an ad was viewed.
+
+:date: August 5, 2021
+
+ * @davidfischer: Remove the view time listener after sending (#80)
+
+
 Version v1.1.0
 ---------------
 
