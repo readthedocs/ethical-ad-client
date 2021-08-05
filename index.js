@@ -192,6 +192,18 @@ const MAX_KEYWORDS = 3;
 // Minimum number of occurrences of a keyword to consider it
 const MIN_KEYWORD_OCCURRENCES = 2;
 
+// Time between checking whether the ad is in the viewport to count the time viewed
+// Time viewed is an important advertiser metric
+const VIEW_TIME_INTERVAL = 1;  // seconds
+const VIEW_TIME_MAX = 5 * 60;  // seconds
+
+// In-viewport fudge factor
+// A fudge factor of ~3 is needed for the case where the ad
+// is hidden off the side of the screen by a sliding sidebar
+// For example, if the right side of the ad is at x=0
+// or the left side of the ad is at the right side of the viewport
+const VIEWPORT_FUDGE_FACTOR = -3;  // px
+
 
 /* Placement object to query decision API and return an Element node
  *
@@ -210,6 +222,8 @@ export class Placement {
     this.ad_type = ad_type;
     this.target = target;
 
+    this.view_time = 0;  // seconds
+
     this.response = null;
 
     this.keywords = keywords || [];
@@ -219,6 +233,8 @@ export class Placement {
     }
 
     this.load_manually = load_manually;
+    this.view_time_sent = false;  // true once the view time is sent to the server
+
     this.force_ad = force_ad;
     this.force_campaign = force_campaign;
   }
@@ -295,14 +311,11 @@ export class Placement {
     }).then((placement) => {
       // Detect when the ad is in the viewport
       // Add the view pixel to the DOM to count the view
+      // Also count the time the ad is in view
+      //  this will be sent before the page/tab is closed or navigated away
 
       let viewport_detection = setInterval((element) => {
-        // Verge can be off by 1-2 pixels
-        // A fudge factor of ~3 is needed for the case where the ad
-        // is hidden off the side of the screen by a sliding sidebar
-        // For example, if the right side of the ad is at x=0
-        // or the left side of the ad is at the right side of the viewport
-        if (placement.response && placement.response.view_url && verge.inViewport(element, -3)) {
+        if (placement.inViewport(element)) {
           // This ad was seen!
           let pixel = document.createElement("img");
           pixel.src = placement.response.view_url;
@@ -315,7 +328,48 @@ export class Placement {
           clearInterval(viewport_detection);
         }
       }, 100, placement.target);
+
+      let view_time_counter = setInterval((element) => {
+        if (placement.view_time_sent) {
+          clearInterval(view_time_counter);
+        } else if (placement.inViewport(element)) {
+          // Increment the ad's time in view counter
+          placement.view_time += VIEW_TIME_INTERVAL;
+
+          if (placement.view_time >= VIEW_TIME_MAX) {
+            clearInterval(view_time_counter);
+          }
+        }
+      }, VIEW_TIME_INTERVAL * 1000, placement.target);
+
+      document.addEventListener("visibilitychange", () => {
+        // Check if the tab loses focus/is closed or the browser/app is minimized/closed
+        // In that case, no longer count further time that the ad is in view
+        // Send the time the ad was viewed to the server
+        if (document.visibilityState === "hidden" || document.visibilityState === "unloaded") {
+          let pixel = document.createElement("img");
+          pixel.src = placement.response.view_url + "?view_time=" + placement.view_time;
+          pixel.className = "ea-pixel";
+          placement.target.appendChild(pixel);
+
+          placement.view_time_sent = true;
+        }
+      });
     });
+  }
+
+  /* Returns whether the ad is visible in the viewport
+   *
+   * @param {Element} element - The ad element
+   * @returns {boolean} True if the ad is loaded and visible in the viewport
+   *  (including the tab being focused and not minimized) and returns false otherwise.
+   */
+  inViewport(element) {
+    if (this.response && this.response.view_url && verge.inViewport(element, VIEWPORT_FUDGE_FACTOR) && document.visibilityState === "visible") {
+      return true;
+    }
+
+    return false;
   }
 
   /* Get placement data from decision API
