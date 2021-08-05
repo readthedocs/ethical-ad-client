@@ -342,7 +342,8 @@ export class Placement {
         }
       }, VIEW_TIME_INTERVAL * 1000, placement.target);
 
-      document.addEventListener("visibilitychange", () => {
+      let visibility_change_listener = () => {
+        if (placement.view_time <= 0 || placement.view_time_sent) return;
         // Check if the tab loses focus/is closed or the browser/app is minimized/closed
         // In that case, no longer count further time that the ad is in view
         // Send the time the ad was viewed to the server
@@ -353,8 +354,10 @@ export class Placement {
           placement.target.appendChild(pixel);
 
           placement.view_time_sent = true;
+          document.removeEventListener("visibilitychange", visibility_change_listener);
         }
-      });
+      };
+      document.addEventListener("visibilitychange", visibility_change_listener);
     });
   }
 
