@@ -6,6 +6,20 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.2.0
+---------------
+
+Move the view time endpoint to a separate endpoint
+sent from the server.
+
+:date: August 13, 2021
+
+ * @davidfischer: Use a separate view time endpoint (#85)
+ * @dependabot[bot]: Bump url-parse from 1.5.1 to 1.5.3 (#84)
+ * @davidfischer: Document the versioning process of the client (#83)
+ * @dependabot[bot]: Bump path-parse from 1.0.6 to 1.0.7 (#82)
+
+
 Version v1.1.1
 ---------------
 
