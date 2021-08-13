@@ -343,13 +343,13 @@ export class Placement {
       }, VIEW_TIME_INTERVAL * 1000, placement.target);
 
       let visibility_change_listener = () => {
-        if (placement.view_time <= 0 || placement.view_time_sent) return;
+        if (placement.view_time <= 0 || placement.view_time_sent || !placement.response.view_time_url) return;
         // Check if the tab loses focus/is closed or the browser/app is minimized/closed
         // In that case, no longer count further time that the ad is in view
         // Send the time the ad was viewed to the server
         if (document.visibilityState === "hidden" || document.visibilityState === "unloaded") {
           let pixel = document.createElement("img");
-          pixel.src = placement.response.view_url + "?view_time=" + placement.view_time;
+          pixel.src = placement.response.view_time_url + "?view_time=" + placement.view_time;
           pixel.className = "ea-pixel";
           placement.target.appendChild(pixel);
 
