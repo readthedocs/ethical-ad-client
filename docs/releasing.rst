@@ -24,6 +24,13 @@ This is the release process for the client itself.
         git tag $VERSION
         git push --tags origin main
 
+* Create the `release on GitHub <https://github.com/readthedocs/ethical-ad-client/releases>`_:
+
+    .. code-block:: bash
+
+        # Push this to GitHub and the CDN
+        cp dist/ethicalads.min.js dist/ethicalads-$VERSION.min.js
+
 * Release the `beta client`_ and purge the client from the CDN.
   A few publishers (notably Read the Docs) use the beta client
   and we can roll it out to verify no breaking changes before pushing this to third-party publishers.
