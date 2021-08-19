@@ -539,7 +539,7 @@ export function check_dependencies() {
     !window.URLSearchParams ||
     !window.Promise
   ) {
-    console.error("Browser does not meet ad client dependencies.");
+    console.error("Browser does not meet ethical ad client dependencies. Not showing ads");
     return false;
   }
 
