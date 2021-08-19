@@ -23,8 +23,6 @@
  *     <div data-ea-publisher="foo" data-ea-type="text"></div>
  */
 
-import polyfills from "./polyfills";
-import Promise from "promise-polyfill";
 import verge from "verge";
 
 import "./styles.scss";
@@ -527,6 +525,27 @@ export class Placement {
   }
 }
 
+/* Detects whether the browser supports the necessary JS APIs to support the ad client
+ *
+ * Generally we support recent versions of evergreen browsers (Chrome, Firefox, Safari, Edge)
+ * but we no longer support IE11.
+ *
+ *  @returns {boolean} true if all dependencies met and false otherwise
+ */
+export function check_dependencies() {
+  if (
+    !Object.entries ||
+    !window.URL ||
+    !window.URLSearchParams ||
+    !window.Promise
+  ) {
+    console.error("Browser does not meet ethical ad client dependencies. Not showing ads");
+    return false;
+  }
+
+  return true;
+}
+
 /* Find all placement DOM elements and hot load HTML as child nodes
  *
  * @param {boolean} force_load - load placements even if they are set to load manually
@@ -623,7 +642,7 @@ export var uplifted = false;
  * This also replicates JQuery `$(document).ready()`, with added protection for
  * usage of `async` -- the DOM ready event can fire before the script is loaded..
  */
-if (require.main !== module) {
+if (require.main !== module && check_dependencies()) {
   const wait_dom = new Promise((resolve) => {
     if (
       document.readyState === "interactive" ||
