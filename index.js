@@ -375,6 +375,7 @@ export class Placement {
    * string from API response. Can also be null, indicating a noop action.
    */
   fetch() {
+    // Make sure callbacks don't collide even with multiple placements
     const callback = "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000);
     var div_id = callback;
     if (this.target.id) {
@@ -412,6 +413,7 @@ export class Placement {
           node_convert.innerHTML = response.html;
           return resolve(node_convert.firstChild);
         } else {
+          // TODO: this also occurs if there's no ad to show
           return reject(
             new Error("Placement is configured with invalid parameters.")
           );
@@ -487,7 +489,8 @@ export class Placement {
   detectKeywords() {
     // Return previously detected keywords
     // If this code has already run.
-    if (detectedKeywords.length > 0) return detectedKeywords;
+    // Note: if there are "no" keywords (an empty list) this is still true
+    if (detectedKeywords) return detectedKeywords;
 
     var keywordHist = {};  // Keywords found => count of keyword
     const mainContent = document.querySelector("[role='main']") ||
@@ -612,7 +615,7 @@ export var uplifted = false;
 /* Keywords detected on the page
  * @type {Array[string]}
  */
-export var detectedKeywords = [];
+export var detectedKeywords = null;
 
 /* If importing this as a module, do not automatically process DOM and fetch the
  * ad placement. Only do this if using the module directly, from a `script`
