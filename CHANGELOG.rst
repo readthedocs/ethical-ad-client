@@ -6,6 +6,25 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.3.0
+---------------
+
+In this change we removed our polyfills to support IE11.
+This shrinks the client by about 40%.
+We also move to support multiple placements on a page.
+This isn't something we're recommending to publishers (and in fact, you won't make more doing this)
+but a publisher who is beta testing our sponsorship model is using this feature.
+
+**Note:** Drops support for IE11.
+
+:date: September 2, 2021
+
+ * @davidfischer: Remove polyfills and drop IE11 support (#88)
+ * @davidfischer: Support multiple placements on a page (#87)
+ * @davidfischer: Use ponyfills instead of polyfills to not change state on others' sites (#62)
+ * @karthikdivi: Failing to display Ad in React environments, also crashing the websites (#59)
+
+
 Version v1.2.0
 ---------------
 
