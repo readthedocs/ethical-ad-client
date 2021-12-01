@@ -260,6 +260,42 @@ Text placements can be defined using ``data-ea-type="text"``:
         :ad_type: text
         :classes: dark raised
 
+
+.. _placement-styles:
+
+Placement style
+---------------
+
+Placement styles are helpers to help integrate our ads into your site.
+They are completely optional but they can help you get started with a common pattern
+without writing custom JavaScript or CSS.
+
+
+StickyBox
+~~~~~~~~~
+
+.. versionadded:: 1.4
+
+The "StickyBox" style is a floating placement in the lower right corner on very wide screens
+(>1300px wide) and a static placement on smaller screens.
+By floating, it ensures that the ad is always seen
+(and therefore results in billed views that make the publisher money).
+On mobile or smaller screens, the ad will just be a static placement wherever the
+ad ``<div>`` is in the DOM.
+
+Using our StickyBox style:
+
+.. code:: html
+
+   <div data-ea-publisher="..." data-ea-type="image" data-ea-style="stickybox"></div>
+
+
+
+.. raw:: html
+
+   <img src="_static/stickybox.gif" width="100%">
+
+
 .. _placements:
 
 Ad placement reporting

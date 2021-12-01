@@ -202,33 +202,31 @@ const VIEWPORT_FUDGE_FACTOR = -3;  // px
  * @param {string} publisher - Publisher ID
  * @param {string} ad_type - Placement ad type id
  * @param {Element} target - Target element
- * @param {Array[string]} keywords - An optional array of keywords
- * @param {Array[string]} campaign_types - An optional array of campaign types
- * @param {boolean} load_manually - whether this placement will be loaded manually later
- * @param {string} force_ad - force the client to show a specific ad
- * @param {string} force_campaign - force the client to show an ad from a specific campaign
+ * @param {Object} options - Various options for configuring the placement such as:
+      keywords, styles, campaign_types, load_manually, force_ad, force_campaign
  */
 export class Placement {
-  constructor(publisher, ad_type = "image", target, keywords, campaign_types, load_manually, force_ad, force_campaign) {
+  constructor (publisher, ad_type, target, options) {
     this.publisher = publisher;
     this.ad_type = ad_type;
     this.target = target;
 
-    this.view_time = 0;  // seconds
-
-    this.response = null;
-
-    this.keywords = keywords || [];
-    this.campaign_types = campaign_types || [];
+    // Options
+    this.options = options;
+    this.style = options.style;
+    this.keywords = options.keywords || [];
+    this.load_manually = options.load_manually;
+    this.force_ad = options.force_ad;
+    this.force_campaign = options.force_campaign;
+    this.campaign_types = options.campaign_types || [];
     if (!this.campaign_types.length) {
       this.campaign_types = ["paid", "community", "house"];
     }
 
-    this.load_manually = load_manually;
+    // Initialized and will be used in the future
+    this.view_time = 0;
     this.view_time_sent = false;  // true once the view time is sent to the server
-
-    this.force_ad = force_ad;
-    this.force_campaign = force_campaign;
+    this.response = null;
   }
 
   /* Create a placement from an element
@@ -252,6 +250,7 @@ export class Placement {
     const campaign_types = (element.getAttribute(ATTR_PREFIX + "campaign-types") || "").split("|").filter(word => word.length > 1);
 
     const load_manually = element.getAttribute(ATTR_PREFIX + "manual") === "true";
+    const style = element.getAttribute(ATTR_PREFIX + "style");
     const force_ad = element.getAttribute(ATTR_PREFIX + "force-ad");
     const force_campaign = element.getAttribute(ATTR_PREFIX + "force-campaign");
 
@@ -266,7 +265,14 @@ export class Placement {
       return null;
     }
 
-    return new Placement(publisher, ad_type, element, keywords, campaign_types, load_manually, force_ad, force_campaign);
+    return new Placement(publisher, ad_type, element, {
+      keywords: keywords,
+      style: style,
+      campaign_types: campaign_types,
+      load_manually,
+      force_ad,
+      force_campaign,
+    });
   }
 
   /* Transforms target element into a placement
@@ -297,6 +303,10 @@ export class Placement {
       while (this.target.firstChild) {
         this.target.removeChild(this.target.firstChild);
       }
+
+      // Apply any styles based on the specified styling
+      this.applyStyles(element);
+
       this.target.appendChild(element);
 
       return this;
@@ -522,7 +532,25 @@ export class Placement {
 
     return keywords;
   }
+
+  /* Apply custom styles based on data-ea-style
+   *
+   */
+  applyStyles(element) {
+    // Stickybox: https://ethical-ad-client.readthedocs.io/en/latest/#stickybox
+    if ("stickybox" === this.style) {
+      let hideButton = document.createElement("div");
+      hideButton.setAttribute("class", "ea-stickybox-hide");
+      hideButton.append("×");
+      hideButton.addEventListener("click", function () {
+        document.querySelector("[data-ea-publisher]").remove();
+      });
+      element.appendChild(hideButton);
+    }
+  }
 }
+
+
 
 /* Detects whether the browser supports the necessary JS APIs to support the ad client
  *
