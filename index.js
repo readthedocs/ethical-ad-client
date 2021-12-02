@@ -538,7 +538,7 @@ export class Placement {
    */
   applyStyles(element) {
     // Stickybox: https://ethical-ad-client.readthedocs.io/en/latest/#stickybox
-    if ("stickybox" === this.style) {
+    if (this.style === "stickybox") {
       let hideButton = document.createElement("div");
       hideButton.setAttribute("class", "ea-stickybox-hide");
       hideButton.append("×");
