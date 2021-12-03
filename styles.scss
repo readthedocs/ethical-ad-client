@@ -4,15 +4,20 @@
 $width-image-horizontal: 320px;
 $width-image-vertical: 180px;
 
+// Breakpoint (used for stickybox format)
+$breakpoint-ultrawide: 1300px;
+
 // Colors
 $color-background: rgba(0, 0, 0, 0.03);
 $color-background-dark: rgba(255, 255, 255, 0.05);
 $color-link: rgb(80, 80, 80);
 $color-link-callout: lighten($color-link, 10%);
 $color-link-bold: #088cdb;
-$color-link-dark: rgb(220, 220, 220);
+$color-link-dark: rgb(220, 220, 220);  // gainsboro
 $color-link-callout-dark: darken($color-link-dark, 10%);
 $color-link-bold-dark: lighten($color-link-bold, 20%);
+$color-bg-stickybox: $color-link-dark;
+$color-bg-dark-stickybox: $color-link;
 
 // Utilities, mostly to reduce file size
 @mixin links($color-primary, $color-secondary, $color-highlight) {
@@ -173,7 +178,10 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
   }
 }
 
+// Image placement
+// -------------------------------------------------------------------------
 // Explicit image ad type, or default image ad type not specified
+// https://ethical-ad-client.readthedocs.io/en/latest/#image-placement
 [data-ea-type="image"].loaded,
 [data-ea-publisher]:not([data-ea-type]).loaded,
 .ea-type-image {
@@ -230,7 +238,10 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
   }
 }
 
-// Text ad type
+
+// Text placement (text-only ad type)
+// -------------------------------------------------------------------------
+// https://ethical-ad-client.readthedocs.io/en/latest/#text-placement
 [data-ea-type="text"].loaded,
 .ea-type-text {
   font-size: 14px;
@@ -245,5 +256,68 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
     padding-right: 1em;
     text-align: right;
     font-style: italic;
+  }
+}
+
+
+// Stickybox ad
+// -------------------------------------------------------------------------
+// The stickybox is an ad that is shown in a floating box in the lower right
+// on very wide screens or a standard image ad
+// (text-only not supported) on screens less wide.
+// https://ethical-ad-client.readthedocs.io/en/latest/#stickybox
+[data-ea-style="stickybox"].loaded {
+  .ea-type-image {
+    z-index: 1000;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    .ea-stickybox-hide {
+      cursor: pointer;
+      position: absolute;
+      top: 0.75em;
+      right: 0.75em;
+
+      background-color: #fefefe;
+      border: 1px solid #088cdb;
+      border-radius: 50%;
+      color: #088cdb;
+      font-size: 1em;
+      text-align: center;
+      height: 1.5em;
+      width: 1.5em;
+      line-height: 1.5em;
+    }
+
+    @media (max-width: $breakpoint-ultrawide) {
+      position: static;
+      bottom: 0;
+      right: 0;
+      margin: auto;
+      text-align: center;
+
+      .ea-stickybox-hide {
+        display: none;
+      }
+    }
+  }
+
+  // Our ads are normally partially transparent
+  // This doesn't work with floating ads
+  @media (min-width: $breakpoint-ultrawide + 1) {
+    .ea-type-image .ea-content {
+      background: $color-bg-stickybox;
+    }
+    &.dark .ea-type-image .ea-content {
+      background: $color-bg-dark-stickybox;
+    }
+    &.adaptive {
+      @media (prefers-color-scheme: dark) {
+        .ea-type-image .ea-content {
+          background: $color-bg-dark-stickybox;
+        }
+      }
+    }
   }
 }
