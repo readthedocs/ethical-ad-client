@@ -6,6 +6,20 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.4.0
+---------------
+
+The big change here is to add custom placements with the ``data-ea-style``
+option.
+
+:date: December 3, 2021
+
+ * @davidfischer: Add stickybox floating placement to ad client (#94)
+ * @davidfischer: Add MIT License file (#93)
+ * @sureshjoshi: Static site support using CSS in lieu of JS (#92)
+ * @voxpelli: Add `LICENSE` file to make license more discoverable by eg. GitHub (#89)
+
+
 Version v1.3.0
 ---------------
 
