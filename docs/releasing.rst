@@ -29,7 +29,9 @@ This is the release process for the client itself.
     .. code-block:: bash
 
         # Push this to GitHub and the CDN
-        cp dist/ethicalads.min.js dist/ethicalads-$VERSION.min.js
+        mkdir dist/$VERSION
+        cp dist/ethicalads.min.js dist/$VERSION/
+        cp dist/ethicalads.min.js dist/$VERSION/ethicalads-$VERSION.min.js
 
 * Release the `beta client`_ and purge the client from the CDN.
   A few publishers (notably Read the Docs) use the beta client
