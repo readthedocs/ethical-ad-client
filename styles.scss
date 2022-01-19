@@ -268,7 +268,7 @@ $color-bg-dark-stickybox: $color-link;
 // https://ethical-ad-client.readthedocs.io/en/latest/#stickybox
 [data-ea-style="stickybox"].loaded {
   .ea-type-image {
-    z-index: 1000;
+    z-index: 10;      // Should be below most modals
     position: fixed;
     bottom: 20px;
     right: 20px;
