@@ -6,6 +6,18 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.4.1
+---------------
+
+This was a very minor change to a ``z-index`` that could
+obscure some content when using the stickybox placement.
+
+:date: January 25, 2022
+
+ * @davidfischer: Decrease the z-index below most modals (#98)
+ * @davidfischer: Tweak around releasing versions (#97)
+
+
 Version v1.4.0
 ---------------
 
