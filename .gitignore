@@ -3,4 +3,4 @@
 /docs/_build/
 .ropeproject/
 *.pyc
-dist/ethicalads-v*.min.js
+ethicalads*.min.js
