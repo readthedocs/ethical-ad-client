@@ -363,7 +363,7 @@ document ready event. For example, using jQuery:
     });
 
 Showing content when there isn't an ad
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------
 
 The biggest use-case is to show backup content when we don't have an ad to show.
 Many of our publishers prefer to serve EthicalAds,
