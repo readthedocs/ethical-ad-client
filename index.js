@@ -292,6 +292,9 @@ export class Placement {
       if (element === undefined) {
         throw new EthicalAdsWarning("Ad decision request blocked");
       }
+      if (!element) {
+        throw new EthicalAdsWarning("No ads to show.");
+      }
 
       // Add `loaded` class, signifying that the CSS styles should finally be
       // applied to the target element.
@@ -421,10 +424,8 @@ export class Placement {
           node_convert.innerHTML = response.html;
           return resolve(node_convert.firstChild);
         } else {
-          // TODO: this also occurs if there's no ad to show
-          return reject(
-            new Error("Placement is configured with invalid parameters.")
-          );
+          // No ad to show for this targeting/publisher
+          return resolve(null);
         }
       };
 
@@ -706,7 +707,8 @@ if (require.main !== module && check_dependencies()) {
 
           if (err instanceof Error) {
             if (err instanceof EthicalAdsWarning && !is_debug) {
-              // Skip reporting these warnings for now, unless debugging.
+              // Report these at a lower log level
+              console.debug(err.message);
               return;
             }
             console.error(err.message);
