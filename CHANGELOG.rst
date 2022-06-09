@@ -6,6 +6,14 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.4.3
+--------------
+
+Fixes a release issue with 1.4.2.
+
+:date: June 9, 2022
+
+
 Version v1.4.2
 ---------------
 
