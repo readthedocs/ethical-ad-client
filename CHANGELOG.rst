@@ -6,6 +6,20 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.4.2
+---------------
+
+This release just demoted an error raised when there were no ads to show to a warning.
+
+:date: June 9, 2022
+
+ * @davidfischer: Silence the no ads to show warning (#111)
+ * @ericholscher: Highlight fallback ads (#109)
+ * @dependabot[bot]: Bump url-parse from 1.5.3 to 1.5.7 (#104)
+ * @dependabot[bot]: Bump follow-redirects from 1.12.1 to 1.14.7 (#96)
+ * @davidfischer: "Placement is configured with invalid parameters" when there's just no ad to show (#26)
+
+
 Version v1.4.1
 ---------------
 
