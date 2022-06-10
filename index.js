@@ -703,10 +703,8 @@ if (require.main !== module && check_dependencies()) {
         .catch((err) => {
           resolve([]);
 
-          const is_debug = global.debug || window.debug || false;
-
           if (err instanceof Error) {
-            if (err instanceof EthicalAdsWarning && !is_debug) {
+            if (err instanceof EthicalAdsWarning) {
               // Report these at a lower log level
               console.debug(err.message);
               return;
