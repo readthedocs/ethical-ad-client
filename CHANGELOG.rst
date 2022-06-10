@@ -6,6 +6,18 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.4.4
+--------------
+
+During the rollout of v1.4.3, we noticed that warnings were treated as errors
+in some situations due to a poorly documented, browser specific ``window.debug``.
+We are just not going to rely on that.
+
+:date: June 9, 2022
+
+ * @davidfischer: Always treat warnings as warnings (#117)
+
+
 Version v1.4.3
 --------------
 
