@@ -6,6 +6,17 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.5.0
+--------------
+
+Publisher house ads (fallback ads) were not enabled by default in the client.
+Starting in this release, they are.
+
+:date: June 20, 2022
+
+ * @davidfischer: Make publisher-house ads enabled by default (#119)
+
+
 Version v1.4.4
 --------------
 
