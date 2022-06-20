@@ -220,7 +220,7 @@ export class Placement {
     this.force_campaign = options.force_campaign;
     this.campaign_types = options.campaign_types || [];
     if (!this.campaign_types.length) {
-      this.campaign_types = ["paid", "community", "house"];
+      this.campaign_types = ["paid", "publisher-house", "community", "house"];
     }
 
     // Initialized and will be used in the future
