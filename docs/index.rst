@@ -54,7 +54,7 @@ The following data attributes are supported on the ad placement element:
     This is page-specific (not publisher-specific) keywords related to where the ad is shown.
 
 ``data-ea-campaign-types`` (optional)
-    A pipe (``|``) separated array of campaign types ("paid", "community", "house").
+    A pipe (``|``) separated array of campaign types ("paid", "publisher-house", "community", "house").
     This can only further reduce campaign types, not allow ones prohibited for the publisher.
     This is useful when you want certain users to not get certain types of ads.
 
