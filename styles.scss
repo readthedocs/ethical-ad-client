@@ -4,6 +4,10 @@
 $width-image-horizontal: 320px;
 $width-image-vertical: 180px;
 
+// Z-index used to ensure these custom ad styles are above the main content.
+// but below most modals
+$zindex-styles: 10;
+
 // Breakpoint (used for stickybox format)
 $breakpoint-ultrawide: 1300px;
 
@@ -268,7 +272,7 @@ $color-bg-dark-stickybox: $color-link;
 // https://ethical-ad-client.readthedocs.io/en/latest/#stickybox
 [data-ea-style="stickybox"].loaded {
   .ea-type-image {
-    z-index: 10;      // Should be below most modals
+    z-index: $zindex-styles;
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -318,6 +322,52 @@ $color-bg-dark-stickybox: $color-link;
           background: $color-bg-dark-stickybox;
         }
       }
+    }
+  }
+}
+
+
+// FixedFooter ad
+// -------------------------------------------------------------------------
+// https://ethical-ad-client.readthedocs.io/en/latest/#fixedfooter
+[data-ea-style="fixedfooter"].loaded {
+
+  .ea-type-text {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+
+    z-index: $zindex-styles;
+    background: $color-bg-stickybox;
+
+    @include theme-flat;
+
+    &.dark {
+      background: $color-bg-dark-stickybox;
+    }
+
+    &.adaptive {
+      @media (prefers-color-scheme: dark) {
+        background: $color-bg-dark-stickybox;
+      }
+    }
+
+    .ea-content {
+      background-color: inherit;
+      max-width: 100%;
+      margin: 0;
+      padding: 1em;
+      flex: auto;     // Expand to fill remaining space
+    }
+
+    .ea-callout {
+      max-width: 100%;
+      margin: 0;
+      padding: 1em;
+      flex: initial;  // Use the initial width of this item - does not expend
     }
   }
 }

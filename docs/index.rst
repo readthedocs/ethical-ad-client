@@ -290,10 +290,38 @@ Using our StickyBox style:
    <div data-ea-publisher="..." data-ea-type="image" data-ea-style="stickybox"></div>
 
 
+Screenshot
+``````````
 
-.. raw:: html
+.. image:: _static/stickybox.gif
+    :align: center
+    :width: 100%
 
-   <img src="_static/stickybox.gif" width="100%">
+
+FixedFooter
+~~~~~~~~~~~
+
+.. versionadded:: 1.6
+
+The "FixedFooter" style is a floating placement is a text-only placement
+attached to the bottom of the screen.
+By floating, it ensures that the ad is always seen
+(and therefore results in billed views that make the publisher money).
+
+Using our FixedFooter style:
+
+.. code:: html
+
+   <!-- Place this div just before the </body> tag -->
+   <div data-ea-publisher="..." data-ea-type="text" data-ea-style="fixedfooter"></div>
+
+
+Screenshot
+``````````
+
+.. image:: _static/fixedfooter.png
+    :align: center
+    :width: 100%
 
 
 .. _placements:
