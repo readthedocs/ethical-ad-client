@@ -345,16 +345,6 @@ $color-bg-dark-stickybox: $color-link;
 
     @include theme-flat;
 
-    &.dark {
-      background: $color-bg-dark-stickybox;
-    }
-
-    &.adaptive {
-      @media (prefers-color-scheme: dark) {
-        background: $color-bg-dark-stickybox;
-      }
-    }
-
     .ea-content {
       background-color: inherit;
       max-width: 100%;
@@ -368,6 +358,20 @@ $color-bg-dark-stickybox: $color-link;
       margin: 0;
       padding: 1em;
       flex: initial;  // Use the initial width of this item - does not expend
+    }
+  }
+
+  &.dark {
+    .ea-type-text {
+      background: $color-bg-dark-stickybox;
+    }
+  }
+
+  &.adaptive {
+    @media (prefers-color-scheme: dark) {
+      .ea-type-text {
+        background: $color-bg-dark-stickybox;
+      }
     }
   }
 }
