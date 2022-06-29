@@ -303,10 +303,10 @@ FixedFooter
 
 .. versionadded:: 1.6
 
-The "FixedFooter" style is a floating placement is a text-only placement
+The "FixedFooter" style is a floating, text-only placement
 attached to the bottom of the screen.
 By floating, it ensures that the ad is always seen
-(and therefore results in billed views that make the publisher money).
+(resulting in the highest view rate, generating the most revenue).
 
 Using our FixedFooter style:
 
