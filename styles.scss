@@ -358,12 +358,35 @@ $color-bg-dark-stickybox: $color-link;
       margin: 0;
       padding: 1em;
       flex: initial;  // Use the initial width of this item - does not expend
+
+      // The close button is now a span rather than a link (a)
+      color: $color-link;
+
+      .ea-fixedfooter-hide {
+        cursor: pointer;
+
+        // Make the close button - button-like
+        font-size: 0.8em;
+        font-weight: bold;
+        border: 0.15em solid $color-link;
+        border-radius: 0.5em;
+        padding: 0.25em;
+        white-space: nowrap;
+      }
     }
   }
 
   &.dark {
     .ea-type-text {
       background: $color-bg-dark-stickybox;
+
+      .ea-callout {
+        color: $color-link-dark;
+
+        .ea-fixedfooter-hide {
+          border-color: $color-link-dark;
+        }
+      }
     }
   }
 
@@ -371,6 +394,14 @@ $color-bg-dark-stickybox: $color-link;
     @media (prefers-color-scheme: dark) {
       .ea-type-text {
         background: $color-bg-dark-stickybox;
+
+        .ea-callout {
+          color: $color-link-dark;
+
+          .ea-fixedfooter-hide {
+            border-color: $color-link-dark;
+          }
+        }
       }
     }
   }

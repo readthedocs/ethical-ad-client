@@ -548,6 +548,19 @@ export class Placement {
       });
       element.appendChild(hideButton);
     }
+
+    // Stickybox: https://ethical-ad-client.readthedocs.io/en/latest/#fixedfooter
+    if (this.style === "fixedfooter") {
+      element.querySelector('.ea-callout a').remove();
+
+      let hideButton = document.createElement("span");
+      hideButton.setAttribute("class", "ea-fixedfooter-hide");
+      hideButton.append("Close Ad");
+      hideButton.addEventListener("click", function () {
+        document.querySelector("[data-ea-publisher]").remove();
+      });
+      element.querySelector('.ea-callout').appendChild(hideButton);
+    }
   }
 }
 
