@@ -8,8 +8,9 @@ $width-image-vertical: 180px;
 // but below most modals
 $zindex-styles: 10;
 
-// Breakpoint (used for stickybox format)
+// Breakpoints (used for stickybox/fixedfooter formats)
 $breakpoint-ultrawide: 1300px;
+$breakpoint-mobile: 576px;
 
 // Colors
 $color-background: rgba(0, 0, 0, 0.03);
@@ -359,18 +360,26 @@ $color-bg-dark-stickybox: $color-link;
       padding: 1em;
       flex: initial;  // Use the initial width of this item - does not expend
 
-      // The close button is now a span rather than a link (a)
+      // Hide Ads by EthicalAds on mobile
+      @media (max-width: $breakpoint-mobile) {
+        display: none;
+      }
+    }
+
+    .ea-fixedfooter-hide {
+      cursor: pointer;
       color: $color-link;
+      padding: 1em;
+      flex: initial;  // Use the initial width of this item - does not expend
+      margin: auto 0;
 
-      .ea-fixedfooter-hide {
-        cursor: pointer;
-
-        // Make the close button - button-like
+      // Make the close button - button-like
+      span {
+        padding: 0.25em;
         font-size: 0.8em;
         font-weight: bold;
         border: 0.15em solid $color-link;
         border-radius: 0.5em;
-        padding: 0.25em;
         white-space: nowrap;
       }
     }
@@ -380,12 +389,9 @@ $color-bg-dark-stickybox: $color-link;
     .ea-type-text {
       background: $color-bg-dark-stickybox;
 
-      .ea-callout {
+      .ea-fixedfooter-hide span {
         color: $color-link-dark;
-
-        .ea-fixedfooter-hide {
-          border-color: $color-link-dark;
-        }
+        border-color: $color-link-dark;
       }
     }
   }
@@ -395,12 +401,9 @@ $color-bg-dark-stickybox: $color-link;
       .ea-type-text {
         background: $color-bg-dark-stickybox;
 
-        .ea-callout {
+        .ea-fixedfooter-hide span {
           color: $color-link-dark;
-
-          .ea-fixedfooter-hide {
-            border-color: $color-link-dark;
-          }
+          border-color: $color-link-dark;
         }
       }
     }

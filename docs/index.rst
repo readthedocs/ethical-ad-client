@@ -290,12 +290,12 @@ Using our StickyBox style:
    <div data-ea-publisher="..." data-ea-type="image" data-ea-style="stickybox"></div>
 
 
-Screenshot
-``````````
-
-.. image:: _static/stickybox.gif
+.. figure:: _static/stickybox.gif
     :align: center
     :width: 100%
+
+    This Stickybox placement as it transitions from ultrawide width where the placement floats
+    to smaller widths where it is inline.
 
 
 FixedFooter
@@ -316,12 +316,11 @@ Using our FixedFooter style:
    <div data-ea-publisher="..." data-ea-type="text" data-ea-style="fixedfooter"></div>
 
 
-Screenshot
-``````````
-
-.. image:: _static/fixedfooter.png
+.. figure:: _static/fixedfooter.png
     :align: center
     :width: 100%
+
+    This FixedFooter placement on our homepage
 
 
 .. _placements:
