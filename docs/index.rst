@@ -293,7 +293,11 @@ Using our StickyBox style:
 
 .. raw:: html
 
-   <img src="_static/stickybox.gif" width="100%">
+	<video autoplay loop muted playsinline>
+	  <source src="_static/stickybox.webm" type="video/webm">
+	  Your browser does not support the video tag.
+	</video>
+
 
 
 .. _placements:
