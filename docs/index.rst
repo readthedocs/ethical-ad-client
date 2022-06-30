@@ -294,7 +294,7 @@ Using our StickyBox style:
 .. raw:: html
 
 	<video autoplay loop muted playsinline>
-	  <source src="_static/stickybox.webm" type="video/webm">
+	  <source src="_static/Stickybox.webm" type="video/webm">
 	  Your browser does not support the video tag.
 	</video>
 
