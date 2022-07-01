@@ -165,7 +165,6 @@ const KEYWORDS = {
   "css": "css",
   "scss": "scss",
   "typescript": "typescript",
-  "rust": "rust",
   "redux": "redux",
 
   // Phrases (not currently implemented)
