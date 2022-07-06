@@ -6,6 +6,17 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.6.0
+--------------
+
+This version added a fixedfooter placement.
+
+:date: July 6, 2022
+
+ * @fshabashev: Fix duplicated keys in the KEYWORDS dictionary (#123)
+ * @davidfischer: Add a fixedfooter placement style (#121)
+
+
 Version v1.5.0
 --------------
 
