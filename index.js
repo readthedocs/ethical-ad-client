@@ -599,13 +599,13 @@ export function load_placements(force_load = false) {
   const node_list = document.querySelectorAll("[" + ATTR_PREFIX + "publisher]");
   let elements = Array.prototype.slice.call(node_list);
 
+  if (elements.length === 0) {
+    console.debug("No ad placements found.");
+  }
+
   // Create main promise. Iterator `all()` Promise will surround array of found
   // elements. If any of these elements have issues, this main promise will
   // reject.
-  if (elements.length === 0) {
-    throw new Error("No ad placements found.");
-  }
-
   return Promise.all(
     elements.map((element, index) => {
       const placement = Placement.from_element(element);
