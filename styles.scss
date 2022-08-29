@@ -272,6 +272,9 @@ $color-bg-dark-stickybox: $color-link;
 // (text-only not supported) on screens less wide.
 // https://ethical-ad-client.readthedocs.io/en/latest/#stickybox
 [data-ea-style="stickybox"].loaded {
+  // The outer div containing data-ea-publisher and data-ea-type
+  // Needs to be positioned when using fixed positioning
+  // in order for viewport detection to function correctly.
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -332,6 +335,9 @@ $color-bg-dark-stickybox: $color-link;
 // -------------------------------------------------------------------------
 // https://ethical-ad-client.readthedocs.io/en/latest/#fixedfooter
 [data-ea-style="fixedfooter"].loaded {
+  // The outer div containing data-ea-publisher and data-ea-type
+  // Needs to be positioned when using fixed positioning
+  // in order for viewport detection to function correctly.
   position: fixed;
   bottom: 0;
   left: 0;
