@@ -272,12 +272,15 @@ $color-bg-dark-stickybox: $color-link;
 // (text-only not supported) on screens less wide.
 // https://ethical-ad-client.readthedocs.io/en/latest/#stickybox
 [data-ea-style="stickybox"].loaded {
-  .ea-type-image {
-    z-index: $zindex-styles;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
+  // The outer div containing data-ea-publisher and data-ea-type
+  // Needs to be positioned when using fixed positioning
+  // in order for viewport detection to function correctly.
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: $zindex-styles;
 
+  .ea-type-image {
     .ea-stickybox-hide {
       cursor: pointer;
       position: absolute;
@@ -332,11 +335,18 @@ $color-bg-dark-stickybox: $color-link;
 // -------------------------------------------------------------------------
 // https://ethical-ad-client.readthedocs.io/en/latest/#fixedfooter
 [data-ea-style="fixedfooter"].loaded {
+  // The outer div containing data-ea-publisher and data-ea-type
+  // Needs to be positioned when using fixed positioning
+  // in order for viewport detection to function correctly.
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: $zindex-styles;
+
+  width: 100%;
+  max-width: 100%;
 
   .ea-type-text {
-    position: fixed;
-    bottom: 0;
-    left: 0;
     width: 100%;
     max-width: 100%;
     display: flex;
