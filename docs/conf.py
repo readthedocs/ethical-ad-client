@@ -73,7 +73,8 @@ class ExampleDirective(Directive):
 <div class="loaded {classes}" data-ea-type="image">
   <div class="ea-content">
     <a href="#" rel="nofollow" target="_blank">
-      <img src="https://via.placeholder.com/240x180.png" />
+      <!-- Placeholder ad image -->
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMTgwIiB2aWV3Qm94PSIwIDAgMjQwIDE4MCI+CiAgPHJlY3QgZmlsbD0iI2RkZCIgd2lkdGg9IjI0MCIgaGVpZ2h0PSIxODAiLz4KICA8dGV4dCBmaWxsPSJyZ2JhKDAsMCwwLDAuNSkiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjMwIiBkeT0iMTAuNSIgZm9udC13ZWlnaHQ9ImJvbGQiIHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4yNDDDlzE4MDwvdGV4dD4KPC9zdmc+" />
     </a>
     <div class="ea-text">
       <a href="#" rel="nofollow" target="_blank">
