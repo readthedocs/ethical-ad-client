@@ -297,17 +297,17 @@ $color-bg-dark-stickybox: $color-link;
       width: 1.5em;
       line-height: 1.5em;
     }
+  }
 
-    @media (max-width: $breakpoint-ultrawide) {
-      position: static;
-      bottom: 0;
-      right: 0;
-      margin: auto;
-      text-align: center;
+  @media (max-width: $breakpoint-ultrawide) {
+    position: static;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
 
-      .ea-stickybox-hide {
-        display: none;
-      }
+    .ea-stickybox-hide {
+      display: none;
     }
   }
 
