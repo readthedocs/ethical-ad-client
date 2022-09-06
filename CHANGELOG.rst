@@ -6,6 +6,17 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.6.2
+--------------
+
+Fix a styling issue that caused the stickybox ad to float on smaller
+screen sizes.
+
+:date: September 6, 2022
+
+ * @davidfischer: The stickybox shouldn't float except on ultrawide (#137)
+
+
 Version v1.6.1
 --------------
 

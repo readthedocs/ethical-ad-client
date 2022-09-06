@@ -28,7 +28,7 @@ import verge from "verge";
 import "./styles.scss";
 
 
-const AD_CLIENT_VERSION = "1.6.1";  // Sent with the ad request
+const AD_CLIENT_VERSION = "1.6.2";  // Sent with the ad request
 
 
 // For local testing, set this
