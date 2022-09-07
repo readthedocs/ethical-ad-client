@@ -31,6 +31,11 @@ some added data attributes to configure the ad placement:
 
     <div data-ea-publisher="..." data-ea-type="text"></div>
 
+Ad client playground
+~~~~~~~~~~~~~~~~~~~~
+
+You can play around with an example placement in our `ethical ad client playground <https://jsbin.com/roniviv/edit?html,output>`_ on JSBin.
+
 .. _configuration:
 
 Configuration
