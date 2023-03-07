@@ -4,8 +4,13 @@
 $width-image-horizontal: 320px;
 $width-image-vertical: 180px;
 
-// Breakpoint (used for stickybox format)
+// Z-index used to ensure these custom ad styles are above the main content.
+// but below most modals
+$zindex-styles: 10;
+
+// Breakpoints (used for stickybox/fixedfooter formats)
 $breakpoint-ultrawide: 1300px;
+$breakpoint-mobile: 576px;
 
 // Colors
 $color-background: rgba(0, 0, 0, 0.03);
@@ -267,12 +272,15 @@ $color-bg-dark-stickybox: $color-link;
 // (text-only not supported) on screens less wide.
 // https://ethical-ad-client.readthedocs.io/en/latest/#stickybox
 [data-ea-style="stickybox"].loaded {
-  .ea-type-image {
-    z-index: 10;      // Should be below most modals
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
+  // The outer div containing data-ea-publisher and data-ea-type
+  // Needs to be positioned when using fixed positioning
+  // in order for viewport detection to function correctly.
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: $zindex-styles;
 
+  .ea-type-image {
     .ea-stickybox-hide {
       cursor: pointer;
       position: absolute;
@@ -289,17 +297,17 @@ $color-bg-dark-stickybox: $color-link;
       width: 1.5em;
       line-height: 1.5em;
     }
+  }
 
-    @media (max-width: $breakpoint-ultrawide) {
-      position: static;
-      bottom: 0;
-      right: 0;
-      margin: auto;
-      text-align: center;
+  @media (max-width: $breakpoint-ultrawide) {
+    position: static;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
 
-      .ea-stickybox-hide {
-        display: none;
-      }
+    .ea-stickybox-hide {
+      display: none;
     }
   }
 
@@ -316,6 +324,96 @@ $color-bg-dark-stickybox: $color-link;
       @media (prefers-color-scheme: dark) {
         .ea-type-image .ea-content {
           background: $color-bg-dark-stickybox;
+        }
+      }
+    }
+  }
+}
+
+
+// FixedFooter ad
+// -------------------------------------------------------------------------
+// https://ethical-ad-client.readthedocs.io/en/latest/#fixedfooter
+[data-ea-style="fixedfooter"].loaded {
+  // The outer div containing data-ea-publisher and data-ea-type
+  // Needs to be positioned when using fixed positioning
+  // in order for viewport detection to function correctly.
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: $zindex-styles;
+
+  width: 100%;
+  max-width: 100%;
+
+  .ea-type-text {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+
+    z-index: $zindex-styles;
+    background: $color-bg-stickybox;
+
+    @include theme-flat;
+
+    .ea-content {
+      background-color: inherit;
+      max-width: 100%;
+      margin: 0;
+      padding: 1em;
+      flex: auto;     // Expand to fill remaining space
+    }
+
+    .ea-callout {
+      max-width: 100%;
+      margin: 0;
+      padding: 1em;
+      flex: initial;  // Use the initial width of this item - does not expend
+
+      // Hide Ads by EthicalAds on mobile
+      @media (max-width: $breakpoint-mobile) {
+        display: none;
+      }
+    }
+
+    .ea-fixedfooter-hide {
+      cursor: pointer;
+      color: $color-link;
+      padding: 1em;
+      flex: initial;  // Use the initial width of this item - does not expend
+      margin: auto 0;
+
+      // Make the close button - button-like
+      span {
+        padding: 0.25em;
+        font-size: 0.8em;
+        font-weight: bold;
+        border: 0.15em solid $color-link;
+        border-radius: 0.5em;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  &.dark {
+    .ea-type-text {
+      background: $color-bg-dark-stickybox;
+
+      .ea-fixedfooter-hide span {
+        color: $color-link-dark;
+        border-color: $color-link-dark;
+      }
+    }
+  }
+
+  &.adaptive {
+    @media (prefers-color-scheme: dark) {
+      .ea-type-text {
+        background: $color-bg-dark-stickybox;
+
+        .ea-fixedfooter-hide span {
+          color: $color-link-dark;
+          border-color: $color-link-dark;
         }
       }
     }

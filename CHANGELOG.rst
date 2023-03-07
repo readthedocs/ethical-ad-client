@@ -6,6 +6,43 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.6.2
+--------------
+
+Fix a styling issue that caused the stickybox ad to float on smaller
+screen sizes.
+
+:date: September 6, 2022
+
+ * @davidfischer: The stickybox shouldn't float except on ultrawide (#137)
+
+
+Version v1.6.1
+--------------
+
+This release fixed a viewport detection issue that pertained
+to styled ads (fixedfooter and stickybox) that cause issues
+with views being counted for them.
+This release also contained a minor docs fix.
+
+:date: August 29, 2022
+
+ * @davidfischer: Position the outer div for styled ads (#134)
+ * @davidfischer: Fix the broken placeholder (#132)
+ * @dependabot[bot]: Bump moment from 2.29.1 to 2.29.2 (#108)
+
+
+Version v1.6.0
+--------------
+
+This version added a fixedfooter placement.
+
+:date: July 6, 2022
+
+ * @fshabashev: Fix duplicated keys in the KEYWORDS dictionary (#123)
+ * @davidfischer: Add a fixedfooter placement style (#121)
+
+
 Version v1.5.0
 --------------
 
