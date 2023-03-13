@@ -735,3 +735,8 @@ if (require.main !== module && check_dependencies()) {
     load_placements(true);
   };
 }
+
+module.exports = {
+    load,
+    load_placements,
+}
