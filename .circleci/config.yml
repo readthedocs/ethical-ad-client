@@ -7,6 +7,7 @@ commands:
       - checkout
       - run: npm ci
       - run: npm run lint
+      - run: npm test
   run-build:
     description: "Ensure compiled assets are up to date"
     steps:
