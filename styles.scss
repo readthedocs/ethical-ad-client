@@ -18,7 +18,7 @@ $color-background-dark: rgba(255, 255, 255, 0.05);
 $color-link: rgb(80, 80, 80);
 $color-link-callout: lighten($color-link, 10%);
 $color-link-bold: #088cdb;
-$color-link-dark: rgb(220, 220, 220);  // gainsboro
+$color-link-dark: rgb(220, 220, 220); // gainsboro
 $color-link-callout-dark: darken($color-link-dark, 10%);
 $color-link-bold-dark: lighten($color-link-bold, 20%);
 $color-bg-stickybox: $color-link-dark;
@@ -243,7 +243,6 @@ $color-bg-dark-stickybox: $color-link;
   }
 }
 
-
 // Text placement (text-only ad type)
 // -------------------------------------------------------------------------
 // https://ethical-ad-client.readthedocs.io/en/latest/#text-placement
@@ -263,7 +262,6 @@ $color-bg-dark-stickybox: $color-link;
     font-style: italic;
   }
 }
-
 
 // Stickybox ad
 // -------------------------------------------------------------------------
@@ -330,7 +328,6 @@ $color-bg-dark-stickybox: $color-link;
   }
 }
 
-
 // FixedFooter ad
 // -------------------------------------------------------------------------
 // https://ethical-ad-client.readthedocs.io/en/latest/#fixedfooter
@@ -361,14 +358,14 @@ $color-bg-dark-stickybox: $color-link;
       max-width: 100%;
       margin: 0;
       padding: 1em;
-      flex: auto;     // Expand to fill remaining space
+      flex: auto; // Expand to fill remaining space
     }
 
     .ea-callout {
       max-width: 100%;
       margin: 0;
       padding: 1em;
-      flex: initial;  // Use the initial width of this item - does not expend
+      flex: initial; // Use the initial width of this item - does not expend
 
       // Hide Ads by EthicalAds on mobile
       @media (max-width: $breakpoint-mobile) {
@@ -380,7 +377,7 @@ $color-bg-dark-stickybox: $color-link;
       cursor: pointer;
       color: $color-link;
       padding: 1em;
-      flex: initial;  // Use the initial width of this item - does not expend
+      flex: initial; // Use the initial width of this item - does not expend
       margin: auto 0;
 
       // Make the close button - button-like
