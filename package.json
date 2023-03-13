@@ -3,6 +3,7 @@
   "version": "1.6.2",
   "description": "EthicalAds client",
   "main": "dist/client.js",
+  "files": ["dist/ethicalads.js"],
   "scripts": {
     "build": "npm ci && npm run build-min && npm run build-unmin",
     "build-min": "webpack --mode=production --progress --colors",
