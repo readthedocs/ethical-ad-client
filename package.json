@@ -10,7 +10,8 @@
     "dev": "webpack-dev-server --mode=development",
     "lint": "prettier -c .",
     "format": "prettier --write .",
-    "changelog": "gh-changelog -o readthedocs -r ethical-ad-client -e '' -f CHANGELOG.rst"
+    "changelog": "gh-changelog -o readthedocs -r ethical-ad-client -e '' -f CHANGELOG.rst",
+    "test": "jest tests/"
   },
   "repository": {
     "type": "git",
@@ -24,11 +25,13 @@
   "homepage": "https://github.com/readthedocs/ethical-ad-client#readme",
   "devDependencies": {
     "@babel/core": "^7.10.2",
-    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-env": "^7.20.2",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.2.0",
     "file-loader": "^2.0.0",
     "github-changelog": "git+https://github.com/davidfischer/github-changelog.git#davidfischer/update-deps",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "prettier": "^2.0.5",
     "sass": "^1.59.2",
@@ -41,5 +44,27 @@
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^4.2.1"
+  },
+  "babel": {
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          "@babel/plugin-transform-modules-commonjs",
+          "@babel/plugin-proposal-class-properties"
+        ]
+      }
+    }
+  },
+  "jest": {
+    "testEnvironment": "jest-environment-jsdom",
+    "globals": {
+      "__webpack_public_path__": null
+    },
+    "moduleNameMapper": {
+      "\\.s?css$": "<rootDir>/tests/mock.css.js"
+    }
   }
 }
