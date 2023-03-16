@@ -1,5 +1,14 @@
-var ethicalads =
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["ethicalads"] = factory();
+	else
+		root["ethicalads"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -168,3 +177,4 @@ eval("var api = __webpack_require__(/*! ./node_modules/style-loader/dist/runtime
 /***/ })
 
 /******/ });
+});
