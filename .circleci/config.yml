@@ -1,0 +1,43 @@
+version: 2.1
+
+commands:
+  run-checks:
+    description: "Run basic checks"
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm run lint
+  run-build:
+    description: "Ensure compiled assets are up to date"
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm run build
+      - run:
+          name: Ensure built assets are up to date
+          command: |
+            if [[ `git status dist/ --porcelain` ]]
+            then
+              echo "ERROR: assets are out of date. Make sure to run 'npm run build' on your branch."
+              git status dist/ --porcelain
+              exit 1
+            fi
+
+jobs:
+  checks:
+    docker:
+      - image: "cimg/node:16.19"
+    steps:
+      - run-checks: {}
+  build:
+    docker:
+      - image: "cimg/node:16.19"
+    steps:
+      - run-build: {}
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - checks
+      - build

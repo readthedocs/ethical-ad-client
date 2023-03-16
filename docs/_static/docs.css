@@ -12,13 +12,11 @@
   background: #443;
 }
 
-
 @media (prefers-color-scheme: dark) {
   .container.adaptive {
     background: #443;
   }
 }
-
 
 .container.row .container.column {
   text-align: center;
