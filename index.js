@@ -27,14 +27,12 @@ import verge from "verge";
 
 import "./styles.scss";
 
-
-const AD_CLIENT_VERSION = "1.6.2";  // Sent with the ad request
-
+const AD_CLIENT_VERSION = "1.6.2"; // Sent with the ad request
 
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
 const AD_DECISION_URL = "https://server.ethicalads.io/api/v1/decision/";
-const AD_TYPES_VERSION = 1;  // Used with the ad type slugs
+const AD_TYPES_VERSION = 1; // Used with the ad type slugs
 const ATTR_PREFIX = "data-ea-";
 const ABP_DETECTION_PX = "https://media.ethicalads.io/abp/px.gif";
 
@@ -46,126 +44,126 @@ const ABP_DETECTION_PX = "https://media.ethicalads.io/abp/px.gif";
 // works decently well most of the time.
 const KEYWORDS = {
   // Topics
-  "android": "android",
-  "ios": "ios",
-  "iphone": "ios",
-  "blockchain": "blockchain",
-  "bitcoin": "bitcoin",
-  "ethereum": "ethereum",
-  "hyperledger": "hyperledger",
-  "solidity": "solidity",
-  "cryptography": "cryptography",
-  "security": "security",
-  "infosec": "security",
-  "privacy": "privacy",
-  "authentication": "authentication",
-  "authorization": "authorization",
-  "otp": "otp",
+  android: "android",
+  ios: "ios",
+  iphone: "ios",
+  blockchain: "blockchain",
+  bitcoin: "bitcoin",
+  ethereum: "ethereum",
+  hyperledger: "hyperledger",
+  solidity: "solidity",
+  cryptography: "cryptography",
+  security: "security",
+  infosec: "security",
+  privacy: "privacy",
+  authentication: "authentication",
+  authorization: "authorization",
+  otp: "otp",
   "2fa": "2fa",
-  "mfa": "mfa",
-  "sms": "sms",
-  "frontend": "frontend",
-  "backend": "backend",
+  mfa: "mfa",
+  sms: "sms",
+  frontend: "frontend",
+  backend: "backend",
   "full-stack": "backend",
-  "devops": "devops",
-  "ai": "artificial-intelligence",
-  "nlp": "nlp",
-  "ml": "machine-learning",
-  "cloud": "cloud",
-  "api": "api",
-  "docker": "docker",
-  "kubernetes": "kubernetes",
-  "container": "containers",
-  "containers": "containers",
-  "ansible": "ansible",
-  "serverless": "serverless",
-  "openshift": "openshift",
-  "terraform": "terraform",
-  "openid": "openid",
-  "aws": "aws",
-  "azure": "azure",
-  "gcp": "gcp",
-  "linux": "linux",
-  "ubuntu": "ubuntu",
-  "monitoring": "monitoring",
-  "redis": "redis",
-  "rabbitmq": "rabbitmq",
-  "nosql": "nosql",
-  "postgres": "postgresql",
-  "postgresql": "postgresql",
-  "mysql": "mysql",
-  "database": "database",
-  "testing": "testing",
-  "pytest": "pytest",
-  "lint": "lint",
-  "linting": "lint",
-  "pylint": "pylint",
-  "unittest": "unittest",
-  "ci": "ci",
-  "cd": "cd",
-  "tdd": "test-driven-development",
-  "elasticsearch": "elasticsearch",
-  "lucene": "lucene",
-  "solr": "solr",
-  "nginx": "nginx",
-  "heroku": "heroku",
-  "spa": "spa",
+  devops: "devops",
+  ai: "artificial-intelligence",
+  nlp: "nlp",
+  ml: "machine-learning",
+  cloud: "cloud",
+  api: "api",
+  docker: "docker",
+  kubernetes: "kubernetes",
+  container: "containers",
+  containers: "containers",
+  ansible: "ansible",
+  serverless: "serverless",
+  openshift: "openshift",
+  terraform: "terraform",
+  openid: "openid",
+  aws: "aws",
+  azure: "azure",
+  gcp: "gcp",
+  linux: "linux",
+  ubuntu: "ubuntu",
+  monitoring: "monitoring",
+  redis: "redis",
+  rabbitmq: "rabbitmq",
+  nosql: "nosql",
+  postgres: "postgresql",
+  postgresql: "postgresql",
+  mysql: "mysql",
+  database: "database",
+  testing: "testing",
+  pytest: "pytest",
+  lint: "lint",
+  linting: "lint",
+  pylint: "pylint",
+  unittest: "unittest",
+  ci: "ci",
+  cd: "cd",
+  tdd: "test-driven-development",
+  elasticsearch: "elasticsearch",
+  lucene: "lucene",
+  solr: "solr",
+  nginx: "nginx",
+  heroku: "heroku",
+  spa: "spa",
 
   // Frameworks amd modules
-  "django": "django",
-  "rails": "rails",
-  "angular": "angular",
-  "angularjs": "angular",
-  "laravel": "laravel",
-  "react": "reactjs",
-  "reactjs": "reactjs",
+  django: "django",
+  rails: "rails",
+  angular: "angular",
+  angularjs: "angular",
+  laravel: "laravel",
+  react: "reactjs",
+  reactjs: "reactjs",
   "react-native": "reactjs",
-  "jupyter": "jupyter",
-  "matplotlib": "matplotlib",
-  "pytorch": "pytorch",
-  "pydata": "pydata",
-  "pandas": "pandas",
-  "numpy": "numpy",
-  "wsgi": "wsgi",
-  "celery": "celery",
-  "jinja": "jinja",
-  "jinja2": "jinja",
-  "flask": "flask",
-  "werkzeug": "werkzeug",
-  "oauth": "oauth",
-  "vuejs": "vuejs",
-  "vue": "vuejs",
-  "tensorflow": "tensorflow",
-  "tensor": "tensor",
-  "webpack": "webpack",
+  jupyter: "jupyter",
+  matplotlib: "matplotlib",
+  pytorch: "pytorch",
+  pydata: "pydata",
+  pandas: "pandas",
+  numpy: "numpy",
+  wsgi: "wsgi",
+  celery: "celery",
+  jinja: "jinja",
+  jinja2: "jinja",
+  flask: "flask",
+  werkzeug: "werkzeug",
+  oauth: "oauth",
+  vuejs: "vuejs",
+  vue: "vuejs",
+  tensorflow: "tensorflow",
+  tensor: "tensor",
+  webpack: "webpack",
 
   // Programming & markup languages
-  "dotnet": "dotnet",
+  dotnet: "dotnet",
   ".net": "dotnet",
   "c#": "c-sharp",
   "c++": "cplusplus",
-  "erlang": "erlang",
+  erlang: "erlang",
   "f#": "fsharp",
-  "golang": "golang",
-  "haskell": "haskell",
-  "java": "java",
-  "javascript": "javascript",
-  "julia": "julia",
-  "kotlin": "kotlin",
+  golang: "golang",
+  haskell: "haskell",
+  java: "java",
+  javascript: "javascript",
+  julia: "julia",
+  kotlin: "kotlin",
   "obj-c": "obj-c",
   "objective-c": "obj-c",
-  "php": "php",
-  "python": "python",
-  "perl": "perl",
-  "sql": "sql",
-  "ruby": "ruby",
-  "rust": "rust",
-  "scala": "scala",
-  "swift": "swift",
-  "css": "css",
-  "scss": "scss",
-  "typescript": "typescript",
-  "redux": "redux",
+  php: "php",
+  python: "python",
+  perl: "perl",
+  sql: "sql",
+  ruby: "ruby",
+  rust: "rust",
+  scala: "scala",
+  swift: "swift",
+  css: "css",
+  scss: "scss",
+  typescript: "typescript",
+  redux: "redux",
 
   // Phrases (not currently implemented)
   //"data science": "datascience",
@@ -185,16 +183,15 @@ const MIN_KEYWORD_OCCURRENCES = 2;
 
 // Time between checking whether the ad is in the viewport to count the time viewed
 // Time viewed is an important advertiser metric
-const VIEW_TIME_INTERVAL = 1;  // seconds
-const VIEW_TIME_MAX = 5 * 60;  // seconds
+const VIEW_TIME_INTERVAL = 1; // seconds
+const VIEW_TIME_MAX = 5 * 60; // seconds
 
 // In-viewport fudge factor
 // A fudge factor of ~3 is needed for the case where the ad
 // is hidden off the side of the screen by a sliding sidebar
 // For example, if the right side of the ad is at x=0
 // or the left side of the ad is at the right side of the viewport
-const VIEWPORT_FUDGE_FACTOR = -3;  // px
-
+const VIEWPORT_FUDGE_FACTOR = -3; // px
 
 /* Placement object to query decision API and return an Element node
  *
@@ -205,7 +202,7 @@ const VIEWPORT_FUDGE_FACTOR = -3;  // px
       keywords, styles, campaign_types, load_manually, force_ad, force_campaign
  */
 export class Placement {
-  constructor (publisher, ad_type, target, options) {
+  constructor(publisher, ad_type, target, options) {
     this.publisher = publisher;
     this.ad_type = ad_type;
     this.target = target;
@@ -224,7 +221,7 @@ export class Placement {
 
     // Initialized and will be used in the future
     this.view_time = 0;
-    this.view_time_sent = false;  // true once the view time is sent to the server
+    this.view_time_sent = false; // true once the view time is sent to the server
     this.response = null;
   }
 
@@ -245,10 +242,17 @@ export class Placement {
       element.setAttribute(ATTR_PREFIX + "type", "image");
     }
 
-    const keywords = (element.getAttribute(ATTR_PREFIX + "keywords") || "").split("|").filter(word => word.length > 1);
-    const campaign_types = (element.getAttribute(ATTR_PREFIX + "campaign-types") || "").split("|").filter(word => word.length > 1);
+    const keywords = (element.getAttribute(ATTR_PREFIX + "keywords") || "")
+      .split("|")
+      .filter((word) => word.length > 1);
+    const campaign_types = (
+      element.getAttribute(ATTR_PREFIX + "campaign-types") || ""
+    )
+      .split("|")
+      .filter((word) => word.length > 1);
 
-    const load_manually = element.getAttribute(ATTR_PREFIX + "manual") === "true";
+    const load_manually =
+      element.getAttribute(ATTR_PREFIX + "manual") === "true";
     const style = element.getAttribute(ATTR_PREFIX + "style");
     const force_ad = element.getAttribute(ATTR_PREFIX + "force-ad");
     const force_campaign = element.getAttribute(ATTR_PREFIX + "force-campaign");
@@ -287,82 +291,109 @@ export class Placement {
     // Detect the keywords
     this.keywords = this.keywords.concat(this.detectKeywords());
 
-    return this.fetch().then((element) => {
-      if (element === undefined) {
-        throw new EthicalAdsWarning("Ad decision request blocked");
-      }
-      if (!element) {
-        throw new EthicalAdsWarning("No ads to show.");
-      }
+    return this.fetch()
+      .then((element) => {
+        if (element === undefined) {
+          throw new EthicalAdsWarning("Ad decision request blocked");
+        }
+        if (!element) {
+          throw new EthicalAdsWarning("No ads to show.");
+        }
 
-      // Add `loaded` class, signifying that the CSS styles should finally be
-      // applied to the target element.
-      let classes = this.target.className || "";
-      classes += " loaded";
-      this.target.className = classes.trim();
+        // Add `loaded` class, signifying that the CSS styles should finally be
+        // applied to the target element.
+        let classes = this.target.className || "";
+        classes += " loaded";
+        this.target.className = classes.trim();
 
-      // Make this element the only child element of the target element
-      while (this.target.firstChild) {
-        this.target.removeChild(this.target.firstChild);
-      }
+        // Make this element the only child element of the target element
+        while (this.target.firstChild) {
+          this.target.removeChild(this.target.firstChild);
+        }
 
-      // Apply any styles based on the specified styling
-      this.applyStyles(element);
+        // Apply any styles based on the specified styling
+        this.applyStyles(element);
 
-      this.target.appendChild(element);
+        this.target.appendChild(element);
 
-      return this;
-    }).then((placement) => {
-      // Detect when the ad is in the viewport
-      // Add the view pixel to the DOM to count the view
-      // Also count the time the ad is in view
-      //  this will be sent before the page/tab is closed or navigated away
+        return this;
+      })
+      .then((placement) => {
+        // Detect when the ad is in the viewport
+        // Add the view pixel to the DOM to count the view
+        // Also count the time the ad is in view
+        //  this will be sent before the page/tab is closed or navigated away
 
-      let viewport_detection = setInterval((element) => {
-        if (placement.inViewport(element)) {
-          // This ad was seen!
-          let pixel = document.createElement("img");
-          pixel.src = placement.response.view_url;
-          if (uplifted) {
-            pixel.src += "?uplift=true";
+        let viewport_detection = setInterval(
+          (element) => {
+            if (placement.inViewport(element)) {
+              // This ad was seen!
+              let pixel = document.createElement("img");
+              pixel.src = placement.response.view_url;
+              if (uplifted) {
+                pixel.src += "?uplift=true";
+              }
+              pixel.className = "ea-pixel";
+              element.appendChild(pixel);
+
+              clearInterval(viewport_detection);
+            }
+          },
+          100,
+          placement.target
+        );
+
+        let view_time_counter = setInterval(
+          (element) => {
+            if (placement.view_time_sent) {
+              clearInterval(view_time_counter);
+            } else if (placement.inViewport(element)) {
+              // Increment the ad's time in view counter
+              placement.view_time += VIEW_TIME_INTERVAL;
+
+              if (placement.view_time >= VIEW_TIME_MAX) {
+                clearInterval(view_time_counter);
+              }
+            }
+          },
+          VIEW_TIME_INTERVAL * 1000,
+          placement.target
+        );
+
+        let visibility_change_listener = () => {
+          if (
+            placement.view_time <= 0 ||
+            placement.view_time_sent ||
+            !placement.response.view_time_url
+          )
+            return;
+          // Check if the tab loses focus/is closed or the browser/app is minimized/closed
+          // In that case, no longer count further time that the ad is in view
+          // Send the time the ad was viewed to the server
+          if (
+            document.visibilityState === "hidden" ||
+            document.visibilityState === "unloaded"
+          ) {
+            let pixel = document.createElement("img");
+            pixel.src =
+              placement.response.view_time_url +
+              "?view_time=" +
+              placement.view_time;
+            pixel.className = "ea-pixel";
+            placement.target.appendChild(pixel);
+
+            placement.view_time_sent = true;
+            document.removeEventListener(
+              "visibilitychange",
+              visibility_change_listener
+            );
           }
-          pixel.className = "ea-pixel";
-          element.appendChild(pixel);
-
-          clearInterval(viewport_detection);
-        }
-      }, 100, placement.target);
-
-      let view_time_counter = setInterval((element) => {
-        if (placement.view_time_sent) {
-          clearInterval(view_time_counter);
-        } else if (placement.inViewport(element)) {
-          // Increment the ad's time in view counter
-          placement.view_time += VIEW_TIME_INTERVAL;
-
-          if (placement.view_time >= VIEW_TIME_MAX) {
-            clearInterval(view_time_counter);
-          }
-        }
-      }, VIEW_TIME_INTERVAL * 1000, placement.target);
-
-      let visibility_change_listener = () => {
-        if (placement.view_time <= 0 || placement.view_time_sent || !placement.response.view_time_url) return;
-        // Check if the tab loses focus/is closed or the browser/app is minimized/closed
-        // In that case, no longer count further time that the ad is in view
-        // Send the time the ad was viewed to the server
-        if (document.visibilityState === "hidden" || document.visibilityState === "unloaded") {
-          let pixel = document.createElement("img");
-          pixel.src = placement.response.view_time_url + "?view_time=" + placement.view_time;
-          pixel.className = "ea-pixel";
-          placement.target.appendChild(pixel);
-
-          placement.view_time_sent = true;
-          document.removeEventListener("visibilitychange", visibility_change_listener);
-        }
-      };
-      document.addEventListener("visibilitychange", visibility_change_listener);
-    });
+        };
+        document.addEventListener(
+          "visibilitychange",
+          visibility_change_listener
+        );
+      });
   }
 
   /* Returns whether the ad is visible in the viewport
@@ -372,7 +403,12 @@ export class Placement {
    *  (including the tab being focused and not minimized) and returns false otherwise.
    */
   inViewport(element) {
-    if (this.response && this.response.view_url && verge.inViewport(element, VIEWPORT_FUDGE_FACTOR) && document.visibilityState === "visible") {
+    if (
+      this.response &&
+      this.response.view_url &&
+      verge.inViewport(element, VIEWPORT_FUDGE_FACTOR) &&
+      document.visibilityState === "visible"
+    ) {
       return true;
     }
 
@@ -386,7 +422,8 @@ export class Placement {
    */
   fetch() {
     // Make sure callbacks don't collide even with multiple placements
-    const callback = "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000);
+    const callback =
+      "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000);
     var div_id = callback;
     if (this.target.id) {
       div_id = this.target.id;
@@ -462,32 +499,34 @@ export class Placement {
     px += "?ch=*&rn=*";
 
     function beforeCheck(callback, timeout) {
-      if (checksRemain == 0 || timeout > 1E3) callback(checksRemain == 0 && detected);
-      else setTimeout(function() {
-        beforeCheck(callback, timeout * 2)
-      }, timeout * 2)
+      if (checksRemain == 0 || timeout > 1e3)
+        callback(checksRemain == 0 && detected);
+      else
+        setTimeout(function () {
+          beforeCheck(callback, timeout * 2);
+        }, timeout * 2);
     }
 
     function checkImages() {
       if (--checksRemain) return;
-      detected = !error1 && error2
+      detected = !error1 && error2;
     }
     var random = Math.random() * 11;
-    var img1 = new Image;
+    var img1 = new Image();
     img1.onload = checkImages;
-    img1.onerror = function() {
+    img1.onerror = function () {
       error1 = true;
-      checkImages()
+      checkImages();
     };
     img1.src = px.replace(/\*/, 1).replace(/\*/, random);
-    var img2 = new Image;
+    var img2 = new Image();
     img2.onload = checkImages;
-    img2.onerror = function() {
+    img2.onerror = function () {
       error2 = true;
-      checkImages()
+      checkImages();
     };
     img2.src = px.replace(/\*/, 2).replace(/\*/, random);
-    beforeCheck(callback, 250)
+    beforeCheck(callback, 250);
   }
 
   /* Returns an array of keywords (strings) found on the page
@@ -500,8 +539,9 @@ export class Placement {
     // Note: if there are "no" keywords (an empty list) this is still true
     if (detectedKeywords) return detectedKeywords;
 
-    var keywordHist = {};  // Keywords found => count of keyword
-    const mainContent = document.querySelector("[role='main']") ||
+    var keywordHist = {}; // Keywords found => count of keyword
+    const mainContent =
+      document.querySelector("[role='main']") ||
       document.querySelector("main") ||
       document.querySelector("body");
 
@@ -517,16 +557,18 @@ export class Placement {
 
     // Sort the hist with the most common items first
     // Grab only the MAX_KEYWORDS most common
-    const keywords = Object.entries(keywordHist).filter(
-      // Only consider a keyword with at least this many occurrences
-      a => a[1] >= MIN_KEYWORD_OCCURRENCES
-    ).sort(
-      (a, b) => {
+    const keywords = Object.entries(keywordHist)
+      .filter(
+        // Only consider a keyword with at least this many occurrences
+        (a) => a[1] >= MIN_KEYWORD_OCCURRENCES
+      )
+      .sort((a, b) => {
         if (a[1] > b[1]) return -1;
         if (a[1] < b[1]) return 1;
         return 0;
-      }
-    ).slice(0, MAX_KEYWORDS).map((x) => x[0]);
+      })
+      .slice(0, MAX_KEYWORDS)
+      .map((x) => x[0]);
 
     detectedKeywords = keywords;
 
@@ -566,8 +608,6 @@ export class Placement {
   }
 }
 
-
-
 /* Detects whether the browser supports the necessary JS APIs to support the ad client
  *
  * Generally we support recent versions of evergreen browsers (Chrome, Firefox, Safari, Edge)
@@ -582,7 +622,9 @@ export function check_dependencies() {
     !window.URLSearchParams ||
     !window.Promise
   ) {
-    console.error("Browser does not meet ethical ad client dependencies. Not showing ads");
+    console.error(
+      "Browser does not meet ethical ad client dependencies. Not showing ads"
+    );
     return false;
   }
 
@@ -599,13 +641,13 @@ export function load_placements(force_load = false) {
   const node_list = document.querySelectorAll("[" + ATTR_PREFIX + "publisher]");
   let elements = Array.prototype.slice.call(node_list);
 
+  if (elements.length === 0) {
+    console.debug("No ad placements found.");
+  }
+
   // Create main promise. Iterator `all()` Promise will surround array of found
   // elements. If any of these elements have issues, this main promise will
   // reject.
-  if (elements.length === 0) {
-    throw new Error("No ad placements found.");
-  }
-
   return Promise.all(
     elements.map((element, index) => {
       const placement = Placement.from_element(element);
@@ -618,7 +660,9 @@ export function load_placements(force_load = false) {
         placement.detectABP(ABP_DETECTION_PX, function (usesABP) {
           uplifted = usesABP;
           if (usesABP) {
-            console.debug("Acceptable Ads enabled. Thanks for allowing our non-tracking ads :)");
+            console.debug(
+              "Acceptable Ads enabled. Thanks for allowing our non-tracking ads :)"
+            );
           }
         });
       }
@@ -731,7 +775,7 @@ if (require.main !== module && check_dependencies()) {
   });
 
   load = () => {
-    console.debug("Loading placements manually")
+    console.debug("Loading placements manually");
     load_placements(true);
   };
 }
