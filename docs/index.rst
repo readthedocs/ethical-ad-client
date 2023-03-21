@@ -295,12 +295,18 @@ Using our StickyBox style:
    <div data-ea-publisher="..." data-ea-type="image" data-ea-style="stickybox"></div>
 
 
-.. figure:: _static/stickybox.gif
-    :align: center
-    :width: 100%
+.. raw:: html
 
-    This Stickybox placement as it transitions from ultrawide width where the placement floats
-    to smaller widths where it is inline.
+    <video controls width="100%">
+        <source src="_static/stickybox.webm">
+
+        <!-- Alt text -->
+        <p>This Stickybox placement as it transitions from ultrawide width where the placement floats
+    to smaller widths where it is inline.</p>
+    </video>
+
+This Stickybox placement as it transitions from ultrawide width where the placement floats
+to smaller widths where it is inline.
 
 
 FixedFooter
