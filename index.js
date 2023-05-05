@@ -36,7 +36,6 @@ const AD_TYPES_VERSION = 1; // Used with the ad type slugs
 const ATTR_PREFIX = "data-ea-";
 const ABP_DETECTION_PX = "https://media.ethicalads.io/abp/px.gif";
 
-
 // Time between checking whether the ad is in the viewport to count the time viewed
 // Time viewed is an important advertiser metric
 const VIEW_TIME_INTERVAL = 1; // seconds
@@ -525,7 +524,6 @@ export var load;
  * @type boolean
  */
 export var uplifted = false;
-
 
 /* If importing this as a module, do not automatically process DOM and fetch the
  * ad placement. Only do this if using the module directly, from a `script`
