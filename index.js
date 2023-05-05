@@ -36,150 +36,6 @@ const AD_TYPES_VERSION = 1; // Used with the ad type slugs
 const ATTR_PREFIX = "data-ea-";
 const ABP_DETECTION_PX = "https://media.ethicalads.io/abp/px.gif";
 
-// Keywords and topics
-//
-// This allows us to categorize pages simply and have better content targeting.
-// Additional categorization can be done on the server side for pages
-// that request ads commonly but this quick and easy categorization
-// works decently well most of the time.
-const KEYWORDS = {
-  // Topics
-  android: "android",
-  ios: "ios",
-  iphone: "ios",
-  blockchain: "blockchain",
-  bitcoin: "bitcoin",
-  ethereum: "ethereum",
-  hyperledger: "hyperledger",
-  solidity: "solidity",
-  cryptography: "cryptography",
-  security: "security",
-  infosec: "security",
-  privacy: "privacy",
-  authentication: "authentication",
-  authorization: "authorization",
-  otp: "otp",
-  "2fa": "2fa",
-  mfa: "mfa",
-  sms: "sms",
-  frontend: "frontend",
-  backend: "backend",
-  "full-stack": "backend",
-  devops: "devops",
-  ai: "artificial-intelligence",
-  nlp: "nlp",
-  ml: "machine-learning",
-  cloud: "cloud",
-  api: "api",
-  docker: "docker",
-  kubernetes: "kubernetes",
-  container: "containers",
-  containers: "containers",
-  ansible: "ansible",
-  serverless: "serverless",
-  openshift: "openshift",
-  terraform: "terraform",
-  openid: "openid",
-  aws: "aws",
-  azure: "azure",
-  gcp: "gcp",
-  linux: "linux",
-  ubuntu: "ubuntu",
-  monitoring: "monitoring",
-  redis: "redis",
-  rabbitmq: "rabbitmq",
-  nosql: "nosql",
-  postgres: "postgresql",
-  postgresql: "postgresql",
-  mysql: "mysql",
-  database: "database",
-  testing: "testing",
-  pytest: "pytest",
-  lint: "lint",
-  linting: "lint",
-  pylint: "pylint",
-  unittest: "unittest",
-  ci: "ci",
-  cd: "cd",
-  tdd: "test-driven-development",
-  elasticsearch: "elasticsearch",
-  lucene: "lucene",
-  solr: "solr",
-  nginx: "nginx",
-  heroku: "heroku",
-  spa: "spa",
-
-  // Frameworks amd modules
-  django: "django",
-  rails: "rails",
-  angular: "angular",
-  angularjs: "angular",
-  laravel: "laravel",
-  react: "reactjs",
-  reactjs: "reactjs",
-  "react-native": "reactjs",
-  jupyter: "jupyter",
-  matplotlib: "matplotlib",
-  pytorch: "pytorch",
-  pydata: "pydata",
-  pandas: "pandas",
-  numpy: "numpy",
-  wsgi: "wsgi",
-  celery: "celery",
-  jinja: "jinja",
-  jinja2: "jinja",
-  flask: "flask",
-  werkzeug: "werkzeug",
-  oauth: "oauth",
-  vuejs: "vuejs",
-  vue: "vuejs",
-  tensorflow: "tensorflow",
-  tensor: "tensor",
-  webpack: "webpack",
-
-  // Programming & markup languages
-  dotnet: "dotnet",
-  ".net": "dotnet",
-  "c#": "c-sharp",
-  "c++": "cplusplus",
-  erlang: "erlang",
-  "f#": "fsharp",
-  golang: "golang",
-  haskell: "haskell",
-  java: "java",
-  javascript: "javascript",
-  julia: "julia",
-  kotlin: "kotlin",
-  "obj-c": "obj-c",
-  "objective-c": "obj-c",
-  php: "php",
-  python: "python",
-  perl: "perl",
-  sql: "sql",
-  ruby: "ruby",
-  rust: "rust",
-  scala: "scala",
-  swift: "swift",
-  css: "css",
-  scss: "scss",
-  typescript: "typescript",
-  redux: "redux",
-
-  // Phrases (not currently implemented)
-  //"data science": "datascience",
-  //"machine learning": "machine-learning",
-};
-
-// Maximum number of words of a document to analyze looking for keywords
-// This is simply a check against taking too much time on very long documents
-const MAX_WORDS_ANALYZED = 9999;
-
-// Max number of detected keywords to send
-// Lowering this number means that only major topics of the page get sent on long pages
-const MAX_KEYWORDS = 3;
-
-// Minimum number of occurrences of a keyword to consider it
-const MIN_KEYWORD_OCCURRENCES = 2;
 
 // Time between checking whether the ad is in the viewport to count the time viewed
 // Time viewed is an important advertiser metric
@@ -288,9 +144,6 @@ export class Placement {
    * @returns {Promise}
    */
   load() {
-    // Detect the keywords
-    this.keywords = this.keywords.concat(this.detectKeywords());
-
     return this.fetch()
       .then((element) => {
         if (element === undefined) {
@@ -529,52 +382,6 @@ export class Placement {
     beforeCheck(callback, 250);
   }
 
-  /* Returns an array of keywords (strings) found on the page
-   *
-   * @returns {Array[string]} Advertising keywords found on the page
-   */
-  detectKeywords() {
-    // Return previously detected keywords
-    // If this code has already run.
-    // Note: if there are "no" keywords (an empty list) this is still true
-    if (detectedKeywords) return detectedKeywords;
-
-    var keywordHist = {}; // Keywords found => count of keyword
-    const mainContent =
-      document.querySelector("[role='main']") ||
-      document.querySelector("main") ||
-      document.querySelector("body");
-
-    const words = mainContent.textContent.split(/\s+/);
-    const wordTrimmer = /^[\('"]?(.*?)[,\.\?\!:;\)'"]?$/g;
-    for (let x = 0; x < words.length && x < MAX_WORDS_ANALYZED; x++) {
-      // Remove certain punctuation from beginning and end of the word
-      let word = words[x].replace(wordTrimmer, "$1").toLowerCase();
-      if (KEYWORDS.hasOwnProperty(word)) {
-        keywordHist[KEYWORDS[word]] = (keywordHist[KEYWORDS[word]] || 0) + 1;
-      }
-    }
-
-    // Sort the hist with the most common items first
-    // Grab only the MAX_KEYWORDS most common
-    const keywords = Object.entries(keywordHist)
-      .filter(
-        // Only consider a keyword with at least this many occurrences
-        (a) => a[1] >= MIN_KEYWORD_OCCURRENCES
-      )
-      .sort((a, b) => {
-        if (a[1] > b[1]) return -1;
-        if (a[1] < b[1]) return 1;
-        return 0;
-      })
-      .slice(0, MAX_KEYWORDS)
-      .map((x) => x[0]);
-
-    detectedKeywords = keywords;
-
-    return keywords;
-  }
-
   /* Apply custom styles based on data-ea-style
    *
    */
@@ -719,10 +526,6 @@ export var load;
  */
 export var uplifted = false;
 
-/* Keywords detected on the page
- * @type {Array[string]}
- */
-export var detectedKeywords = null;
 
 /* If importing this as a module, do not automatically process DOM and fetch the
  * ad placement. Only do this if using the module directly, from a `script`
