@@ -373,6 +373,24 @@ They are ``|``-seperated, so you can include multiple for a single page.
 
     <div data-ea-publisher="..." data-ea-keywords="devops|kubernetes"></div>
 
+
+Single-page apps
+----------------
+
+Single-page applications (SPAs) rewrite rather than reload the current page
+to load new content. The goal is to seem more responsive to the site visitor.
+While ads should not change too frequently, for long lasting pages
+that transition based on user interaction, it may make sense to rotate the ad.
+
+.. code:: javascript
+
+    ethicalads.reload();
+
+
+Be careful that the ad placement (``<div data-ea-publisher="...">``)
+is not also removed by your screen transition or it will need to be recreated.
+
+
 Customization
 -------------
 

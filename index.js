@@ -677,6 +677,16 @@ export function load_placements(force_load = false) {
   );
 }
 
+export function unload_placements() {
+  const node_list = document.querySelectorAll("[" + ATTR_PREFIX + "publisher]");
+  let elements = Array.prototype.slice.call(node_list);
+
+  elements.forEach((div) => {
+    div.innerHTML = "";
+    div.classList.remove("loaded");
+  });
+}
+
 // An error class that we will not surface to clients normally.
 class EthicalAdsWarning extends Error {}
 
@@ -713,6 +723,11 @@ export var wait;
  * @type function
  */
 export var load;
+
+/* Reloading placements. Used by SPAs.
+ * @type function
+ */
+export var reload;
 
 /* Whether this ad impression is attributed to being on the Acceptable Ads list.
  * @type boolean
@@ -777,5 +792,10 @@ if (require.main !== module && check_dependencies()) {
   load = () => {
     console.debug("Loading placements manually");
     load_placements(true);
+  };
+
+  reload = () => {
+    unload_placements();
+    load_placements();
   };
 }
