@@ -295,12 +295,18 @@ Using our StickyBox style:
    <div data-ea-publisher="..." data-ea-type="image" data-ea-style="stickybox"></div>
 
 
-.. figure:: _static/stickybox.gif
-    :align: center
-    :width: 100%
+.. raw:: html
 
-    This Stickybox placement as it transitions from ultrawide width where the placement floats
-    to smaller widths where it is inline.
+    <video controls width="100%">
+        <source src="_static/stickybox.webm">
+
+        <!-- Alt text -->
+        <p>This Stickybox placement as it transitions from ultrawide width where the placement floats
+    to smaller widths where it is inline.</p>
+    </video>
+
+This Stickybox placement as it transitions from ultrawide width where the placement floats
+to smaller widths where it is inline.
 
 
 FixedFooter
@@ -366,6 +372,24 @@ They are ``|``-seperated, so you can include multiple for a single page.
 .. code:: html
 
     <div data-ea-publisher="..." data-ea-keywords="devops|kubernetes"></div>
+
+
+Single-page apps
+----------------
+
+Single-page applications (SPAs) rewrite rather than reload the current page
+to load new content. The goal is to seem more responsive to the site visitor.
+While ads should not change too frequently, for long lasting pages
+that transition based on user interaction, it may make sense to rotate the ad.
+
+.. code:: javascript
+
+    ethicalads.reload();
+
+
+Be careful that the ad placement (``<div data-ea-publisher="...">``)
+is not also removed by your screen transition or it will need to be recreated.
+
 
 Customization
 -------------

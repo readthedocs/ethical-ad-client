@@ -6,6 +6,20 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.7.0
+--------------
+
+Improved single page app (SPA) support. See the docs for more details.
+
+:date: June 8, 2023
+
+ * @davidfischer: Improved SPA support in the ad client (#161)
+ * @davidfischer: Read the Docs docs config (#158)
+ * @davidfischer: Use a fancy webm for the stickybox video (#153)
+ * @agjohnson: Add basic test suite (#150)
+ * @agjohnson: Fork basic circleci configuration here (#149)
+
+
 Version v1.6.2
 --------------
 
