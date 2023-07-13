@@ -5,7 +5,7 @@
   "main": "dist/client.js",
   "files": ["dist/ethicalads.js"],
   "scripts": {
-    "build": "npm ci && npm run build-min && npm run build-unmin",
+    "build": "export NODE_OPTIONS='--openssl-legacy-provider' && npm ci && npm run build-min && npm run build-unmin",
     "build-min": "webpack --mode=production --progress --colors",
     "build-unmin": "webpack --mode=development --progress --colors",
     "dev": "webpack-dev-server --mode=development",
