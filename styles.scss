@@ -6,7 +6,9 @@ $width-image-vertical: 180px;
 
 // Z-index used to ensure these custom ad styles are above the main content.
 // but below most modals
-$zindex-styles: 10;
+$zindex-styles-stickybox: 10;
+// "fixedfooter" requires 200 minimum to be show over the Read the Docs Sphinx theme navbar.
+$zindex-styles-fixedfooter: 200;
 
 // Breakpoints (used for stickybox/fixedfooter formats)
 $breakpoint-ultrawide: 1300px;
@@ -276,7 +278,7 @@ $color-bg-dark-stickybox: $color-link;
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: $zindex-styles;
+  z-index: $zindex-styles-stickybox;
 
   .ea-type-image {
     .ea-stickybox-hide {
@@ -338,7 +340,7 @@ $color-bg-dark-stickybox: $color-link;
   position: fixed;
   bottom: 0;
   left: 0;
-  z-index: $zindex-styles;
+  z-index: $zindex-styles-fixedfooter;
 
   width: 100%;
   max-width: 100%;
@@ -348,7 +350,7 @@ $color-bg-dark-stickybox: $color-link;
     max-width: 100%;
     display: flex;
 
-    z-index: $zindex-styles;
+    z-index: $zindex-styles-fixedfooter;
     background: $color-bg-stickybox;
 
     @include theme-flat;
