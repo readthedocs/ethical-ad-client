@@ -6,6 +6,19 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.8.0
+--------------
+
+The main difference in this release is a change to the z-index
+in the fixed footer ad. The z-index was a bit low and a higher
+one was needed especially on Read the Docs.
+
+:date: August 29, 2023
+
+ * @humitos: FixedFooter: use a bigger `z-index` (#167)
+ * @davidfischer: Note that page specific keywords are mostly unnecessary (#163)
+
+
 Version v1.7.0
 --------------
 
