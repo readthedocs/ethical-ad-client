@@ -1,9 +1,11 @@
 {
   "name": "ethical-ad-client",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "EthicalAds client",
   "main": "dist/client.js",
-  "files": ["dist/ethicalads.js"],
+  "files": [
+    "dist/ethicalads.js"
+  ],
   "scripts": {
     "build": "export NODE_OPTIONS='--openssl-legacy-provider' && npm ci && npm run build-min && npm run build-unmin",
     "build-min": "webpack --mode=production --progress --colors",

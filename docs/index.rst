@@ -360,6 +360,15 @@ you can go to :guilabel:`Settings > Record placements` to enable this feature.
 Page-specific keywords
 ----------------------
 
+.. tip::
+    EthicalAds uses a crawler (similar to a search engine)
+    to crawl our publishers' sites and figure out the appropriate keywords and topics for each
+    page where ads appear. Most publishers won't need to do anything for EthicalAds
+    to appropriately target the right advertisers to the right pages on publisher sites.
+    This API is mostly for SPAs or other non-traditional sites
+    where our crawler won't work.
+
+
 EthicalAds allows our advertisers to target ads based on the content of pages.
 This provides value for everyone, giving users more relevent ads while still respecting their privacy.
 
