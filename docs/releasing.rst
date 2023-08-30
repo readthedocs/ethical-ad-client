@@ -30,6 +30,7 @@ This is the release process for the client itself.
 
         # Push this to GitHub and the CDN
         mkdir dist/$VERSION
+        cp dist/ethicalads.js     dist/$VERSION/
         cp dist/ethicalads.min.js dist/$VERSION/
         cp dist/ethicalads.min.js dist/$VERSION/ethicalads-$VERSION.min.js
 
