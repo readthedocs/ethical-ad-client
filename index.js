@@ -285,13 +285,14 @@ export class Placement {
    * API transaction, displaying the ad element,
    * and handling the viewport detection.
    *
+   * @param {Number} placement_index - The number of this placement (0-indexed)
    * @returns {Promise}
    */
-  load() {
+  load(placement_index) {
     // Detect the keywords
     this.keywords = this.keywords.concat(this.detectKeywords());
 
-    return this.fetch()
+    return this.fetch(placement_index)
       .then((element) => {
         if (element === undefined) {
           throw new EthicalAdsWarning("Ad decision request blocked");
@@ -417,10 +418,11 @@ export class Placement {
 
   /* Get placement data from decision API
    *
+   * @param {Number} placement_index - The number of this placement (0-indexed)
    * @returns {Promise<Element>} Resolves with an Element converted from an HTML
    * string from API response. Can also be null, indicating a noop action.
    */
-  fetch() {
+  fetch(placement_index) {
     // Make sure callbacks don't collide even with multiple placements
     const callback =
       "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000);
@@ -440,6 +442,7 @@ export class Placement {
       campaign_types: this.campaign_types.join("|"),
       format: "jsonp",
       client_version: AD_CLIENT_VERSION,
+      index: placement_index,
       // location.href includes query params (possibly sensitive) and fragments (unnecessary)
       url: (window.location.origin + window.location.pathname).slice(0, 256),
     };
@@ -668,7 +671,7 @@ export function load_placements(force_load = false) {
       }
 
       if (placement && (force_load || !placement.load_manually)) {
-        return placement.load();
+        return placement.load(index);
       } else {
         // This will be manually loaded later or has already been loaded
         return null;
