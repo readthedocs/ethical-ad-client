@@ -442,7 +442,7 @@ export class Placement {
       campaign_types: this.campaign_types.join("|"),
       format: "jsonp",
       client_version: AD_CLIENT_VERSION,
-      index: placement_index,
+      placement_index: placement_index,
       // location.href includes query params (possibly sensitive) and fragments (unnecessary)
       url: (window.location.origin + window.location.pathname).slice(0, 256),
     };
