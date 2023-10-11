@@ -6,6 +6,19 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.9.0
+--------------
+
+The client will send a placement index for multiple placements
+on the same screen.
+
+:date: October 11, 2023
+
+ * @davidfischer: Index -> placement_index (#171)
+ * @davidfischer: Include placement number with ad request (#170)
+ * @davidfischer: Release update step (#169)
+
+
 Version v1.8.0
 --------------
 
