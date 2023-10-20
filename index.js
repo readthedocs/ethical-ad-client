@@ -604,6 +604,8 @@ export class Placement {
           "visibilitychange",
           visibility_change_listener
         );
+
+        return this;
       });
   }
 
