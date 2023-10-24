@@ -427,14 +427,44 @@ document ready event. For example, using jQuery:
       });
     });
 
+
+Splitting traffic with other ad networks
+----------------------------------------
+
+While our `publisher policy <https://www.ethicalads.io/publisher-policy/>`_ states
+that our ad should be the only ad visible when your page is loaded,
+you are free to split your traffic with other ad networks or fallback from
+EthicalAds to another network or vice versa.
+
+You can fallback to Carbon Ads with a snippet like this:
+
+.. code:: html
+
+  <script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+  <script>
+  ethicalads.wait.then((placements) => {
+    // Fallback to Carbon Ads and put the ad in '#ad-container'
+    if (!placements.length || placements[0].response.campaign_type !== "paid") {
+      let script = document.createElement("script");
+      script.src = "//cdn.carbonads.com/carbon.js";  // Note: Don't forget your Carbon ID
+      script.type = "text/javascript";
+      script.async = true;
+      script.id = "_carbonads_js";
+      document.getElementById("ad-container").appendChild(script);
+    }
+  });
+  </script>
+
+
 Showing content when there isn't an ad
 --------------------------------------
 
-The biggest use-case is to show backup content when we don't have an ad to show.
-Many of our publishers prefer to serve EthicalAds,
-but while we're still building the network we might not have a 100% fill rate.
+The easiest way to show alternative content when we do not have a paid ad is to use fallback ads.
+Fallback ads are ads you as a publisher can create to show only on your own site.
+You can create and manage fallback ads in your publisher dashboard.
 
-You can show backup content with a code snippet like this:
+However, if you want to show something custom to users who do not get an ad,
+you can show backup content with a code snippet like this:
 
 .. code:: html
 
@@ -442,6 +472,7 @@ You can show backup content with a code snippet like this:
   <script>
   ethicalads.wait.then((placements) => {
     if (!placements.length) {
+      // No ads were returned by the server
       console.debug('Loading backup content');
       div = document.querySelector('[data-ea-publisher]')
       div.innerHTML = '<p>Check out our first-party ad content.</p>'
@@ -451,7 +482,7 @@ You can show backup content with a code snippet like this:
   });
   </script>
 
-.. warning:: You need to have ``Allow house campaigns`` disabled in the ads dashboard, otherwise we will always return a house ad. Go to :guilabel:`Settings > Control advertiser campaign types` to disable it.
+.. warning:: You need to have ``Allow house campaigns`` disabled in your publisher settings, otherwise we will always return a house ad. Go to :guilabel:`Settings > Control advertiser campaign types` to disable it. Alternatively, you may request *only* a paid ad or your own fallback ads by setting ``data-ea-campaign-types="paid|publisher-house"``.
 
 
 .. _load manually:
