@@ -6,6 +6,20 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.10.0
+---------------
+
+Fixed a bug with ``ethicalads.wait``.
+Updated the keywords and added documentation for falling back from
+EthicalAds to other networks.
+
+:date: October 24, 2023
+
+ * @davidfischer: Fallback to other ad networks (#176)
+ * @davidfischer: Fix promise bug for ethicalads.wait (#175)
+ * @davidfischer: Use the same keywords as the server (#174)
+
+
 Version v1.9.0
 --------------
 
