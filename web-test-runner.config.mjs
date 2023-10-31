@@ -1,5 +1,6 @@
 import { importMapsPlugin } from "@web/dev-server-import-maps";
 import { fromRollup, rollupAdapter } from "@web/dev-server-rollup";
+import { chromeLauncher } from "@web/test-runner-chrome";
 import rollupCommonjs from "@rollup/plugin-commonjs";
 import rollupImage from "@rollup/plugin-image";
 import rollupJson from "@rollup/plugin-json";
@@ -27,6 +28,13 @@ export default {
     pluginCommonjs({
       include: ["node_modules/**"],
       requireReturnsDefault: "preferred",
+    }),
+  ],
+  browsers: [
+    chromeLauncher({
+      launchOptions: {
+        headless: false,
+      },
     }),
   ],
 };
