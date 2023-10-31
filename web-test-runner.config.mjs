@@ -4,7 +4,7 @@ import rollupCommonjs from "@rollup/plugin-commonjs";
 import rollupImage from "@rollup/plugin-image";
 import rollupJson from "@rollup/plugin-json";
 import rollupLitCss from "rollup-plugin-lit-css";
-import rollupScss from 'rollup-plugin-scss'
+import rollupScss from "rollup-plugin-scss";
 
 const pluginCommonjs = fromRollup(rollupCommonjs);
 
@@ -20,7 +20,7 @@ export default {
     "**/*.json": "js",
   },
   plugins: [
-    rollupAdapter(rollupScss({output: false, verbose: true})),
+    rollupAdapter(rollupScss({ output: false, verbose: true })),
     rollupAdapter(rollupJson()),
     rollupAdapter(rollupImage()),
     rollupAdapter(rollupLitCss()),
