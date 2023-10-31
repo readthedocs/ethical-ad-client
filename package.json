@@ -34,7 +34,7 @@
     "file-loader": "^2.0.0",
     "github-changelog": "git+https://github.com/davidfischer/github-changelog.git#davidfischer/update-deps",
     "jest": "^29.5.0",
-    "jest-environment-jsdom": "^29.5.0",
+    "jest-environment-jsdom": "^29.7.0",
     "optimize-css-assets-webpack-plugin": "^5.0.8",
     "prettier": "^2.8.4",
     "sass": "^1.59.3",

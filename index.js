@@ -1010,6 +1010,8 @@ if (require.main !== module && check_dependencies()) {
   };
 
   reload = () => {
+    // Re-run keyword detection when reloading
+    detectedKeywords = null;
     unload_placements();
     load_placements();
   };

@@ -1,21 +1,17 @@
-import { wait, load, detectedKeywords } from "../index";
+/**
+ * @jest-environment jsdom
+ */
+
+import { wait, load_placements, reload, detectedKeywords } from "../index";
 
 test("Wait promise is exported", () => {
   expect(wait).toBeInstanceOf(Promise);
 });
 
-test("load() loads the dynamic decision script tag", () => {
-  const parser = new DOMParser();
-  const dom = parser.parseFromString(
-    '<div data-ea-publisher="foo" data-ea-type="text"></div>',
-    "text/html"
-  );
+test("Load the dynamic decision script tag", () => {
+  document.body.innerHTML = '<div data-ea-publisher="foo" data-ea-type="text"></div>';
 
-  jest
-    .spyOn(document, "querySelectorAll")
-    .mockImplementation((selector) => dom.querySelectorAll(selector));
-
-  load();
+  load_placements();
 
   // Ensure the script tag is added to the head
   expect(document.head.innerHTML).toContain(
@@ -24,24 +20,13 @@ test("load() loads the dynamic decision script tag", () => {
   expect(document.head.innerHTML).toContain("publisher=foo");
 });
 
-test.failing("test keyword detection", () => {
-  const parser = new DOMParser();
-  const dom = parser.parseFromString(
-    '<body><div data-ea-publisher="foo"></div>' +
-      '<p role="main">PyTorch is an important module for machine learning.' +
-      "PyTorch can use your GPU to crunch numbers faster than a CPU.</p></body>",
-    "text/html"
-  );
+test("Verify keyword detection", () => {
+  document.body.innerHTML = '<div data-ea-publisher="foo"></div>' +
+      '<p role="main">PyTorch is an important module for machine learning. ' +
+      "PyTorch can use your GPU to crunch numbers faster than a CPU.</p>";
 
-  jest
-    .spyOn(document, "querySelectorAll")
-    .mockImplementation((selector) => dom.querySelectorAll(selector));
-
-  jest
-    .spyOn(document, "querySelector")
-    .mockImplementation((selector) => dom.querySelector(selector));
-
-  load();
+  // Reset keyword detection - it will be re-run when the placement is loaded
+  reload();
 
   expect(detectedKeywords).toContain("pytorch");
 });
