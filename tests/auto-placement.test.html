@@ -26,6 +26,7 @@
           it("loads placements automatically", async () => {
             const placements = await wait;
             expect(placements.length).to.equal(1);
+            expect(placements[0]).to.have.property("publisher", "test");
           });
         });
       });
