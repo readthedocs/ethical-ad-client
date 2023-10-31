@@ -9,7 +9,8 @@ test("Wait promise is exported", () => {
 });
 
 test("Load the dynamic decision script tag", () => {
-  document.body.innerHTML = '<div data-ea-publisher="foo" data-ea-type="text"></div>';
+  document.body.innerHTML =
+    '<div data-ea-publisher="foo" data-ea-type="text"></div>';
 
   load_placements();
 
@@ -21,9 +22,10 @@ test("Load the dynamic decision script tag", () => {
 });
 
 test("Verify keyword detection", () => {
-  document.body.innerHTML = '<div data-ea-publisher="foo"></div>' +
-      '<p role="main">PyTorch is an important module for machine learning. ' +
-      "PyTorch can use your GPU to crunch numbers faster than a CPU.</p>";
+  document.body.innerHTML =
+    '<div data-ea-publisher="foo"></div>' +
+    '<p role="main">PyTorch is an important module for machine learning. ' +
+    "PyTorch can use your GPU to crunch numbers faster than a CPU.</p>";
 
   // Reset keyword detection - it will be re-run when the placement is loaded
   reload();
