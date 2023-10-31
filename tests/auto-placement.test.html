@@ -5,8 +5,15 @@
     <script type="module">
       import { expect } from "@open-wc/testing";
       import { runTests } from "@web/test-runner-mocha";
+      import { default as sinon } from "sinon";
 
-      import { wait } from "../index";
+      import { wait, Placement } from "../index";
+
+      let stub = sinon.stub(Placement.prototype, "fetch");
+      const response_html = "<div></div>";
+      const elem_placement = document.createElement("div");
+      elem_placement.innerHTML = response_html;
+      stub.resolves(elem_placement.firstChild);
 
       runTests(async () => {
         describe("EthicalAds library", () => {
