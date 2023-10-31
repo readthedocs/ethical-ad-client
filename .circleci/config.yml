@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  browser-tools: circleci/browser-tools@1.4.6
+
 commands:
   run-checks:
     description: "Run basic checks"
@@ -23,6 +26,14 @@ commands:
               git status dist/ --porcelain
               exit 1
             fi
+  run-test:
+    description: "Run test suite"
+    steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - checkout
+      - run: npm ci
+      - run: npm test
 
 jobs:
   checks:
@@ -35,6 +46,11 @@ jobs:
       - image: "cimg/node:16.19"
     steps:
       - run-build: {}
+  test:
+    docker:
+      - image: "cimg/node:16.19"
+    steps:
+      - run-test: {}
 
 workflows:
   version: 2
@@ -42,3 +58,4 @@ workflows:
     jobs:
       - checks
       - build
+      - test

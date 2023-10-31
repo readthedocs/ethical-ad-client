@@ -11,7 +11,9 @@
     "lint": "prettier -c .",
     "format": "prettier --write .",
     "changelog": "gh-changelog -o readthedocs -r ethical-ad-client -e '' -f CHANGELOG.rst",
-    "test": "jest tests/"
+    "test": "web-test-runner",
+    "test:dev": "web-test-runner --watch",
+    "test:debug": "web-test-runner --manual --open"
   },
   "repository": {
     "type": "git",
@@ -29,14 +31,20 @@
   "devDependencies": {
     "@babel/core": "^7.21.3",
     "@babel/preset-env": "^7.20.2",
+    "@open-wc/testing": "^3.2.0",
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-image": "^3.0.2",
+    "@rollup/plugin-json": "^6.0.0",
+    "@web/dev-server-import-maps": "^0.1.1",
+    "@web/test-runner": "^0.17.2",
     "babel-loader": "^8.3.0",
     "css-loader": "^3.6.0",
     "file-loader": "^2.0.0",
     "github-changelog": "git+https://github.com/davidfischer/github-changelog.git#davidfischer/update-deps",
-    "jest": "^29.5.0",
-    "jest-environment-jsdom": "^29.5.0",
     "optimize-css-assets-webpack-plugin": "^5.0.8",
     "prettier": "^2.8.4",
+    "rollup-plugin-lit-css": "^4.0.1",
+    "rollup-plugin-scss": "^4.0.0",
     "sass": "^1.59.3",
     "sass-loader": "^10.4.1",
     "style-loader": "^1.3.0",
@@ -58,15 +66,6 @@
           "@babel/plugin-proposal-class-properties"
         ]
       }
-    }
-  },
-  "jest": {
-    "testEnvironment": "jest-environment-jsdom",
-    "globals": {
-      "__webpack_public_path__": null
-    },
-    "moduleNameMapper": {
-      "\\.s?css$": "<rootDir>/tests/mock.css.js"
     }
   }
 }
