@@ -6,14 +6,17 @@
       import { expect } from "@open-wc/testing";
       import { runTests } from "@web/test-runner-mocha";
 
-      import { wait } from "../index";
+      import { wait, load_placements } from "../index";
 
       runTests(async () => {
         describe("EthicalAds library", () => {
           it("skips manual placements", async () => {
             const placements = await wait;
-            console.error(placements);
-            expect(placements.length).to.equal(0);
+            expect(placements).to.be.an('array').that.includes(null);
+          });
+          it("can force load manual placements", async () => {
+            const placements = await load_placements(true);
+            expect(placements).to.be.an('array').that.includes(null);
           });
         });
       });
