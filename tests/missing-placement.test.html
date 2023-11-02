@@ -5,18 +5,11 @@
     <script type="module">
       import { expect } from "@open-wc/testing";
       import { runTests } from "@web/test-runner-mocha";
-      import { default as sinon } from "sinon";
 
-      import { wait, load_placements, Placement } from "../index";
+      import { wait, load_placements } from "../index";
+      import { mockAdDecision } from "./common.inc";
 
-      // Don't actually call the server
-      // https://sinonjs.org/releases/v17/stubs/
-      let stub = sinon.stub(Placement.prototype, "fetch");
-      const response_html =
-        "<div><!-- A real ad would be here normally --></div>";
-      const elem_placement = document.createElement("div");
-      elem_placement.innerHTML = response_html;
-      stub.resolves(elem_placement.firstChild);
+      let stub = mockAdDecision();
 
       runTests(async () => {
         describe("EthicalAds library", () => {

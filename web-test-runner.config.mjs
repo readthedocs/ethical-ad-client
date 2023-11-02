@@ -11,7 +11,7 @@ const pluginCommonjs = fromRollup(rollupCommonjs);
 
 export default {
   rootDir: ".",
-  files: ["./tests/**/*.{js,html}"],
+  files: ["./tests/**/*.html"],
   preserveSymlinks: true,
   nodeResolve: {},
   mimeTypes: {
