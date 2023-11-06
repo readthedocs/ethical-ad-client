@@ -1,0 +1,25 @@
+<html>
+  <body>
+    <div data-ea-publisher="test" data-ea-manual="false"></div>
+
+    <script type="module">
+      import { expect } from "@open-wc/testing";
+      import { runTests } from "@web/test-runner-mocha";
+
+      import { wait } from "../index";
+      import { mockAdDecision } from "./common.inc";
+
+      let stub = mockAdDecision();
+
+      runTests(async () => {
+        describe("EthicalAds library", () => {
+          it("loads placements automatically", async () => {
+            const placements = await wait;
+            expect(placements.length).to.equal(1);
+            expect(placements[0]).to.have.property("publisher", "test");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

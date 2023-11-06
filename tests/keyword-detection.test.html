@@ -1,0 +1,31 @@
+<html>
+  <body>
+    <div data-ea-publisher="test"></div>
+    <main>
+      <p>
+        PyTorch is an important module for machine learning. PyTorch can use
+        your GPU to crunch numbers faster than a CPU.
+      </p>
+    </main>
+
+    <script type="module">
+      import { expect } from "@open-wc/testing";
+      import { runTests } from "@web/test-runner-mocha";
+
+      import { wait, detectedKeywords } from "../index";
+      import { mockAdDecision } from "./common.inc";
+
+      let stub = mockAdDecision();
+
+      runTests(async () => {
+        describe("EthicalAds library", () => {
+          it("keyword detection", async () => {
+            const placements = await wait;
+            expect(detectedKeywords).to.be.an("array");
+            expect(detectedKeywords).to.include("pytorch");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
