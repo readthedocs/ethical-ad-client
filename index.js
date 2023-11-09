@@ -1018,7 +1018,7 @@ export var detectedKeywords = null;
  * This also replicates JQuery `$(document).ready()`, with added protection for
  * usage of `async` -- the DOM ready event can fire before the script is loaded..
  */
-if (check_dependencies()) {
+if (check_dependencies() && !window.ethicalads) {
   const wait_dom = new Promise((resolve) => {
     if (
       document.readyState === "interactive" ||
