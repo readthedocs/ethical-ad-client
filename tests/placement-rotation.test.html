@@ -1,0 +1,38 @@
+<html>
+  <body>
+    <div data-ea-publisher="test"></div>
+
+    <script type="module">
+      import { expect } from "@open-wc/testing";
+      import { runTests } from "@web/test-runner-mocha";
+
+      import { wait, detectedKeywords } from "../index";
+      import { mockAdDecision } from "./common.inc";
+
+      let stub = mockAdDecision();
+
+      runTests(async () => {
+        describe("EthicalAds library", () => {
+          it("placement rotation", async () => {
+            const placements = await wait;
+            expect(placements.length).to.equal(1);
+            let placement = placements[0];
+            expect(placement.rotations).to.equal(1);
+
+            // Does not rotate due to time restriction
+            window.location.hash = "#top";
+            expect(placement.rotations).to.equal(1);
+
+            // Rotate the placement
+            placement.rotate();
+            expect(placement.rotations).to.equal(2);
+
+            // Rotate the placement again
+            placement.rotate();
+            expect(placement.rotations).to.equal(3);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

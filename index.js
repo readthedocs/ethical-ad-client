@@ -27,7 +27,7 @@ import verge from "verge";
 
 import "./styles.scss";
 
-const AD_CLIENT_VERSION = "1.10.0"; // Sent with the ad request
+const AD_CLIENT_VERSION = "1.11.0-alpha"; // Sent with the ad request
 
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
@@ -403,6 +403,13 @@ const VIEW_TIME_MAX = 5 * 60; // seconds
 // or the left side of the ad is at the right side of the viewport
 const VIEWPORT_FUDGE_FACTOR = -3; // px
 
+// An ad may be rotated if it has been visible for sufficient time
+// And there is user interaction.
+// We rotate no more than the maximum number of rotations.
+// Loading the ad the first time counts as the first rotation.
+const MIN_VIEW_TIME_ROTATION_DURATION = 60; // seconds
+const MAX_ROTATIONS = 3;
+
 /* Placement object to query decision API and return an Element node
  *
  * @param {string} publisher - Publisher ID
@@ -433,6 +440,9 @@ export class Placement {
     this.view_time = 0;
     this.view_time_sent = false; // true once the view time is sent to the server
     this.response = null;
+
+    this.rotations = 1;
+    this.index = null;
   }
 
   /* Create a placement from an element
@@ -495,14 +505,13 @@ export class Placement {
    * API transaction, displaying the ad element,
    * and handling the viewport detection.
    *
-   * @param {Number} placement_index - The number of this placement (0-indexed)
    * @returns {Promise}
    */
-  load(placement_index) {
+  load() {
     // Detect the keywords
     this.keywords = this.keywords.concat(this.detectKeywords());
 
-    return this.fetch(placement_index)
+    return this.fetch()
       .then((element) => {
         if (element === undefined) {
           throw new EthicalAdsWarning("Ad decision request blocked");
@@ -585,15 +594,7 @@ export class Placement {
             document.visibilityState === "hidden" ||
             document.visibilityState === "unloaded"
           ) {
-            let pixel = document.createElement("img");
-            pixel.src =
-              placement.response.view_time_url +
-              "?view_time=" +
-              placement.view_time;
-            pixel.className = "ea-pixel";
-            placement.target.appendChild(pixel);
-
-            placement.view_time_sent = true;
+            placement.sendViewTime();
             document.removeEventListener(
               "visibilitychange",
               visibility_change_listener
@@ -605,8 +606,42 @@ export class Placement {
           visibility_change_listener
         );
 
+        let ad_rotation_listener = () => {
+          if (
+            placement.inViewport(placement.target) &&
+            placement.view_time >= MIN_VIEW_TIME_ROTATION_DURATION &&
+            placement.rotations < MAX_ROTATIONS
+          ) {
+            placement.sendViewTime();
+            placement.rotate();
+            window.removeEventListener("hashchange", ad_rotation_listener);
+
+            // Remove existing event listeners
+            document.removeEventListener(
+              "visibilitychange",
+              visibility_change_listener
+            );
+            clearInterval(view_time_counter);
+          }
+        };
+        window.addEventListener("hashchange", ad_rotation_listener);
+
         return this;
       });
+  }
+
+  /* Reloads the placement with a new ad (if applicable)
+   *
+   * @returns {Promise}
+   */
+  rotate() {
+    this.view_time = 0;
+    this.view_time_sent = false;
+    this.response = null;
+
+    this.rotations += 1;
+
+    return this.load();
   }
 
   /* Returns whether the ad is visible in the viewport
@@ -630,11 +665,10 @@ export class Placement {
 
   /* Get placement data from decision API
    *
-   * @param {Number} placement_index - The number of this placement (0-indexed)
    * @returns {Promise<Element>} Resolves with an Element converted from an HTML
    * string from API response. Can also be null, indicating a noop action.
    */
-  fetch(placement_index) {
+  fetch() {
     // Make sure callbacks don't collide even with multiple placements
     const callback =
       "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000);
@@ -654,7 +688,7 @@ export class Placement {
       campaign_types: this.campaign_types.join("|"),
       format: "jsonp",
       client_version: AD_CLIENT_VERSION,
-      placement_index: placement_index,
+      placement_index: this.index,
       // location.href includes query params (possibly sensitive) and fragments (unnecessary)
       url: (window.location.origin + window.location.pathname).slice(0, 256),
     };
@@ -663,6 +697,9 @@ export class Placement {
     }
     if (this.force_campaign) {
       params["force_campaign"] = this.force_campaign;
+    }
+    if (this.rotations > 1) {
+      params["rotations"] = this.rotations;
     }
     const url_params = new URLSearchParams(params);
     const url = new URL(AD_DECISION_URL + "?" + url_params.toString());
@@ -692,6 +729,25 @@ export class Placement {
       });
       document.getElementsByTagName("head")[0].appendChild(script);
     });
+  }
+
+  /* Sends the view time of the ad to the server
+   */
+  sendViewTime() {
+    if (
+      this.view_time <= 0 ||
+      this.view_time_sent ||
+      !this.response ||
+      !this.response.view_time_url
+    )
+      return;
+
+    let pixel = document.createElement("img");
+    pixel.src = this.response.view_time_url + "?view_time=" + this.view_time;
+    pixel.className = "ea-pixel";
+    this.target.appendChild(pixel);
+
+    this.view_time_sent = true;
   }
 
   /* Detect whether this ad is "uplifted" meaning allowed by ABP's Acceptable Ads list
@@ -866,6 +922,7 @@ export function load_placements(force_load = false) {
   return Promise.all(
     elements.map((element, index) => {
       const placement = Placement.from_element(element);
+      placement.index = index;
 
       // Run AcceptableAds detection code
       // This lets us know how many impressions are attributed to AceeptableAds
@@ -883,7 +940,7 @@ export function load_placements(force_load = false) {
       }
 
       if (placement && (force_load || !placement.load_manually)) {
-        return placement.load(index);
+        return placement.load();
       } else {
         // This will be manually loaded later or has already been loaded
         return null;
@@ -961,7 +1018,7 @@ export var detectedKeywords = null;
  * This also replicates JQuery `$(document).ready()`, with added protection for
  * usage of `async` -- the DOM ready event can fire before the script is loaded..
  */
-if (check_dependencies()) {
+if (check_dependencies() && !window.ethicalads) {
   const wait_dom = new Promise((resolve) => {
     if (
       document.readyState === "interactive" ||
@@ -1010,6 +1067,7 @@ if (check_dependencies()) {
   };
 
   reload = () => {
+    detectedKeywords = null;
     unload_placements();
     load_placements();
   };
