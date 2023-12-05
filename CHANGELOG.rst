@@ -6,6 +6,22 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.11.0
+---------------
+
+The client will not automatically rotate ads very conservatively.
+This is primarily for SPAs.
+Added a check to prevent double-loading the module.
+Also, added a more significant test suite.
+
+:date: December 5, 2023
+
+ * @davidfischer: Prevent double loading the module (#181)
+ * @davidfischer: Rotate ads (#180)
+ * @agjohnson: Proof of concept for web-test-runner (#179)
+ * @davidfischer: WIP: Add a test suite (#178)
+
+
 Version v1.10.0
 ---------------
 
