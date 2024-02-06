@@ -6,6 +6,17 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.12.0
+---------------
+
+We made a few tweaks around double-loading the module.
+We settled on just raising a warning.
+
+:date: February 6, 2023
+
+ * @davidfischer: Ad client reloading check tweaks (#184)
+
+
 Version v1.11.0
 ---------------
 
