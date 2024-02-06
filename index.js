@@ -27,7 +27,7 @@ import verge from "verge";
 
 import "./styles.scss";
 
-const AD_CLIENT_VERSION = "1.11.0"; // Sent with the ad request
+const AD_CLIENT_VERSION = "1.12.0-alpha"; // Sent with the ad request
 
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
@@ -922,6 +922,12 @@ export function load_placements(force_load = false) {
   return Promise.all(
     elements.map((element, index) => {
       const placement = Placement.from_element(element);
+
+      if (!placement) {
+        // Placement has already been loaded
+        return null;
+      }
+
       placement.index = index;
 
       // Run AcceptableAds detection code
@@ -1018,7 +1024,10 @@ export var detectedKeywords = null;
  * This also replicates JQuery `$(document).ready()`, with added protection for
  * usage of `async` -- the DOM ready event can fire before the script is loaded..
  */
-if (check_dependencies() && !window.ethicalads) {
+if (window.ethicalads) {
+  console.warn("Double-loading the EthicalAds client. Use reload() instead.");
+}
+if (check_dependencies()) {
   const wait_dom = new Promise((resolve) => {
     if (
       document.readyState === "interactive" ||
