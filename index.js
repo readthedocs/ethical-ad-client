@@ -1025,7 +1025,7 @@ export var detectedKeywords = null;
  * usage of `async` -- the DOM ready event can fire before the script is loaded..
  */
 if (window.ethicalads) {
-  console.warn("Double-loading the EthicalAds client. Use reload() instead.");
+  console.warn("Double-loading the EthicalAds client. Use reload() instead. https://ethical-ad-client.readthedocs.io/en/latest/#single-page-apps");
 }
 if (check_dependencies()) {
   const wait_dom = new Promise((resolve) => {
