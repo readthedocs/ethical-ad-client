@@ -400,6 +400,20 @@ Be careful that the ad placement (``<div data-ea-publisher="...">``)
 is not also removed by your screen transition or it will need to be recreated.
 
 
+Automatic ad rotation
+---------------------
+
+.. note:: This feature is under active development and the conditions may change in future versions.
+
+The ad client will automatically rotate an ad and show a new ad when appropriate.
+Currently, the conditions for ad rotation are:
+
+* The ad must be visible for 30 seconds or more.
+* There must be a URL change (anchor link or using the `browser history API`_)
+
+.. _browser history API: https://developer.mozilla.org/en-US/docs/Web/API/History_API
+
+
 Customization
 -------------
 

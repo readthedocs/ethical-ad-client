@@ -27,7 +27,7 @@ import verge from "verge";
 
 import "./styles.scss";
 
-const AD_CLIENT_VERSION = "1.12.0"; // Sent with the ad request
+const AD_CLIENT_VERSION = "1.13.0-alpha"; // Sent with the ad request
 
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
@@ -407,7 +407,7 @@ const VIEWPORT_FUDGE_FACTOR = -3; // px
 // And there is user interaction.
 // We rotate no more than the maximum number of rotations.
 // Loading the ad the first time counts as the first rotation.
-const MIN_VIEW_TIME_ROTATION_DURATION = 60; // seconds
+const MIN_VIEW_TIME_ROTATION_DURATION = 30; // seconds
 const MAX_ROTATIONS = 3;
 
 /* Placement object to query decision API and return an Element node
