@@ -6,6 +6,17 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.13.0
+---------------
+
+This change lowers the ad rotation threshold
+and adds the notes on rotation to the documentation.
+
+:date: February 13, 2023
+
+ * @davidfischer: Lower ad rotation threshold to 30 seconds (#186)
+
+
 Version v1.12.0
 ---------------
 
