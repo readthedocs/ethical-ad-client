@@ -488,6 +488,11 @@ export class Placement {
       return null;
     }
 
+    const placementBottom = element.getAttribute(ATTR_PREFIX + "placement-bottom");
+    if (placementBottom) {
+      element.style.setProperty("bottom", placementBottom);
+    }
+
     return new Placement(publisher, ad_type, element, {
       keywords: keywords,
       style: style,
