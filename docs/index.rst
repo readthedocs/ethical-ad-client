@@ -368,6 +368,8 @@ Page-specific keywords
     This API is mostly for SPAs or other non-traditional sites
     where our crawler won't work.
 
+    The user agent for our crawler is: ``EthicalAds Analyzer/$version <server.ethicalads.io>``
+
 
 EthicalAds allows our advertisers to target ads based on the content of pages.
 This provides value for everyone, giving users more relevent ads while still respecting their privacy.
