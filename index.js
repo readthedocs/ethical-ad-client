@@ -27,7 +27,7 @@ import verge from "verge";
 
 import "./styles.scss";
 
-const AD_CLIENT_VERSION = "1.13.0"; // Sent with the ad request
+const AD_CLIENT_VERSION = "1.14.0-alpha"; // Sent with the ad request
 
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
@@ -486,6 +486,14 @@ export class Placement {
     if (classes.indexOf("loaded") >= 0) {
       console.error("EthicalAd already loaded.");
       return null;
+    }
+
+    // Note: this attribute value *must* contain a unit (eg. '200px')
+    const placementBottom = element.getAttribute(
+      ATTR_PREFIX + "placement-bottom"
+    );
+    if (placementBottom) {
+      element.style.setProperty("bottom", placementBottom);
     }
 
     return new Placement(publisher, ad_type, element, {

@@ -36,7 +36,6 @@ Ad client playground
 
 You can play around with an example placement in our `ethical ad client playground <https://jsbin.com/roniviv/edit?html,output>`_ on JSBin.
 
-.. _configuration:
 
 Configuration
 -------------
@@ -53,6 +52,9 @@ The following data attributes are supported on the ad placement element:
 ``id`` (optional)
     A placement identifier. If you define an ``id`` and :ref:`enable placements reporting <placements>`,
     this will allow you to see reports for each ``id``.
+
+``data-ea-style`` (optional)
+    Use a custom :ref:`placement style <placement-styles>`.
 
 ``data-ea-keywords`` (optional)
     A pipe (``|``) separated array of keywords for this ad placement.
@@ -75,6 +77,10 @@ The following data attributes are supported on the ad placement element:
 ``data-ea-force-campaign`` (optional)
     This parameter can be used to test the ad client on a specific campaign (group of ads).
     When used, any impressions will not be counted for billing purposes.
+
+``data-ea-placement-bottom`` (optional)
+    Set to a valid value for the CSS bottom property (eg. '40px') to have a custom position.
+    This must be used with ``data-ea-style`` to have any effect.
 
 
 Themes
