@@ -6,6 +6,21 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.14.0
+---------------
+
+The changes in this release were minor but allow adjusting
+the position of the stickybox placement with the `data-ea-placement-bottom`
+attribute.
+
+:date: May 16, 2023
+
+ * @davidfischer: Fix the unit tests (#191)
+ * @humitos: Use `data-ea-placement-bottom` to set CSS `bottom` property (#190)
+ * @ericholscher: Add UA for crawler (#189)
+ * @humitos: Ad placement for Read the Docs addons (#188)
+
+
 Version v1.13.0
 ---------------
 
