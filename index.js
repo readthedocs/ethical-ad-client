@@ -36,6 +36,41 @@ const AD_TYPES_VERSION = 1; // Used with the ad type slugs
 const ATTR_PREFIX = "data-ea-";
 const ABP_DETECTION_PX = "https://media.ethicalads.io/abp/px.gif";
 
+// Verbosity and logging
+//
+// Set with:
+//
+//  <div data-ea-publisher="..." data-ea-verbosity="quiet"></div>
+const VERBOSITY = {
+  quiet: 0, // Errors only
+  normal: 1, // Warnings only (default)
+  verbose: 2, // Debug messages
+};
+const logger = {
+  verbosity: VERBOSITY["normal"], // Default
+
+  debug(message, ...params) {
+    if (this.verbosity >= 2) {
+      console.debug(message, ...params);
+    }
+  },
+  info(message, ...params) {
+    if (this.verbosity >= 2) {
+      console.info(message, ...params);
+    }
+  },
+  warn(message, ...params) {
+    if (this.verbosity >= 1) {
+      console.warn(message, ...params);
+    }
+  },
+  error(message, ...params) {
+    if (this.verbosity >= 0) {
+      console.error(message, ...params);
+    }
+  },
+};
+
 // Keywords and topics
 //
 // This allows us to categorize pages simply and have better content targeting.
@@ -484,7 +519,7 @@ export class Placement {
 
     let classes = (element.className || "").split(" ");
     if (classes.indexOf("loaded") >= 0) {
-      console.error("EthicalAd already loaded.");
+      logger.warn("EthicalAd already loaded.");
       return null;
     }
 
@@ -901,7 +936,7 @@ export function check_dependencies() {
     !window.URLSearchParams ||
     !window.Promise
   ) {
-    console.error(
+    logger.error(
       "Browser does not meet ethical ad client dependencies. Not showing ads"
     );
     return false;
@@ -921,7 +956,7 @@ export function load_placements(force_load = false) {
   let elements = Array.prototype.slice.call(node_list);
 
   if (elements.length === 0) {
-    console.debug("No ad placements found.");
+    logger.warn("No ad placements found.");
   }
 
   // Create main promise. Iterator `all()` Promise will surround array of found
@@ -946,7 +981,7 @@ export function load_placements(force_load = false) {
         placement.detectABP(ABP_DETECTION_PX, function (usesABP) {
           uplifted = usesABP;
           if (usesABP) {
-            console.debug(
+            logger.debug(
               "Acceptable Ads enabled. Thanks for allowing our non-tracking ads :)"
             );
           }
@@ -971,6 +1006,17 @@ export function unload_placements() {
     div.innerHTML = "";
     div.classList.remove("loaded");
   });
+}
+
+export function set_verbosity() {
+  let element = document.querySelector("[" + ATTR_PREFIX + "publisher]");
+
+  if (element) {
+    let user_verbosity = element.getAttribute(ATTR_PREFIX + "verbosity");
+    if (VERBOSITY.hasOwnProperty(user_verbosity)) {
+      logger.verbosity = VERBOSITY[user_verbosity];
+    }
+  }
 }
 
 // An error class that we will not surface to clients normally.
@@ -1033,11 +1079,16 @@ export var detectedKeywords = null;
  * usage of `async` -- the DOM ready event can fire before the script is loaded..
  */
 if (window.ethicalads) {
+  // Always display this warning regardless of log level
+  // This is a code mistake by publishers and should be caught right away.
   console.warn(
     "Double-loading the EthicalAds client. Use reload() instead. https://ethical-ad-client.readthedocs.io/en/latest/#single-page-apps"
   );
 }
 if (check_dependencies()) {
+  // Set the client verbosity
+  set_verbosity();
+
   const wait_dom = new Promise((resolve) => {
     if (
       document.readyState === "interactive" ||
@@ -1071,17 +1122,17 @@ if (check_dependencies()) {
           if (err instanceof Error) {
             if (err instanceof EthicalAdsWarning) {
               // Report these at a lower log level
-              console.debug(err.message);
+              logger.info(err.message);
               return;
             }
-            console.error(err.message);
+            logger.error(err.message);
           }
         });
     });
   });
 
   load = () => {
-    console.debug("Loading placements manually");
+    logger.debug("Loading placements manually");
     load_placements(true);
   };
 

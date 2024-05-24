@@ -70,6 +70,12 @@ The following data attributes are supported on the ad placement element:
     This is useful if you want to conditionally load advertising for some users but not others
     or only load advertising when specific actions are performed.
 
+``data-ea-verbosity`` (optional)
+    This can be set to "quiet", "normal" (default), or "verbose".
+    The client will log more or less depending on this value.
+    The value of "verbose" is useful when setting up the client initially
+    and "normal" is a good value for most publishers.
+
 ``data-ea-force-ad`` (optional)
     This parameter can be used to test the ad client on a specific ad.
     When used, any impressions will not be counted for billing purposes.
