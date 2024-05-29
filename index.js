@@ -557,7 +557,9 @@ export class Placement {
     return this.fetch()
       .then((element) => {
         if (element === undefined) {
-          throw new EthicalAdsWarning("Ad decision request blocked or invalid.");
+          throw new EthicalAdsWarning(
+            "Ad decision request blocked or invalid."
+          );
         }
         if (!element) {
           throw new EthicalAdsWarning("No ads to show.");
