@@ -6,7 +6,7 @@ $width-image-vertical: 180px;
 
 // Z-index used to ensure these custom ad styles are above the main content.
 // but below most modals
-$zindex-styles-stickybox: 10;
+$zindex-styles-stickybox: 100;
 // "fixedfooter" requires 200 minimum to be show over the Read the Docs Sphinx theme navbar.
 $zindex-styles-fixedfooter: 200;
 
