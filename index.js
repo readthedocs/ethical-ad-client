@@ -50,22 +50,22 @@ const logger = {
   verbosity: VERBOSITY["normal"], // Default
 
   debug(message, ...params) {
-    if (this.verbosity >= 2) {
+    if (this.verbosity >= VERBOSITY["verbose"]) {
       console.debug(message, ...params);
     }
   },
   info(message, ...params) {
-    if (this.verbosity >= 2) {
+    if (this.verbosity >= VERBOSITY["verbose"]) {
       console.info(message, ...params);
     }
   },
   warn(message, ...params) {
-    if (this.verbosity >= 1) {
+    if (this.verbosity >= VERBOSITY["normal"]) {
       console.warn(message, ...params);
     }
   },
   error(message, ...params) {
-    if (this.verbosity >= 0) {
+    if (this.verbosity >= VERBOSITY["quiet"]) {
       console.error(message, ...params);
     }
   },
@@ -557,7 +557,7 @@ export class Placement {
     return this.fetch()
       .then((element) => {
         if (element === undefined) {
-          throw new EthicalAdsWarning("Ad decision request blocked");
+          throw new EthicalAdsWarning("Ad decision request blocked or invalid.");
         }
         if (!element) {
           throw new EthicalAdsWarning("No ads to show.");
@@ -1122,7 +1122,7 @@ if (check_dependencies()) {
           if (err instanceof Error) {
             if (err instanceof EthicalAdsWarning) {
               // Report these at a lower log level
-              logger.info(err.message);
+              logger.warn(err.message);
               return;
             }
             logger.error(err.message);
