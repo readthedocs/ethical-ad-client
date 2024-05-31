@@ -862,7 +862,7 @@ export class Placement {
     if (this.style === "stickybox") {
       let hideButton = document.createElement("div");
       hideButton.setAttribute("class", "ea-stickybox-hide");
-      hideButton.append("×");
+      hideButton.innerHTML = "&#215;";
       hideButton.addEventListener("click", function () {
         document.querySelector("[data-ea-publisher]").remove();
       });
