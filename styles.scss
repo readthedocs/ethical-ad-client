@@ -295,7 +295,9 @@ $color-bg-dark-stickybox: $color-link;
       text-align: center;
       height: 1.5em;
       width: 1.5em;
-      line-height: 1.5em;
+      /* MDN says prefer unitless line-heights */
+      /*  and the times symbol vertically centers best with this value */
+      line-height: 1.4;
     }
   }
 
