@@ -6,6 +6,21 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.15.0
+---------------
+
+This release has a number of minor bugfixes and improves the ability
+to control the client's logging.
+
+:date: June 14, 2024
+
+ * @davidfischer: Vertically center the close button (#200)
+ * @davidfischer: Fix typo in styles.scss (#199)
+ * @davidfischer: Remove unicode char from client (#198)
+ * @davidfischer: Increase stickybox z-index (#196)
+ * @davidfischer: Update client logging (#195)
+
+
 Version v1.14.0
 ---------------
 
@@ -13,7 +28,7 @@ The changes in this release were minor but allow adjusting
 the position of the stickybox placement with the `data-ea-placement-bottom`
 attribute.
 
-:date: May 16, 2023
+:date: May 16, 2024
 
  * @davidfischer: Fix the unit tests (#191)
  * @humitos: Use `data-ea-placement-bottom` to set CSS `bottom` property (#190)
@@ -27,7 +42,7 @@ Version v1.13.0
 This change lowers the ad rotation threshold
 and adds the notes on rotation to the documentation.
 
-:date: February 13, 2023
+:date: February 13, 2024
 
  * @davidfischer: Lower ad rotation threshold to 30 seconds (#186)
 
@@ -38,7 +53,7 @@ Version v1.12.0
 We made a few tweaks around double-loading the module.
 We settled on just raising a warning.
 
-:date: February 6, 2023
+:date: February 6, 2024
 
  * @davidfischer: Ad client reloading check tweaks (#184)
 
