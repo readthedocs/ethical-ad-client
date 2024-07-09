@@ -89,6 +89,13 @@ $color-bg-dark-stickybox: $color-link;
     }
   }
 
+  .ea-domain {
+    margin-top: 0.75em;
+    font-size: 0.8em;
+    text-align: center;
+    color: lighten($color-link-callout, 20%);
+  }
+
   &.dark {
     .ea-content {
       background: $color-background-dark;
@@ -106,6 +113,10 @@ $color-bg-dark-stickybox: $color-link;
         lighten($color-link-callout-dark, 10%),
         $color-link-bold-dark
       );
+    }
+
+    .ea-domain {
+      color: darken($color-link-callout-dark, 20%);
     }
   }
 
@@ -129,6 +140,10 @@ $color-bg-dark-stickybox: $color-link;
           lighten($color-link-callout-dark, 10%),
           $color-link-bold-dark
         );
+      }
+
+      .ea-domain {
+        color: darken($color-link-callout-dark, 20%);
       }
     }
   }
