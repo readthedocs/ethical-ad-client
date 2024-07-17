@@ -6,6 +6,18 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.16.0
+---------------
+
+This release contains styling changes to style the destination domain
+in the ad which we are adding to have more transparency.
+
+:date: July 17, 2024
+
+ * @davidfischer: Style showing the domain in the ad client (#203)
+ * @ericholscher: Rename README (#202)
+
+
 Version v1.15.0
 ---------------
 
