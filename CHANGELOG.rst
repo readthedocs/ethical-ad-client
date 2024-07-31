@@ -6,6 +6,16 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.17.0
+---------------
+
+Minor changes in this release to add some specific keywords
+
+:date: July 31, 2024
+
+ * @davidfischer: Add billing/payments keywords (#205)
+
+
 Version v1.16.0
 ---------------
 
