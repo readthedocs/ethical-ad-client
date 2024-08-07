@@ -19,17 +19,32 @@
             let placement = placements[0];
             expect(placement.rotations).to.equal(1);
 
+            // Mock the inViewport call
+            placement.inViewport = function () {
+              return true;
+            };
+
             // Does not rotate due to time restriction
             window.location.hash = "#top";
             expect(placement.rotations).to.equal(1);
 
+            // View time condition not met
+            expect(placement.canRotate()).to.equal(false);
+
             // Rotate the placement
+            placement.view_time += 70;
+            expect(placement.canRotate()).to.equal(true);
             placement.rotate();
             expect(placement.rotations).to.equal(2);
 
             // Rotate the placement again
+            placement.view_time += 75;
             placement.rotate();
             expect(placement.rotations).to.equal(3);
+
+            // Can't rotate again
+            placement.view_time += 75;
+            expect(placement.canRotate()).to.equal(false);
           });
         });
       });

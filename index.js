@@ -27,7 +27,7 @@ import verge from "verge";
 
 import "./styles.scss";
 
-const AD_CLIENT_VERSION = "1.17.0"; // Sent with the ad request
+const AD_CLIENT_VERSION = "1.18.0-alpha"; // Sent with the ad request
 
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
@@ -446,7 +446,7 @@ const VIEW_TIME_MAX = 5 * 60; // seconds
 const VIEWPORT_FUDGE_FACTOR = -3; // px
 
 // An ad may be rotated if it has been visible for sufficient time
-// And there is user interaction.
+// And there is user interaction such as a hashchange or visibilitychange.
 // We rotate no more than the maximum number of rotations.
 // Loading the ad the first time counts as the first rotation.
 const MIN_VIEW_TIME_ROTATION_DURATION = 30; // seconds
@@ -482,6 +482,7 @@ export class Placement {
     this.view_time = 0;
     this.view_time_sent = false; // true once the view time is sent to the server
     this.response = null;
+    this.tab_hidden = false;
 
     this.rotations = 1;
     this.index = null;
@@ -615,16 +616,17 @@ export class Placement {
           placement.target
         );
 
-        let view_time_counter = setInterval(
+        placement.view_time_counter = setInterval(
           (element) => {
-            if (placement.view_time_sent) {
-              clearInterval(view_time_counter);
-            } else if (placement.inViewport(element)) {
+            if (
+              placement.tab_hidden === false &&
+              placement.inViewport(element)
+            ) {
               // Increment the ad's time in view counter
               placement.view_time += VIEW_TIME_INTERVAL;
 
               if (placement.view_time >= VIEW_TIME_MAX) {
-                clearInterval(view_time_counter);
+                clearInterval(placement.view_time_counter);
               }
             }
           },
@@ -632,54 +634,86 @@ export class Placement {
           placement.target
         );
 
-        let visibility_change_listener = () => {
-          if (
-            placement.view_time <= 0 ||
-            placement.view_time_sent ||
-            !placement.response.view_time_url
-          )
-            return;
-          // Check if the tab loses focus/is closed or the browser/app is minimized/closed
-          // In that case, no longer count further time that the ad is in view
-          // Send the time the ad was viewed to the server
+        placement.hashchange_listener = () => {
+          if (placement.canRotate()) {
+            placement.sendViewTime();
+            placement.rotate();
+          }
+        };
+        window.addEventListener("hashchange", placement.hashchange_listener);
+
+        // Listens to the window visibility
+        // Rotates the ad when the window comes back into focus if
+        // other conditions (minimum view time, under max rotations)
+        // are met.
+        // When the tab loses focus, send the view time to the server.
+        placement.visibilitychange_listener = () => {
           if (
             document.visibilityState === "hidden" ||
             document.visibilityState === "unloaded"
           ) {
+            // Check if the tab loses focus/is closed or the browser/app is minimized/closed
+            // In that case, no longer count further time that the ad is in view
+            // Send the time the ad was viewed to the server
+            placement.tab_hidden = true;
             placement.sendViewTime();
-            document.removeEventListener(
-              "visibilitychange",
-              visibility_change_listener
-            );
+          }
+
+          // This tab was invisible and has come back into focus
+          // Trigger an ad rotation
+          if (
+            placement.tab_hidden === true &&
+            document.visibilityState === "visible"
+          ) {
+            placement.tab_hidden = false;
+
+            if (placement.canRotate()) {
+              placement.sendViewTime(); // Should already be sent, but just in case
+              placement.rotate();
+            }
           }
         };
         document.addEventListener(
           "visibilitychange",
-          visibility_change_listener
+          placement.visibilitychange_listener
         );
-
-        let ad_rotation_listener = () => {
-          if (
-            placement.inViewport(placement.target) &&
-            placement.view_time >= MIN_VIEW_TIME_ROTATION_DURATION &&
-            placement.rotations < MAX_ROTATIONS
-          ) {
-            placement.sendViewTime();
-            placement.rotate();
-            window.removeEventListener("hashchange", ad_rotation_listener);
-
-            // Remove existing event listeners
-            document.removeEventListener(
-              "visibilitychange",
-              visibility_change_listener
-            );
-            clearInterval(view_time_counter);
-          }
-        };
-        window.addEventListener("hashchange", ad_rotation_listener);
 
         return this;
       });
+  }
+
+  /* Clears all the placement's event listeners */
+  clearListeners() {
+    if (this.view_time_counter) {
+      clearInterval(this.view_time_counter);
+    }
+
+    if (this.hashchange_listener) {
+      window.removeEventListener("hashchange", this.hashchange_listener);
+    }
+
+    if (this.visibilitychange_listener) {
+      document.removeEventListener(
+        "visibilitychange",
+        this.visibilitychange_listener
+      );
+    }
+  }
+
+  /* Returns whether the conditions to rotate are met
+   *
+   * @returns {boolean} True if the placement can rotate
+   */
+  canRotate() {
+    if (
+      !this.inViewport(this.target) ||
+      this.view_time < MIN_VIEW_TIME_ROTATION_DURATION ||
+      this.rotations >= MAX_ROTATIONS
+    ) {
+      return false;
+    }
+
+    return true;
   }
 
   /* Reloads the placement with a new ad (if applicable)
@@ -687,9 +721,15 @@ export class Placement {
    * @returns {Promise}
    */
   rotate() {
+    if (!this.canRotate()) {
+      return;
+    }
+    this.clearListeners();
+
     this.view_time = 0;
     this.view_time_sent = false;
     this.response = null;
+    this.tab_hidden = false;
 
     this.rotations += 1;
 
