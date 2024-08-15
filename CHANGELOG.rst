@@ -6,6 +6,17 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.18.0
+---------------
+
+Rotate ads if they've been visible long enough when a tab is refocused
+after being backgrounded.
+
+:date: August 15, 2024
+
+ * @davidfischer: Rotate ads on a visibilitychange event (#207)
+
+
 Version v1.17.0
 ---------------
 
