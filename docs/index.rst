@@ -424,8 +424,11 @@ Currently, the conditions for ad rotation are:
 
 * The ad must be visible for 30 seconds or more.
 * There must be a URL change (anchor link or using the `browser history API`_)
+  **OR** the tab must come back into focus after being backgrounded or minimized
+  (a visibilitychange_ event)
 
 .. _browser history API: https://developer.mozilla.org/en-US/docs/Web/API/History_API
+.. _visibilitychange: https://developer.mozilla.org/en-US/docs/Web/API/Document/visibilitychange_event
 
 
 Customization
