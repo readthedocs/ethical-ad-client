@@ -6,6 +6,18 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.19.0
+---------------
+
+Release v1.18.0 was tested but never widely adopted as we saw a performance (CTR) degradation.
+We tested a delay before this release and think it will solve most of the performance
+problems that we saw in the previous release.
+
+:date: September 24, 2024
+
+ * @davidfischer: Add a delay before a visibilitychange rotation (#209)
+
+
 Version v1.18.0
 ---------------
 
