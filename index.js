@@ -27,7 +27,7 @@ import verge from "verge";
 
 import "./styles.scss";
 
-const AD_CLIENT_VERSION = "1.18.0"; // Sent with the ad request
+const AD_CLIENT_VERSION = "1.19.0-alpha"; // Sent with the ad request
 
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
@@ -452,6 +452,9 @@ const VIEWPORT_FUDGE_FACTOR = -3; // px
 const MIN_VIEW_TIME_ROTATION_DURATION = 30; // seconds
 const MAX_ROTATIONS = 3;
 
+// Seconds after a tab comes back into focus to rotate an ad.
+const VISIBILITYCHANGE_ROTATION_DELAY = 3; // seconds
+
 /* Placement object to query decision API and return an Element node
  *
  * @param {string} publisher - Publisher ID
@@ -669,7 +672,9 @@ export class Placement {
 
             if (placement.canRotate()) {
               placement.sendViewTime(); // Should already be sent, but just in case
-              placement.rotate();
+              setTimeout(function () {
+                placement.rotate();
+              }, VISIBILITYCHANGE_ROTATION_DELAY * 1000);
             }
           }
         };
