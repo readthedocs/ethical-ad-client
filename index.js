@@ -27,7 +27,7 @@ import verge from "verge";
 
 import "./styles.scss";
 
-const AD_CLIENT_VERSION = "1.19.0-alpha"; // Sent with the ad request
+const AD_CLIENT_VERSION = "1.19.0"; // Sent with the ad request
 
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
