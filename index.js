@@ -27,7 +27,7 @@ import verge from "verge";
 
 import "./styles.scss";
 
-const AD_CLIENT_VERSION = "1.19.0"; // Sent with the ad request
+const AD_CLIENT_VERSION = "1.20.0"; // Sent with the ad request
 
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
@@ -454,7 +454,7 @@ const VIEWPORT_FUDGE_FACTOR = -3; // px
 // And there is user interaction such as a hashchange or visibilitychange.
 // We rotate no more than the maximum number of rotations.
 // Loading the ad the first time counts as the first rotation.
-const MIN_VIEW_TIME_ROTATION_DURATION = 30; // seconds
+const MIN_VIEW_TIME_ROTATION_DURATION = 45; // seconds
 const MAX_ROTATIONS = 3;
 
 // Seconds after a tab comes back into focus to rotate an ad.
