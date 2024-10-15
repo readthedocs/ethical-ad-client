@@ -6,6 +6,18 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.20.0
+---------------
+
+This release again makes some tweaks to our ad rotation algorithm
+specifically around the timeframe and delay.
+
+:date: October 15, 2024
+
+ * @davidfischer: Change ad rotation minimum view time (30s -> 45) (#212)
+ * @davidfischer:  Add additional blockchain keywords (#211)
+
+
 Version v1.19.0
 ---------------
 
