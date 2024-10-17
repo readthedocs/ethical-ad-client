@@ -457,7 +457,11 @@ const VIEWPORT_FUDGE_FACTOR = -3; // px
 const MIN_VIEW_TIME_ROTATION_DURATION = 45; // seconds
 const MAX_ROTATIONS = 3;
 
+// Enable ad rotation on hash change (intra-site nav)
+const HASHCHANGE_ROTATION_ENABLE = true;
+
 // Seconds after a tab comes back into focus to rotate an ad.
+const VISIBILITYCHANGE_ROTATION_ENABLE = false;
 const VISIBILITYCHANGE_ROTATION_DELAY = 3; // seconds
 
 /* Placement object to query decision API and return an Element node
@@ -648,7 +652,9 @@ export class Placement {
             placement.rotate();
           }
         };
-        window.addEventListener("hashchange", placement.hashchange_listener);
+        if (HASHCHANGE_ROTATION_ENABLE) {
+          window.addEventListener("hashchange", placement.hashchange_listener);
+        }
 
         // Listens to the window visibility
         // Rotates the ad when the window comes back into focus if
@@ -683,10 +689,12 @@ export class Placement {
             }
           }
         };
-        document.addEventListener(
-          "visibilitychange",
-          placement.visibilitychange_listener
-        );
+        if (VISIBILITYCHANGE_ROTATION_ENABLE) {
+          document.addEventListener(
+            "visibilitychange",
+            placement.visibilitychange_listener
+          );
+        }
 
         return this;
       });
@@ -698,11 +706,11 @@ export class Placement {
       clearInterval(this.view_time_counter);
     }
 
-    if (this.hashchange_listener) {
+    if (this.hashchange_listener && HASHCHANGE_ROTATION_ENABLE) {
       window.removeEventListener("hashchange", this.hashchange_listener);
     }
 
-    if (this.visibilitychange_listener) {
+    if (this.visibilitychange_listener && VISIBILITYCHANGE_ROTATION_ENABLE) {
       document.removeEventListener(
         "visibilitychange",
         this.visibilitychange_listener
