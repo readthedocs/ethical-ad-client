@@ -6,6 +6,18 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.21.0
+---------------
+
+This release again makes some tweaks to our ad rotation algorithm
+by making it more configurable and disabling at least temporarily
+visibilitychange ad rotations.
+
+:date: October 17, 2024
+
+ * @davidfischer: Make visibilitychange rotation an option (#214)
+
+
 Version v1.20.0
 ---------------
 
