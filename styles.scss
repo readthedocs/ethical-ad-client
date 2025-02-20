@@ -12,6 +12,9 @@ $zindex-styles-fixedfooter: 200;
 
 // Breakpoints (used for stickybox/fixedfooter formats)
 $breakpoint-ultrawide: 1300px;
+$breakpoint-xl: 1200px;
+$breakpoint-lg: 992px;
+$breakpoint-md: 768px;
 $breakpoint-mobile: 576px;
 
 // Colors
@@ -183,6 +186,33 @@ $color-bg-dark-stickybox: $color-link;
       }
     }
   }
+}
+
+[data-ea-publisher] {
+  --ea-container-md: 720px;
+  --ea-container-lg: 960px;
+  --ea-container-xl: 1040px;
+
+  --ea-image-width: 120px;
+  --ea-image-width-xs: 44px;
+
+  --ea-fixedheader-height: 50px;
+
+  // Necessary to reference SCSS colors with CSS properties
+  // https://sass-lang.com/documentation/breaking-changes/css-vars/
+  --ea-stylefixed-bgcolor: #{$color-link-dark};
+  --ea-stylefixed-bgcolor-dark: #{$color-link};
+
+  --ea-link-color: #{$color-link};
+  --ea-link-color-active: #{darken($color-link, 10%)};
+  --ea-link-color-callout: #{$color-link-callout};
+  --ea-link-color-callout-active: #{darken($color-link-callout, 10%)};
+  --ea-link-color-bold: #{$color-link-bold};
+  --ea-link-color-dark: #{$color-link-dark};
+  --ea-link-color-dark-active: #{lighten($color-link-dark, 10%)};
+  --ea-link-color-callout-dark: #{$color-link-callout-dark};
+  --ea-link-color-callout-dark-active: #{lighten($color-link-callout-dark, 10%)};
+  --ea-link-color-bold-dark: #{$color-link-bold-dark};
 }
 
 [data-ea-publisher].loaded,
@@ -411,6 +441,11 @@ $color-bg-dark-stickybox: $color-link;
     }
   }
 
+  .ea-type-image {
+    // Fixed footer is for text-only ads (for now)
+    display: none !important;
+  }
+
   &.dark {
     .ea-type-text {
       background: $color-bg-dark-stickybox;
@@ -430,6 +465,232 @@ $color-bg-dark-stickybox: $color-link;
         .ea-fixedfooter-hide span {
           color: $color-link-dark;
           border-color: $color-link-dark;
+        }
+      }
+    }
+  }
+}
+
+
+// Fixed Header ad
+// -------------------------------------------------------------------------
+// https://ethical-ad-client.readthedocs.io/en/latest/#fixedheader
+[data-ea-style="fixedheader"] {
+  height: var(--ea-fixedheader-height);
+  width: 100%;
+  max-width: 100%;
+
+  background: var(--ea-stylefixed-bgcolor);
+  border-bottom: 1px solid var(--ea-background-color);
+
+  // Hide the fixedheader ad completely below tablet width
+  @media (max-width: $breakpoint-md) {
+    display: none !important;
+  }
+}
+
+[data-ea-style="fixedheader"].loaded {
+  // The outer div containing data-ea-publisher and data-ea-type
+
+  // Text-only or text+image
+  .ea-type-image, .ea-type-text {
+    width: var(--ea-container-xl);
+    margin: 0 auto;
+    display: flex;
+
+    @media (max-width: $breakpoint-lg) {
+      width: var(--ea-container-md);
+    }
+    @media (max-width: $breakpoint-xl) {
+      width: var(--ea-container-lg);
+    }
+
+    @include theme-flat;
+
+    .ea-content {
+      background-color: inherit;
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+      flex: auto; // Expand to fill remaining space
+      display: flex;
+
+      color: var(--ea-link-color);
+      a {
+        &:link {
+          color: var(--ea-link-color);
+        }
+        &:visited {
+          color: var(--ea-link-color);
+        }
+        &:hover {
+          color: var(--ea-link-color-active);
+        }
+        &:active {
+          color: var(--ea-link-color-active);
+        }
+        strong,
+        b {
+          color: var(--ea-link-color-bold);
+        }
+      }
+    }
+
+    .ea-content .ea-text {
+      margin-top: 0;
+      padding: 1em;
+      flex: auto;
+      text-align: left;
+    }
+
+    .ea-callout {
+      max-width: 100%;
+      margin: 0;
+      padding: 1em;
+      flex: initial; // Use the initial width of this item - does not expend
+
+      color: var(--ea-link-color-callout);
+      a {
+        &:link {
+          color: var(--ea-link-color-callout);
+        }
+        &:visited {
+          color: var(--ea-link-color-callout);
+        }
+        &:hover {
+          color: var(--ea-link-color-callout-active);
+        }
+        &:active {
+          color: var(--ea-link-color-callout-active);
+        }
+        strong,
+        b {
+          color: var(--ea-link-color-callout);
+        }
+      }
+
+      // Hide Ads by EthicalAds on mobile
+      @media (max-width: $breakpoint-mobile) {
+        display: none;
+      }
+    }
+  }
+
+  // Text+image (displayed horizontally)
+  .ea-type-image {
+    img {
+      width: var(--ea-image-width-xs) !important;
+      height: auto !important;
+      margin: 0.6em;
+    }
+
+
+    .ea-domain {
+      // Doesn't fit with the image
+      display: none;
+    }
+
+  }
+
+  // Text-only
+  .ea-type-text {
+
+  }
+
+  &.dark {
+    background-color: var(--ea-stylefixed-bgcolor-dark);
+
+    .ea-content {
+
+      color: var(--ea-link-color-dark);
+      a {
+        &:link {
+          color: var(--ea-link-color-dark);
+        }
+        &:visited {
+          color: var(--ea-link-color-dark);
+        }
+        &:hover {
+          color: var(--ea-link-color-dark-active);
+        }
+        &:active {
+          color: var(--ea-link-color-dark-active);
+        }
+        strong,
+        b {
+          color: var(--ea-link-color-bold-dark);
+        }
+      }
+    }
+
+    .ea-callout {
+      color: var(--ea-link-color-callout-dark);
+      a {
+        &:link {
+          color: var(--ea-link-color-callout-dark);
+        }
+        &:visited {
+          color: var(--ea-link-color-callout-dark);
+        }
+        &:hover {
+          color: var(--ea-link-color-callout-dark-active);
+        }
+        &:active {
+          color: var(--ea-link-color-callout-dark-active);
+        }
+        strong,
+        b {
+          color: var(--ea-link-color-callout-dark);
+        }
+      }
+    }
+  }
+
+  &.adaptive {
+    @media (prefers-color-scheme: dark) {
+      background-color: var(--ea-stylefixed-bgcolor-dark);
+
+      .ea-content {
+        color: var(--ea-link-color-dark);
+        a {
+          &:link {
+            color: var(--ea-link-color-dark);
+          }
+          &:visited {
+            color: var(--ea-link-color-dark);
+          }
+          &:hover {
+            color: var(--ea-link-color-dark-active);
+          }
+          &:active {
+            color: var(--ea-link-color-dark-active);
+          }
+          strong,
+          b {
+            color: var(--ea-link-color-bold-dark);
+          }
+        }
+      }
+
+      .ea-callout {
+        color: var(--ea-link-color-callout-dark);
+        a {
+          &:link {
+            color: var(--ea-link-color-callout-dark);
+          }
+          &:visited {
+            color: var(--ea-link-color-callout-dark);
+          }
+          &:hover {
+            color: var(--ea-link-color-callout-dark-active);
+          }
+          &:active {
+            color: var(--ea-link-color-callout-dark-active);
+          }
+          strong,
+          b {
+            color: var(--ea-link-color-callout-dark);
+          }
         }
       }
     }
