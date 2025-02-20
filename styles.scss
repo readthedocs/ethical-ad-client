@@ -471,7 +471,6 @@ $color-bg-dark-stickybox: $color-link;
   }
 }
 
-
 // Fixed Header ad
 // -------------------------------------------------------------------------
 // https://ethical-ad-client.readthedocs.io/en/latest/#fixedheader
@@ -493,7 +492,8 @@ $color-bg-dark-stickybox: $color-link;
   // The outer div containing data-ea-publisher and data-ea-type
 
   // Text-only or text+image
-  .ea-type-image, .ea-type-text {
+  .ea-type-image,
+  .ea-type-text {
     width: var(--ea-container-xl);
     margin: 0 auto;
     display: flex;
@@ -584,24 +584,20 @@ $color-bg-dark-stickybox: $color-link;
       margin: 0.6em;
     }
 
-
     .ea-domain {
       // Doesn't fit with the image
       display: none;
     }
-
   }
 
   // Text-only
   .ea-type-text {
-
   }
 
   &.dark {
     background-color: var(--ea-stylefixed-bgcolor-dark);
 
     .ea-content {
-
       color: var(--ea-link-color-dark);
       a {
         &:link {
