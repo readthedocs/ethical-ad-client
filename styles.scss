@@ -32,7 +32,7 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
   --ea-container-lg: 960px;
   --ea-container-xl: 1040px;
 
-  --ea-image-width: 120px;    // Height is "auto"
+  --ea-image-width: 120px; // Height is "auto"
   --ea-image-width-xs: 44px;
 
   --ea-image-placement-width: #{$width-image-vertical};
@@ -66,7 +66,6 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
   --ea-color-domain: #{lighten($color-link-callout, 20%)};
   --ea-color-domain-dark: #{darken($color-link-callout-dark, 20%)};
 }
-
 
 // Themes & Dark Mode
 @mixin theme-dark {
@@ -154,7 +153,6 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
     }
   }
 }
-
 
 // Common styles default to most themes
 [data-ea-publisher].loaded,
@@ -244,7 +242,6 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
     }
   }
 }
-
 
 [data-ea-publisher].loaded,
 [data-ea-type].loaded {
