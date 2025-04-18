@@ -1197,14 +1197,13 @@ if (check_dependencies()) {
 
   load = () => {
     logger.debug("Loading placements manually");
-    load_placements(true)
-      .catch((err) => {
-        if (err instanceof EthicalAdsWarning) {
-          logger.warn(err.message);
-        } else {
-          logger.error(err.message);
-        }
-      });
+    load_placements(true).catch((err) => {
+      if (err instanceof EthicalAdsWarning) {
+        logger.warn(err.message);
+      } else {
+        logger.error(err.message);
+      }
+    });
   };
 
   reload = () => {
@@ -1212,13 +1211,12 @@ if (check_dependencies()) {
 
     detectedKeywords = null;
     unload_placements();
-    load_placements()
-      .catch((err) => {
-        if (err instanceof EthicalAdsWarning) {
-          logger.warn(err.message);
-        } else {
-          logger.error(err.message);
-        }
-      });
+    load_placements().catch((err) => {
+      if (err instanceof EthicalAdsWarning) {
+        logger.warn(err.message);
+      } else {
+        logger.error(err.message);
+      }
+    });
   };
 }
