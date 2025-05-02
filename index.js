@@ -1186,12 +1186,9 @@ if (check_dependencies()) {
         .catch((err) => {
           resolve([]);
 
-          if (err instanceof Error) {
-            if (err instanceof EthicalAdsWarning) {
-              // Report these at a lower log level
-              logger.warn(err.message);
-              return;
-            }
+          if (err instanceof EthicalAdsWarning) {
+            logger.warn(err.message);
+          } else {
             logger.error(err.message);
           }
         });
@@ -1200,12 +1197,26 @@ if (check_dependencies()) {
 
   load = () => {
     logger.debug("Loading placements manually");
-    load_placements(true);
+    load_placements(true).catch((err) => {
+      if (err instanceof EthicalAdsWarning) {
+        logger.warn(err.message);
+      } else {
+        logger.error(err.message);
+      }
+    });
   };
 
   reload = () => {
+    logger.debug("Reloading ad placement");
+
     detectedKeywords = null;
     unload_placements();
-    load_placements();
+    load_placements().catch((err) => {
+      if (err instanceof EthicalAdsWarning) {
+        logger.warn(err.message);
+      } else {
+        logger.error(err.message);
+      }
+    });
   };
 }
