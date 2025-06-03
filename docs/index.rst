@@ -374,8 +374,8 @@ Using our FixedHeader style:
 
    <!-- Place this div just after the open <body> tag (top of the document) -->
    <!-- You can also use `data-ea-type="text"` for a text-only ad -->
-   <!-- Set style="height 50px" to preallocate space for the ad -->
-   <div data-ea-publisher="..." data-ea-type="image" data-ea-style="fixedheader"></div>
+   <!-- Set style="height: 50px" to preallocate space for the ad so the page doesn't re-flow -->
+   <div data-ea-publisher="..." data-ea-type="image" data-ea-style="fixedheader" style="height: 50px"></div>
 
 
 .. figure:: _static/fixedheader.png
