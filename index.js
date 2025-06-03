@@ -27,7 +27,7 @@ import verge from "verge";
 
 import "./styles.scss";
 
-const AD_CLIENT_VERSION = "1.21.1"; // Sent with the ad request
+const AD_CLIENT_VERSION = "1.22.0-alpha"; // Sent with the ad request
 
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
@@ -986,6 +986,9 @@ export class Placement {
       });
       container.appendChild(hideButton);
     }
+
+    // FixedHeader: https://ethical-ad-client.readthedocs.io/en/latest/#fixedheader
+    // No special elements required
   }
 }
 

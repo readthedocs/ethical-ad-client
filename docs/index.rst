@@ -346,6 +346,46 @@ Using our FixedFooter style:
     This FixedFooter placement on our homepage
 
 
+FixedHeader
+~~~~~~~~~~~
+
+.. versionadded:: 1.22
+
+The "FixedHeader" style is a static, text-only or text+image placement
+at the top of the screen.
+Since it's at the top of the screen, it's almost always seen
+(resulting in the highest view rate, generating the most revenue).
+
+There's a few notes and strong recommendations when using this ad style:
+
+* This ad is hidden on mobile. It isn't well suited for sites with a lot of mobile users.
+* There are a few breakpoint widths on this ad style and corresponding container sizes.
+  If needed, these are customizable by setting CSS variables (eg. ``--ea-container-lg``) on the placement div.
+* In your CSS styles, you want a style like `[data-ea-style="fixedheader"] { height: 50px; }`.
+  This ensures the space is pre-allocated for the ad slot so the content isn't pushed down when the ad loads.
+  We set this on the ad client but there can be a flash where the space isn't allocated before the client loads.
+* We recommend you set up :ref:`fallback ads <fallback-ads>`.
+  This ensures something always fills the slot at the top of the screen.
+  You don't want to have 50px of blank real estate at the top of your page.
+
+Using our FixedHeader style:
+
+.. code:: html
+
+   <!-- Place this div just after the open <body> tag (top of the document) -->
+   <!-- You can also use `data-ea-type="text"` for a text-only ad -->
+   <!-- Set style="height: 50px" to preallocate space for the ad so the page doesn't re-flow -->
+   <div data-ea-publisher="..." data-ea-type="image" data-ea-style="fixedheader" style="height: 50px"></div>
+
+
+.. figure:: _static/fixedheader.png
+    :align: center
+    :width: 100%
+
+    This FixedHeader placement on our homepage
+
+
+
 .. _placements:
 
 Ad placement reporting
@@ -486,6 +526,8 @@ You can fallback to Carbon Ads with a snippet like this:
   });
   </script>
 
+
+.. _fallback-ads:
 
 Showing content when there isn't an ad
 --------------------------------------
