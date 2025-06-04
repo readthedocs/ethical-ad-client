@@ -477,12 +477,11 @@ Customizing styles
 Our ad client includes a number of `CSS custom properties`_ (variables)
 which provide easy access to the values we use and an easy point to override them.
 
-All our custom properties are prefixed with ``ea-`` to avoid any conflicts with other CSS
-and they are scoped the ad placement itself so they'll never affect anything else.
+All our custom properties are prefixed with ``ea-`` to avoid any conflicts with other CSS.
 
 .. code:: css
 
-    [data-ea-publisher] {
+    :root {
         --ea-bgcolor: rgba(0, 0, 0, 0.03);              /* Background color */
         --ea-bgcolor-dark: rgba(255, 255, 255, 0.05);   /* BG color in dark mode */
         --ea-color-domain: #9d9d9d;                     /* Domain element (image ad type) */

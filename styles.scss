@@ -27,44 +27,49 @@ $color-link-dark: rgb(220, 220, 220); // gainsboro
 $color-link-callout-dark: darken($color-link-dark, 10%);
 $color-link-bold-dark: lighten($color-link-bold, 20%);
 
-[data-ea-publisher] {
-  --ea-container-md: 720px;
-  --ea-container-lg: 960px;
-  --ea-container-xl: 1040px;
+@layer defaults {
+  :root {
+    --ea-container-md: 720px;
+    --ea-container-lg: 960px;
+    --ea-container-xl: 1040px;
 
-  --ea-image-width: 120px; // Height is "auto"
-  --ea-image-width-xs: 44px;
+    --ea-image-width: 120px; // Height is "auto"
+    --ea-image-width-xs: 44px;
 
-  --ea-image-placement-width: #{$width-image-vertical};
-  --ea-image-placement-width-horizontal: #{$width-image-horizontal};
-  --ea-fixedheader-height: 50px;
+    --ea-image-placement-width: #{$width-image-vertical};
+    --ea-image-placement-width-horizontal: #{$width-image-horizontal};
+    --ea-fixedheader-height: 50px;
 
-  --ea-font-size: 14px;
-  --ea-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji,
-    Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    --ea-font-size: 14px;
+    --ea-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+      Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji,
+      Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
 
-  // Backgrounds for image or text-only ads
-  --ea-bgcolor: #{$color-background};
-  --ea-bgcolor-dark: #{$color-background-dark};
+    // Backgrounds for image or text-only ads
+    --ea-bgcolor: #{$color-background};
+    --ea-bgcolor-dark: #{$color-background-dark};
 
-  // Background colors for ad styles (stickybox, fixedheader, fixedfooter)
-  --ea-stylefixed-bgcolor: #{$color-link-dark};
-  --ea-stylefixed-bgcolor-dark: #{$color-link};
+    // Background colors for ad styles (stickybox, fixedheader, fixedfooter)
+    --ea-stylefixed-bgcolor: #{$color-link-dark};
+    --ea-stylefixed-bgcolor-dark: #{$color-link};
 
-  // Text colors for various elements and states
-  --ea-color-link: #{$color-link};
-  --ea-color-link-active: #{darken($color-link, 10%)};
-  --ea-color-link-callout: #{$color-link-callout};
-  --ea-color-link-callout-active: #{darken($color-link-callout, 10%)};
-  --ea-color-link-bold: #{$color-link-bold};
-  --ea-color-link-dark: #{$color-link-dark};
-  --ea-color-link-dark-active: #{lighten($color-link-dark, 10%)};
-  --ea-color-link-callout-dark: #{$color-link-callout-dark};
-  --ea-color-link-callout-dark-active: #{lighten($color-link-callout-dark, 10%)};
-  --ea-color-link-bold-dark: #{$color-link-bold-dark};
-  --ea-color-domain: #{lighten($color-link-callout, 20%)};
-  --ea-color-domain-dark: #{darken($color-link-callout-dark, 20%)};
+    // Text colors for various elements and states
+    --ea-color-link: #{$color-link};
+    --ea-color-link-active: #{darken($color-link, 10%)};
+    --ea-color-link-callout: #{$color-link-callout};
+    --ea-color-link-callout-active: #{darken($color-link-callout, 10%)};
+    --ea-color-link-bold: #{$color-link-bold};
+    --ea-color-link-dark: #{$color-link-dark};
+    --ea-color-link-dark-active: #{lighten($color-link-dark, 10%)};
+    --ea-color-link-callout-dark: #{$color-link-callout-dark};
+    --ea-color-link-callout-dark-active: #{lighten(
+        $color-link-callout-dark,
+        10%
+      )};
+    --ea-color-link-bold-dark: #{$color-link-bold-dark};
+    --ea-color-domain: #{lighten($color-link-callout, 20%)};
+    --ea-color-domain-dark: #{darken($color-link-callout-dark, 20%)};
+  }
 }
 
 // Themes & Dark Mode
