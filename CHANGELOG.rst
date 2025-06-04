@@ -6,6 +6,28 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v1.22.0
+---------------
+
+This release added a new ad style (fixed header) for putting an ad fixed to the top of the page.
+The ad can be text-only or use an image in addition to the ad text.
+
+:date: June 3, 2025
+
+ * @davidfischer: Add a fixedheader ad style (#218)
+
+
+Version v1.21.1
+---------------
+
+This is a very minor release that catches some warnings (logged to the console at error previously)
+when loading ads manually. This means that using `data-verbosity="quiet"` will now catch them.
+
+:date: October 17, 2024
+
+ * @davidfischer: Catch warnings when loading manually (#221)
+
+
 Version v1.21.0
 ---------------
 
