@@ -1184,7 +1184,7 @@ if (check_dependencies()) {
     wait_dom.then(() => {
       load_placements()
         .then((placements) => {
-          resolve(placements);
+          resolve(placements.filter((p) => p != null));
         })
         .catch((err) => {
           resolve([]);
