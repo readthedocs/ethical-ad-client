@@ -6,6 +6,18 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v2.0.0
+---------------
+
+This major release should be entirely backwards compatible.
+However, it makes major styling changes possible by adding CSS variables for colors, container sizes,
+backgrounds, and more.
+
+:date: July 23, 2025
+
+ * @davidfischer: Use CSS properties everywhere (#219)
+
+
 Version v1.22.0
 ---------------
 
