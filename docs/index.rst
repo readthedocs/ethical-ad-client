@@ -471,8 +471,50 @@ Currently, the conditions for ad rotation are:
 .. _visibilitychange: https://developer.mozilla.org/en-US/docs/Web/API/Document/visibilitychange_event
 
 
-Customization
--------------
+Customizing styles
+------------------
+
+Our ad client includes a number of `CSS custom properties`_ (variables)
+which provide easy access to the values we use and an easy point to override them.
+
+All our custom properties are prefixed with ``ea-`` to avoid any conflicts with other CSS.
+
+.. code:: css
+
+    :root {
+        --ea-bgcolor: rgba(0, 0, 0, 0.03);              /* Background color */
+        --ea-bgcolor-dark: rgba(255, 255, 255, 0.05);   /* BG color in dark mode */
+        --ea-color-domain: #9d9d9d;                     /* Domain element (image ad type) */
+        --ea-color-domain-dark: #909090;
+        --ea-color-link: rgb(80, 80, 80);               /* Main text color */
+        --ea-color-link-active: #373737;
+        --ea-color-link-bold: #088cdb;                  /* Bold header & CTA */
+        --ea-color-link-bold-dark: #50baf9;
+        --ea-color-link-callout: #6a6a6a;               /* "Ads by EthicalAds" */
+        --ea-color-link-callout-active: #505050;
+        --ea-color-link-callout-dark: #c3c3c3;
+        --ea-color-link-callout-dark-active: gainsboro;
+        --ea-color-link-dark: rgb(220, 220, 220);       /* Main text color in dark mode */
+        --ea-color-link-dark-active: #f6f6f6;
+        --ea-container-lg: 960px;                       /* Container sizes for fixedheader ad style */
+        --ea-container-md: 720px;
+        --ea-container-xl: 1040px;
+        --ea-fixedheader-height: 50px;
+        --ea-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+        --ea-font-size: 14px;
+        --ea-image-placement-width: 180px;              /* Ad placement width */
+        --ea-image-placement-width-horizontal: 320px;
+        --ea-image-width: 120px;                        /* Image display size */
+        --ea-image-width-xs: 44px;                      /* Image size in fixedheader style */
+        --ea-stylefixed-bgcolor: rgb(220, 220, 220);    /* Background of stickybox, fixedheader, fixedfooter */
+        --ea-stylefixed-bgcolor-dark: rgb(80, 80, 80)
+    }
+
+.. _CSS custom properties: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables/Using_CSS_custom_properties
+
+
+Customizing execution
+---------------------
 
 It's possible to extend the ad client, even if you are loading the client in
 your browser through a request. After loading the script, there will be an

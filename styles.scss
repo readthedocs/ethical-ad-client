@@ -26,133 +26,104 @@ $color-link-bold: #088cdb;
 $color-link-dark: rgb(220, 220, 220); // gainsboro
 $color-link-callout-dark: darken($color-link-dark, 10%);
 $color-link-bold-dark: lighten($color-link-bold, 20%);
-$color-bg-stickybox: $color-link-dark;
-$color-bg-dark-stickybox: $color-link;
 
-// Utilities, mostly to reduce file size
-@mixin links($color-primary, $color-secondary, $color-highlight) {
-  a {
-    &:link {
-      color: $color-primary;
-    }
-    &:visited {
-      color: $color-primary;
-    }
-    &:hover {
-      color: $color-secondary;
-    }
-    &:active {
-      color: $color-secondary;
-    }
-    strong,
-    b {
-      color: $color-highlight;
-    }
+@layer defaults {
+  :root {
+    --ea-container-md: 720px;
+    --ea-container-lg: 960px;
+    --ea-container-xl: 1040px;
+
+    --ea-image-width: 120px; // Height is "auto"
+    --ea-image-width-xs: 44px;
+
+    --ea-image-placement-width: #{$width-image-vertical};
+    --ea-image-placement-width-horizontal: #{$width-image-horizontal};
+    --ea-fixedheader-height: 50px;
+
+    --ea-font-size: 14px;
+    --ea-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+      Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji,
+      Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+
+    // Backgrounds for image or text-only ads
+    --ea-bgcolor: #{$color-background};
+    --ea-bgcolor-dark: #{$color-background-dark};
+
+    // Background colors for ad styles (stickybox, fixedheader, fixedfooter)
+    --ea-stylefixed-bgcolor: #{$color-link-dark};
+    --ea-stylefixed-bgcolor-dark: #{$color-link};
+
+    // Text colors for various elements and states
+    --ea-color-link: #{$color-link};
+    --ea-color-link-active: #{darken($color-link, 10%)};
+    --ea-color-link-callout: #{$color-link-callout};
+    --ea-color-link-callout-active: #{darken($color-link-callout, 10%)};
+    --ea-color-link-bold: #{$color-link-bold};
+    --ea-color-link-dark: #{$color-link-dark};
+    --ea-color-link-dark-active: #{lighten($color-link-dark, 10%)};
+    --ea-color-link-callout-dark: #{$color-link-callout-dark};
+    --ea-color-link-callout-dark-active: #{lighten(
+        $color-link-callout-dark,
+        10%
+      )};
+    --ea-color-link-bold-dark: #{$color-link-bold-dark};
+    --ea-color-domain: #{lighten($color-link-callout, 20%)};
+    --ea-color-domain-dark: #{darken($color-link-callout-dark, 20%)};
   }
 }
 
-// Common styles default to most themes
-[data-ea-publisher].loaded,
-[data-ea-type].loaded {
-  font-size: 14px;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji,
-    Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-  font-weight: normal;
-  font-style: normal;
-  letter-spacing: 0px;
-  vertical-align: baseline;
-  line-height: 1.3em;
-
-  a {
-    text-decoration: none;
-  }
-
-  .ea-pixel {
-    display: none;
-  }
-
+// Themes & Dark Mode
+@mixin theme-dark {
   .ea-content {
-    margin: 1em 1em 0.5em 1em;
-    padding: 1em;
-
-    background: $color-background;
-    color: $color-link;
-
-    @include links($color-link, darken($color-link, 10%), $color-link-bold);
-  }
-  .ea-callout {
-    @include links(
-      $color-link-callout,
-      darken($color-link-callout, 10%),
-      $color-link-bold
-    );
+    background: var(--ea-bgcolor-dark);
+    color: var(--ea-color-link-dark);
     a {
-      font-size: 0.8em;
+      &:link {
+        color: var(--ea-color-link-dark);
+      }
+      &:visited {
+        color: var(--ea-color-link-dark);
+      }
+      &:hover {
+        color: var(--ea-color-link-dark-active);
+      }
+      &:active {
+        color: var(--ea-color-link-dark-active);
+      }
+      strong,
+      b {
+        color: var(--ea-color-link-bold-dark);
+      }
+    }
+  }
+
+  .ea-callout {
+    color: var(--ea-color-link-callout-dark);
+    a {
+      &:link {
+        color: var(--ea-color-link-callout-dark);
+      }
+      &:visited {
+        color: var(--ea-color-link-callout-dark);
+      }
+      &:hover {
+        color: var(--ea-color-link-callout-dark-active);
+      }
+      &:active {
+        color: var(--ea-color-link-callout-dark-active);
+      }
+      strong,
+      b {
+        color: var(--ea-color-link-callout-dark);
+      }
     }
   }
 
   .ea-domain {
-    margin-top: 0.75em;
-    font-size: 0.8em;
-    text-align: center;
-    color: lighten($color-link-callout, 20%);
-  }
-
-  &.dark {
-    .ea-content {
-      background: $color-background-dark;
-      color: $color-link-dark;
-      @include links(
-        $color-link-dark,
-        lighten($color-link-dark, 10%),
-        $color-link-bold-dark
-      );
-    }
-
-    .ea-callout {
-      @include links(
-        $color-link-callout-dark,
-        lighten($color-link-callout-dark, 10%),
-        $color-link-bold-dark
-      );
-    }
-
-    .ea-domain {
-      color: darken($color-link-callout-dark, 20%);
-    }
-  }
-
-  &.adaptive {
-    // For adaptive color schemes, the default is light
-    // TODO: Find a way to reuse these definitions from dark class above
-    @media (prefers-color-scheme: dark) {
-      .ea-content {
-        background: $color-background-dark;
-        color: $color-link-dark;
-        @include links(
-          $color-link-dark,
-          lighten($color-link-dark, 10%),
-          $color-link-bold-dark
-        );
-      }
-
-      .ea-callout {
-        @include links(
-          $color-link-callout-dark,
-          lighten($color-link-callout-dark, 10%),
-          $color-link-bold-dark
-        );
-      }
-
-      .ea-domain {
-        color: darken($color-link-callout-dark, 20%);
-      }
-    }
+    color: var(--ea-color-domain-dark);
   }
 }
 
-// Themes
 @mixin theme-flat {
   .ea-content {
     border: 0px;
@@ -188,31 +159,93 @@ $color-bg-dark-stickybox: $color-link;
   }
 }
 
-[data-ea-publisher] {
-  --ea-container-md: 720px;
-  --ea-container-lg: 960px;
-  --ea-container-xl: 1040px;
+// Common styles default to most themes
+[data-ea-publisher].loaded,
+[data-ea-type].loaded {
+  font-size: var(--ea-font-size);
+  font-family: var(--ea-font-family);
+  font-weight: normal;
+  font-style: normal;
+  letter-spacing: 0px;
+  vertical-align: baseline;
+  line-height: 1.3em;
 
-  --ea-image-width: 120px;
-  --ea-image-width-xs: 44px;
+  a {
+    text-decoration: none;
+  }
 
-  --ea-fixedheader-height: 50px;
+  .ea-pixel {
+    display: none;
+  }
 
-  // Necessary to reference SCSS colors with CSS properties
-  // https://sass-lang.com/documentation/breaking-changes/css-vars/
-  --ea-stylefixed-bgcolor: #{$color-link-dark};
-  --ea-stylefixed-bgcolor-dark: #{$color-link};
+  .ea-content {
+    margin: 1em 1em 0.5em 1em;
+    padding: 1em;
 
-  --ea-link-color: #{$color-link};
-  --ea-link-color-active: #{darken($color-link, 10%)};
-  --ea-link-color-callout: #{$color-link-callout};
-  --ea-link-color-callout-active: #{darken($color-link-callout, 10%)};
-  --ea-link-color-bold: #{$color-link-bold};
-  --ea-link-color-dark: #{$color-link-dark};
-  --ea-link-color-dark-active: #{lighten($color-link-dark, 10%)};
-  --ea-link-color-callout-dark: #{$color-link-callout-dark};
-  --ea-link-color-callout-dark-active: #{lighten($color-link-callout-dark, 10%)};
-  --ea-link-color-bold-dark: #{$color-link-bold-dark};
+    background: var(--ea-bgcolor);
+    color: var(--ea-color-link);
+
+    color: var(--ea-color-link);
+    a {
+      &:link {
+        color: var(--ea-color-link);
+      }
+      &:visited {
+        color: var(--ea-color-link);
+      }
+      &:hover {
+        color: var(--ea-color-link-active);
+      }
+      &:active {
+        color: var(--ea-color-link-active);
+      }
+      strong,
+      b {
+        color: var(--ea-color-link-bold);
+      }
+    }
+  }
+  .ea-callout {
+    color: var(--ea-color-link-callout);
+    a {
+      font-size: 0.8em;
+
+      &:link {
+        color: var(--ea-color-link-callout);
+      }
+      &:visited {
+        color: var(--ea-color-link-callout);
+      }
+      &:hover {
+        color: var(--ea-color-link-callout-active);
+      }
+      &:active {
+        color: var(--ea-color-link-callout-active);
+      }
+      strong,
+      b {
+        color: var(--ea-color-link-callout);
+      }
+    }
+  }
+
+  .ea-domain {
+    margin-top: 0.75em;
+    font-size: 0.8em;
+    text-align: center;
+    color: var(--ea-color-domain);
+  }
+
+  &.dark {
+    @include theme-dark;
+  }
+
+  &.adaptive {
+    // For adaptive color schemes, the default is light
+    @media (prefers-color-scheme: dark) {
+      @include theme-dark;
+    }
+  }
 }
 
 [data-ea-publisher].loaded,
@@ -240,14 +273,14 @@ $color-bg-dark-stickybox: $color-link;
   display: inline-block;
 
   .ea-content {
-    max-width: $width-image-vertical;
+    max-width: var(--ea-image-placement-width);
     overflow: auto;
 
     text-align: center;
 
     > a > img {
-      width: 120px;
-      height: 90px;
+      width: var(--ea-image-width);
+      height: auto;
       display: inline-block;
     }
 
@@ -259,7 +292,7 @@ $color-bg-dark-stickybox: $color-link;
   }
 
   .ea-callout {
-    max-width: $width-image-vertical;
+    max-width: var(--ea-image-placement-width);
     margin: 0em 1em 1em 1em;
     padding-left: 1em;
     padding-right: 1em;
@@ -269,7 +302,7 @@ $color-bg-dark-stickybox: $color-link;
 
   &.horizontal {
     .ea-content {
-      max-width: $width-image-horizontal;
+      max-width: var(--ea-image-placement-width-horizontal);
 
       > a > img {
         float: left;
@@ -284,7 +317,7 @@ $color-bg-dark-stickybox: $color-link;
     }
 
     .ea-callout {
-      max-width: $width-image-horizontal;
+      max-width: var(--ea-image-placement-width-horizontal);
       text-align: right;
     }
   }
@@ -295,7 +328,7 @@ $color-bg-dark-stickybox: $color-link;
 // https://ethical-ad-client.readthedocs.io/en/latest/#text-placement
 [data-ea-type="text"].loaded,
 .ea-type-text {
-  font-size: 14px;
+  font-size: var(--ea-font-size);
 
   .ea-content {
     text-align: left;
@@ -346,6 +379,11 @@ $color-bg-dark-stickybox: $color-link;
     }
   }
 
+  .ea-type-text {
+    // Stickybox is for image ads only
+    display: none !important;
+  }
+
   @media (max-width: $breakpoint-ultrawide) {
     position: static;
     bottom: 0;
@@ -362,15 +400,15 @@ $color-bg-dark-stickybox: $color-link;
   // This doesn't work with floating ads
   @media (min-width: $breakpoint-ultrawide + 1) {
     .ea-type-image .ea-content {
-      background: $color-bg-stickybox;
+      background: var(--ea-stylefixed-bgcolor);
     }
     &.dark .ea-type-image .ea-content {
-      background: $color-bg-dark-stickybox;
+      background: var(--ea-stylefixed-bgcolor-dark);
     }
     &.adaptive {
       @media (prefers-color-scheme: dark) {
         .ea-type-image .ea-content {
-          background: $color-bg-dark-stickybox;
+          background: var(--ea-stylefixed-bgcolor-dark);
         }
       }
     }
@@ -398,7 +436,7 @@ $color-bg-dark-stickybox: $color-link;
     display: flex;
 
     z-index: $zindex-styles-fixedfooter;
-    background: $color-bg-stickybox;
+    background: var(--ea-stylefixed-bgcolor);
 
     @include theme-flat;
 
@@ -424,7 +462,7 @@ $color-bg-dark-stickybox: $color-link;
 
     .ea-fixedfooter-hide {
       cursor: pointer;
-      color: $color-link;
+      color: var(--ea-color-link);
       padding: 1em;
       flex: initial; // Use the initial width of this item - does not expend
       margin: auto 0;
@@ -434,7 +472,7 @@ $color-bg-dark-stickybox: $color-link;
         padding: 0.25em;
         font-size: 0.8em;
         font-weight: bold;
-        border: 0.15em solid $color-link;
+        border: 0.15em solid var(--ea-color-link);
         border-radius: 0.5em;
         white-space: nowrap;
       }
@@ -448,11 +486,11 @@ $color-bg-dark-stickybox: $color-link;
 
   &.dark {
     .ea-type-text {
-      background: $color-bg-dark-stickybox;
+      background: var(--ea-stylefixed-bgcolor-dark);
 
       .ea-fixedfooter-hide span {
-        color: $color-link-dark;
-        border-color: $color-link-dark;
+        color: var(--ea-color-link-dark);
+        border-color: var(--ea-color-link-dark);
       }
     }
   }
@@ -460,11 +498,11 @@ $color-bg-dark-stickybox: $color-link;
   &.adaptive {
     @media (prefers-color-scheme: dark) {
       .ea-type-text {
-        background: $color-bg-dark-stickybox;
+        background: var(--ea-stylefixed-bgcolor-dark);
 
         .ea-fixedfooter-hide span {
-          color: $color-link-dark;
-          border-color: $color-link-dark;
+          color: var(--ea-color-link-dark);
+          border-color: var(--ea-color-link-dark);
         }
       }
     }
@@ -514,26 +552,6 @@ $color-bg-dark-stickybox: $color-link;
       padding: 0;
       flex: auto; // Expand to fill remaining space
       display: flex;
-
-      color: var(--ea-link-color);
-      a {
-        &:link {
-          color: var(--ea-link-color);
-        }
-        &:visited {
-          color: var(--ea-link-color);
-        }
-        &:hover {
-          color: var(--ea-link-color-active);
-        }
-        &:active {
-          color: var(--ea-link-color-active);
-        }
-        strong,
-        b {
-          color: var(--ea-link-color-bold);
-        }
-      }
     }
 
     .ea-content .ea-text {
@@ -549,26 +567,6 @@ $color-bg-dark-stickybox: $color-link;
       padding: 1em;
       flex: initial; // Use the initial width of this item - does not expend
 
-      color: var(--ea-link-color-callout);
-      a {
-        &:link {
-          color: var(--ea-link-color-callout);
-        }
-        &:visited {
-          color: var(--ea-link-color-callout);
-        }
-        &:hover {
-          color: var(--ea-link-color-callout-active);
-        }
-        &:active {
-          color: var(--ea-link-color-callout-active);
-        }
-        strong,
-        b {
-          color: var(--ea-link-color-callout);
-        }
-      }
-
       // Hide Ads by EthicalAds on mobile
       @media (max-width: $breakpoint-mobile) {
         display: none;
@@ -580,7 +578,6 @@ $color-bg-dark-stickybox: $color-link;
   .ea-type-image {
     img {
       width: var(--ea-image-width-xs) !important;
-      height: auto !important;
       margin: 0.6em;
     }
 
@@ -596,99 +593,11 @@ $color-bg-dark-stickybox: $color-link;
 
   &.dark {
     background-color: var(--ea-stylefixed-bgcolor-dark);
-
-    .ea-content {
-      color: var(--ea-link-color-dark);
-      a {
-        &:link {
-          color: var(--ea-link-color-dark);
-        }
-        &:visited {
-          color: var(--ea-link-color-dark);
-        }
-        &:hover {
-          color: var(--ea-link-color-dark-active);
-        }
-        &:active {
-          color: var(--ea-link-color-dark-active);
-        }
-        strong,
-        b {
-          color: var(--ea-link-color-bold-dark);
-        }
-      }
-    }
-
-    .ea-callout {
-      color: var(--ea-link-color-callout-dark);
-      a {
-        &:link {
-          color: var(--ea-link-color-callout-dark);
-        }
-        &:visited {
-          color: var(--ea-link-color-callout-dark);
-        }
-        &:hover {
-          color: var(--ea-link-color-callout-dark-active);
-        }
-        &:active {
-          color: var(--ea-link-color-callout-dark-active);
-        }
-        strong,
-        b {
-          color: var(--ea-link-color-callout-dark);
-        }
-      }
-    }
   }
 
   &.adaptive {
     @media (prefers-color-scheme: dark) {
       background-color: var(--ea-stylefixed-bgcolor-dark);
-
-      .ea-content {
-        color: var(--ea-link-color-dark);
-        a {
-          &:link {
-            color: var(--ea-link-color-dark);
-          }
-          &:visited {
-            color: var(--ea-link-color-dark);
-          }
-          &:hover {
-            color: var(--ea-link-color-dark-active);
-          }
-          &:active {
-            color: var(--ea-link-color-dark-active);
-          }
-          strong,
-          b {
-            color: var(--ea-link-color-bold-dark);
-          }
-        }
-      }
-
-      .ea-callout {
-        color: var(--ea-link-color-callout-dark);
-        a {
-          &:link {
-            color: var(--ea-link-color-callout-dark);
-          }
-          &:visited {
-            color: var(--ea-link-color-callout-dark);
-          }
-          &:hover {
-            color: var(--ea-link-color-callout-dark-active);
-          }
-          &:active {
-            color: var(--ea-link-color-callout-dark-active);
-          }
-          strong,
-          b {
-            color: var(--ea-link-color-callout-dark);
-          }
-        }
-      }
     }
   }
 }
