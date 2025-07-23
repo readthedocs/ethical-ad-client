@@ -15,7 +15,7 @@
         describe("EthicalAds library", () => {
           it("skips manual placements", async () => {
             const placements = await wait;
-            expect(placements).to.be.an("array").that.includes(null);
+            expect(placements.length).equals(0);
           });
           it("can force load manual placements", async () => {
             const placements = await load_placements(true);
