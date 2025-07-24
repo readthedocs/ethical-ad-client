@@ -599,6 +599,12 @@ export class Placement {
         // Apply any styles based on the specified styling
         this.applyStyles(element);
 
+        // Liste to HTML and BODY attributes changes and apply dark mode if detected
+        this.listenDarkMode();
+
+        // Auto-detect dark mode and apply it
+        this.applyDarkMode(this);
+
         this.target.appendChild(element);
 
         return this;
@@ -989,6 +995,69 @@ export class Placement {
 
     // FixedHeader: https://ethical-ad-client.readthedocs.io/en/latest/#fixedheader
     // No special elements required
+  }
+
+  /* Auto-detect dark mode and apply it if detected.
+   *
+   * Different frameworks update different attributes:
+   *   - Furo Sphinx Theme: `document.body.data-theme`
+   *   - Docusaurus: `document.html.data-theme`
+   *   - VitePress: `document.html.class` ("dark" or nothing)
+   *   - PyData Sphinx Theme: `document.html.data-theme` and `document.html.data-mode`
+   *   - Shibuya Sphinx Theme: `document.html.data-color`
+   *   - mystmd: `document.html.class`
+   */
+  applyDarkMode(placement) {
+    let theme;
+    const themeSelector =
+      "html[data-theme], html[data-mode], html[data-color], body[data-theme]";
+    const prefersDarkMode = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    for (const attribute of ["theme", "mode", "color"]) {
+      theme = document.querySelector(themeSelector)?.dataset[attribute];
+      if (theme) break;
+    }
+    if (theme === undefined) {
+      theme = document.querySelector("html.dark") ? "dark" : undefined;
+    }
+    if (theme === undefined) {
+      theme = document.querySelector("html.light") ? "light" : undefined;
+    }
+
+    if (theme === "dark" || (theme === "auto" && prefersDarkMode)) {
+      placement.classList?.add("dark");
+    } else if (theme !== undefined) {
+      placement.classList?.remove("dark");
+    }
+  }
+
+  /*
+   * Listen to `html` and `body` attributes change to apply dark mode if needed.
+   *
+   * Use a ``MutationObserver`` to listen to attribute changes in the
+   * `<html>` and `<body>` elements.
+   */
+  listenDarkMode() {
+    const config = { attributes: true, childList: false, subtree: false };
+    const callback = (mutationList, observer) => {
+      for (const mutation of mutationList) {
+        if (mutation.type === "attributes") {
+          const placements = document.querySelectorAll(
+            "[" + ATTR_PREFIX + "publisher]"
+          );
+          for (const placement of placements) {
+            this.applyDarkMode(placement);
+          }
+        }
+      }
+    };
+    const observer = new MutationObserver(callback);
+    // <html> element
+    observer.observe(document.documentElement, config);
+    // <body> element
+    observer.observe(document.body, config);
   }
 }
 
