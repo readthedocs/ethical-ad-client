@@ -16,6 +16,26 @@
   .container.adaptive {
     background: #443;
   }
+
+  html.auto .container.adaptive-css,
+  body.auto .container.adaptive-css,
+  html.system .container.adaptive-css,
+  body.system .container.adaptive-css,
+  html[data-theme="auto"] .container.adaptive-css,
+  body[data-theme="auto"] .container.adaptive-css,
+  html[data-bs-theme="auto"] .container.adaptive-css,
+  body[data-theme="auto"] .container.adaptive-css {
+    background: #443;
+  }
+}
+
+html.dark .container.adaptive-css,
+body.dark .container.adaptive-css,
+html[data-theme="dark"] .container.adaptive-css,
+body[data-theme="dark"] .container.adaptive-css,
+html[data-bs-theme="dark"] .container.adaptive-css,
+body[data-theme="dark"] .container.adaptive-css {
+  background: #443;
 }
 
 .container.row .container.column {

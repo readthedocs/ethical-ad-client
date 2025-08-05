@@ -248,6 +248,40 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
   }
 }
 
+// Explicit dark mode via CSS classes
+html.dark,
+body.dark,
+html[data-theme="dark"],
+body[data-theme="dark"],
+html[data-bs-theme="dark"],
+body[data-theme="dark"] {
+  [data-ea-publisher].loaded,
+  [data-ea-type].loaded {
+    &.adaptive-css {
+      @include theme-dark;
+    }
+  }
+}
+
+// Used by 3-way toggles between light mode, dark mode and "auto" which uses the system's prefers-color-scheme
+html.auto,
+body.auto,
+html.system,
+body.system,
+html[data-theme="auto"],
+body[data-theme="auto"],
+html[data-bs-theme="auto"],
+body[data-theme="auto"] {
+  [data-ea-publisher].loaded,
+  [data-ea-type].loaded {
+    &.adaptive-css {
+      @media (prefers-color-scheme: dark) {
+        @include theme-dark;
+      }
+    }
+  }
+}
+
 [data-ea-publisher].loaded,
 [data-ea-type].loaded {
   @include theme-raised;
