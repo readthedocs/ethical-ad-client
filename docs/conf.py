@@ -47,10 +47,11 @@ html_css_files = [
     'docs.css',
 ]
 html_show_sourcelink = True
-if not os.environ.get("READTHEDOCS", False):
-    # The client is needed just for styling some of the sample ad blocks
-    # Ads aren't loaded on these docs outside of RTD
-    html_js_files.append("https://media.ethicalads.io/media/client/alpha/ethicalads.min.js")
+
+#if not os.environ.get("READTHEDOCS", False):
+# The client is needed just for styling some of the sample ad blocks
+# Ads aren't loaded on these docs outside of RTD
+html_js_files.append("https://media.ethicalads.io/media/client/alpha/ethicalads.min.js")
 
 htmlhelp_basename = slug
 
