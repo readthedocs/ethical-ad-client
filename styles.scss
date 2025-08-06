@@ -55,18 +55,23 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 
     // Text colors for various elements and states
     --ea-color-link: #{$color-link};
-    --ea-color-link-active: #{darken($color-link, 10%)};
-    --ea-color-link-callout: #{$color-link-callout};
-    --ea-color-link-callout-active: #{darken($color-link-callout, 10%)};
-    --ea-color-link-bold: #{$color-link-bold};
     --ea-color-link-dark: #{$color-link-dark};
+
+    --ea-color-link-active: #{darken($color-link, 10%)};
     --ea-color-link-dark-active: #{lighten($color-link-dark, 10%)};
+
+    --ea-color-link-callout: #{$color-link-callout};
     --ea-color-link-callout-dark: #{$color-link-callout-dark};
+
+    --ea-color-link-callout-active: #{darken($color-link-callout, 10%)};
     --ea-color-link-callout-dark-active: #{lighten(
         $color-link-callout-dark,
         10%
       )};
+
+    --ea-color-link-bold: #{$color-link-bold};
     --ea-color-link-bold-dark: #{$color-link-bold-dark};
+
     --ea-color-domain: #{lighten($color-link-callout, 20%)};
     --ea-color-domain-dark: #{darken($color-link-callout-dark, 20%)};
   }
@@ -74,46 +79,14 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 
 // Themes & Dark Mode
 @mixin theme-dark {
-  .ea-content {
-    background: var(--ea-bgcolor-dark);
-    color: var(--ea-color-link-dark);
-    a {
-      &:link,
-      &:visited {
-        color: var(--ea-color-link-dark);
-      }
-      &:hover,
-      &:active {
-        color: var(--ea-color-link-dark-active);
-      }
-      strong,
-      b {
-        color: var(--ea-color-link-bold-dark);
-      }
-    }
-  }
-
-  .ea-callout {
-    color: var(--ea-color-link-callout-dark);
-    a {
-      &:link,
-      &:visited {
-        color: var(--ea-color-link-callout-dark);
-      }
-      &:hover,
-      &:active {
-        color: var(--ea-color-link-callout-dark-active);
-      }
-      strong,
-      b {
-        color: var(--ea-color-link-callout-dark);
-      }
-    }
-  }
-
-  .ea-domain {
-    color: var(--ea-color-domain-dark);
-  }
+  --ea-bgcolor: var(--ea-bgcolor-dark);
+  --ea-stylefixed-bgcolor: var(--ea-stylefixed-bgcolor-dark);
+  --ea-color-link: var(--ea-color-link-dark);
+  --ea-color-link-active: var(--ea-color-link-dark-active);
+  --ea-color-link-callout: var(--ea-color-link-callout-dark);
+  --ea-color-link-callout-active: var(--ea-color-link-callout-dark-active);
+  --ea-color-link-bold: var(--ea-color-link-bold-dark);
+  --ea-color-domain: var(--ea-color-domain-dark);
 }
 
 @mixin theme-flat {
@@ -239,7 +212,7 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
   }
 }
 
-// Explicit dark mode via CSS classes
+// Explicit adaptive color mode via CSS classes
 // Bootstrap uses data-bs-theme: https://getbootstrap.com/docs/5.3/customize/color-modes/
 // Tailwind can use either a data attribute or a class: https://tailwindcss.com/docs/dark-mode
 html.dark,
@@ -426,16 +399,6 @@ body[data-bs-theme="auto"] {
     .ea-type-image .ea-content {
       background: var(--ea-stylefixed-bgcolor);
     }
-    &.dark .ea-type-image .ea-content {
-      background: var(--ea-stylefixed-bgcolor-dark);
-    }
-    &.adaptive {
-      @media (prefers-color-scheme: dark) {
-        .ea-type-image .ea-content {
-          background: var(--ea-stylefixed-bgcolor-dark);
-        }
-      }
-    }
   }
 }
 
@@ -506,30 +469,6 @@ body[data-bs-theme="auto"] {
   .ea-type-image {
     // Fixed footer is for text-only ads (for now)
     display: none !important;
-  }
-
-  &.dark {
-    .ea-type-text {
-      background: var(--ea-stylefixed-bgcolor-dark);
-
-      .ea-fixedfooter-hide span {
-        color: var(--ea-color-link-dark);
-        border-color: var(--ea-color-link-dark);
-      }
-    }
-  }
-
-  &.adaptive {
-    @media (prefers-color-scheme: dark) {
-      .ea-type-text {
-        background: var(--ea-stylefixed-bgcolor-dark);
-
-        .ea-fixedfooter-hide span {
-          color: var(--ea-color-link-dark);
-          border-color: var(--ea-color-link-dark);
-        }
-      }
-    }
   }
 }
 
@@ -613,15 +552,5 @@ body[data-bs-theme="auto"] {
 
   // Text-only
   .ea-type-text {
-  }
-
-  &.dark {
-    background-color: var(--ea-stylefixed-bgcolor-dark);
-  }
-
-  &.adaptive {
-    @media (prefers-color-scheme: dark) {
-      background-color: var(--ea-stylefixed-bgcolor-dark);
-    }
   }
 }
