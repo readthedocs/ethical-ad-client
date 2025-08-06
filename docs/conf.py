@@ -72,7 +72,7 @@ class ExampleDirective(Directive):
 
     templates = {
         'image': """
-<div class="loaded {classes}" data-ea-type="image">
+<div class="loaded {classes}" data-ea-type="image" data-ea-publisher>
   <div class="ea-content">
     <a href="#" rel="nofollow" target="_blank">
       <!-- Placeholder ad image -->
@@ -91,7 +91,7 @@ class ExampleDirective(Directive):
 </div>
         """,
         'text': """
-<div class="loaded {classes}" data-ea-type="text">
+<div class="loaded {classes}" data-ea-type="text" data-ea-publisher>
   <div class="ea-content">
     <div class="ea-text">
       <a href="#" rel="nofollow" target="_blank">

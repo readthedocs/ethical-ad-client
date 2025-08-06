@@ -78,16 +78,10 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
     background: var(--ea-bgcolor-dark);
     color: var(--ea-color-link-dark);
     a {
-      &:link {
+      &:link, &:visited {
         color: var(--ea-color-link-dark);
       }
-      &:visited {
-        color: var(--ea-color-link-dark);
-      }
-      &:hover {
-        color: var(--ea-color-link-dark-active);
-      }
-      &:active {
+      &:hover, &:active {
         color: var(--ea-color-link-dark-active);
       }
       strong,
@@ -100,16 +94,10 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
   .ea-callout {
     color: var(--ea-color-link-callout-dark);
     a {
-      &:link {
+      &:link, &:visited {
         color: var(--ea-color-link-callout-dark);
       }
-      &:visited {
-        color: var(--ea-color-link-callout-dark);
-      }
-      &:hover {
-        color: var(--ea-color-link-callout-dark-active);
-      }
-      &:active {
+      &:hover, &:active {
         color: var(--ea-color-link-callout-dark-active);
       }
       strong,
@@ -160,8 +148,7 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 }
 
 // Common styles default to most themes
-[data-ea-publisher].loaded,
-[data-ea-type].loaded {
+[data-ea-publisher].loaded {
   font-size: var(--ea-font-size);
   font-family: var(--ea-font-family);
   font-weight: normal;
@@ -249,14 +236,15 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 }
 
 // Explicit dark mode via CSS classes
+// Bootstrap uses data-bs-theme: https://getbootstrap.com/docs/5.3/customize/color-modes/
+// Tailwind can use either a data attribute or a class: https://tailwindcss.com/docs/dark-mode
 html.dark,
 body.dark,
 html[data-theme="dark"],
 body[data-theme="dark"],
 html[data-bs-theme="dark"],
 body[data-bs-theme="dark"] {
-  [data-ea-publisher].loaded,
-  [data-ea-type].loaded {
+  [data-ea-publisher].loaded {
     &.adaptive-css {
       @include theme-dark;
     }
@@ -272,8 +260,7 @@ html[data-theme="auto"],
 body[data-theme="auto"],
 html[data-bs-theme="auto"],
 body[data-bs-theme="auto"] {
-  [data-ea-publisher].loaded,
-  [data-ea-type].loaded {
+  [data-ea-publisher].loaded {
     &.adaptive-css {
       @media (prefers-color-scheme: dark) {
         @include theme-dark;
@@ -282,8 +269,7 @@ body[data-bs-theme="auto"] {
   }
 }
 
-[data-ea-publisher].loaded,
-[data-ea-type].loaded {
+[data-ea-publisher].loaded {
   @include theme-raised;
 
   &.raised {
