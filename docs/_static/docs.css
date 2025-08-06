@@ -24,7 +24,7 @@
   html[data-theme="auto"] .container.adaptive-css,
   body[data-theme="auto"] .container.adaptive-css,
   html[data-bs-theme="auto"] .container.adaptive-css,
-  body[data-theme="auto"] .container.adaptive-css {
+  body[data-bs-theme="auto"] .container.adaptive-css {
     background: #443;
   }
 }
@@ -34,7 +34,7 @@ body.dark .container.adaptive-css,
 html[data-theme="dark"] .container.adaptive-css,
 body[data-theme="dark"] .container.adaptive-css,
 html[data-bs-theme="dark"] .container.adaptive-css,
-body[data-theme="dark"] .container.adaptive-css {
+body[data-bs-theme="dark"] .container.adaptive-css {
   background: #443;
 }
 
