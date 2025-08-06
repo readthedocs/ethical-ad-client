@@ -78,10 +78,12 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
     background: var(--ea-bgcolor-dark);
     color: var(--ea-color-link-dark);
     a {
-      &:link, &:visited {
+      &:link,
+      &:visited {
         color: var(--ea-color-link-dark);
       }
-      &:hover, &:active {
+      &:hover,
+      &:active {
         color: var(--ea-color-link-dark-active);
       }
       strong,
@@ -94,10 +96,12 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
   .ea-callout {
     color: var(--ea-color-link-callout-dark);
     a {
-      &:link, &:visited {
+      &:link,
+      &:visited {
         color: var(--ea-color-link-callout-dark);
       }
-      &:hover, &:active {
+      &:hover,
+      &:active {
         color: var(--ea-color-link-callout-dark-active);
       }
       strong,
