@@ -254,7 +254,7 @@ body.dark,
 html[data-theme="dark"],
 body[data-theme="dark"],
 html[data-bs-theme="dark"],
-body[data-theme="dark"] {
+body[data-bs-theme="dark"] {
   [data-ea-publisher].loaded,
   [data-ea-type].loaded {
     &.adaptive-css {
@@ -271,7 +271,7 @@ body.system,
 html[data-theme="auto"],
 body[data-theme="auto"],
 html[data-bs-theme="auto"],
-body[data-theme="auto"] {
+body[data-bs-theme="auto"] {
   [data-ea-publisher].loaded,
   [data-ea-type].loaded {
     &.adaptive-css {
