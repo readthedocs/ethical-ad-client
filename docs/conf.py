@@ -38,7 +38,9 @@ gettext_compact = False
 master_doc = 'index'
 pygments_style = 'default'
 
-html_theme = 'furo'
+# Try out adaptive dark mode on Furo
+# html_theme = 'furo'
+html_theme = 'sphinx_rtd_theme'
 html_theme_options = {}
 html_static_path = ['_static']
 html_context = {}
@@ -48,10 +50,10 @@ html_css_files = [
 ]
 html_show_sourcelink = True
 
-#if not os.environ.get("READTHEDOCS", False):
-# The client is needed just for styling some of the sample ad blocks
-# Ads aren't loaded on these docs outside of RTD
-html_js_files.append("https://media.ethicalads.io/media/client/alpha/ethicalads.min.js")
+if not os.environ.get("READTHEDOCS", False):
+    # The client is needed just for styling some of the sample ad blocks
+    # Ads aren't loaded on these docs outside of RTD
+    html_js_files.append("https://media.ethicalads.io/media/client/beta/ethicalads.min.js")
 
 htmlhelp_basename = slug
 
