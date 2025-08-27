@@ -38,6 +38,8 @@ gettext_compact = False
 master_doc = 'index'
 pygments_style = 'default'
 
+# Try out adaptive dark mode on Furo
+# html_theme = 'furo'
 html_theme = 'sphinx_rtd_theme'
 html_theme_options = {}
 html_static_path = ['_static']
@@ -47,6 +49,7 @@ html_css_files = [
     'docs.css',
 ]
 html_show_sourcelink = True
+
 if not os.environ.get("READTHEDOCS", False):
     # The client is needed just for styling some of the sample ad blocks
     # Ads aren't loaded on these docs outside of RTD
@@ -71,7 +74,7 @@ class ExampleDirective(Directive):
 
     templates = {
         'image': """
-<div class="loaded {classes}" data-ea-type="image">
+<div class="loaded {classes}" data-ea-type="image" data-ea-publisher>
   <div class="ea-content">
     <a href="#" rel="nofollow" target="_blank">
       <!-- Placeholder ad image -->
@@ -90,7 +93,7 @@ class ExampleDirective(Directive):
 </div>
         """,
         'text': """
-<div class="loaded {classes}" data-ea-type="text">
+<div class="loaded {classes}" data-ea-type="text" data-ea-publisher>
   <div class="ea-content">
     <div class="ea-text">
       <a href="#" rel="nofollow" target="_blank">

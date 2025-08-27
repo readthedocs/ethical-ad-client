@@ -55,18 +55,23 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 
     // Text colors for various elements and states
     --ea-color-link: #{$color-link};
-    --ea-color-link-active: #{darken($color-link, 10%)};
-    --ea-color-link-callout: #{$color-link-callout};
-    --ea-color-link-callout-active: #{darken($color-link-callout, 10%)};
-    --ea-color-link-bold: #{$color-link-bold};
     --ea-color-link-dark: #{$color-link-dark};
+
+    --ea-color-link-active: #{darken($color-link, 10%)};
     --ea-color-link-dark-active: #{lighten($color-link-dark, 10%)};
+
+    --ea-color-link-callout: #{$color-link-callout};
     --ea-color-link-callout-dark: #{$color-link-callout-dark};
+
+    --ea-color-link-callout-active: #{darken($color-link-callout, 10%)};
     --ea-color-link-callout-dark-active: #{lighten(
         $color-link-callout-dark,
         10%
       )};
+
+    --ea-color-link-bold: #{$color-link-bold};
     --ea-color-link-bold-dark: #{$color-link-bold-dark};
+
     --ea-color-domain: #{lighten($color-link-callout, 20%)};
     --ea-color-domain-dark: #{darken($color-link-callout-dark, 20%)};
   }
@@ -74,54 +79,14 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 
 // Themes & Dark Mode
 @mixin theme-dark {
-  .ea-content {
-    background: var(--ea-bgcolor-dark);
-    color: var(--ea-color-link-dark);
-    a {
-      &:link {
-        color: var(--ea-color-link-dark);
-      }
-      &:visited {
-        color: var(--ea-color-link-dark);
-      }
-      &:hover {
-        color: var(--ea-color-link-dark-active);
-      }
-      &:active {
-        color: var(--ea-color-link-dark-active);
-      }
-      strong,
-      b {
-        color: var(--ea-color-link-bold-dark);
-      }
-    }
-  }
-
-  .ea-callout {
-    color: var(--ea-color-link-callout-dark);
-    a {
-      &:link {
-        color: var(--ea-color-link-callout-dark);
-      }
-      &:visited {
-        color: var(--ea-color-link-callout-dark);
-      }
-      &:hover {
-        color: var(--ea-color-link-callout-dark-active);
-      }
-      &:active {
-        color: var(--ea-color-link-callout-dark-active);
-      }
-      strong,
-      b {
-        color: var(--ea-color-link-callout-dark);
-      }
-    }
-  }
-
-  .ea-domain {
-    color: var(--ea-color-domain-dark);
-  }
+  --ea-bgcolor: var(--ea-bgcolor-dark);
+  --ea-stylefixed-bgcolor: var(--ea-stylefixed-bgcolor-dark);
+  --ea-color-link: var(--ea-color-link-dark);
+  --ea-color-link-active: var(--ea-color-link-dark-active);
+  --ea-color-link-callout: var(--ea-color-link-callout-dark);
+  --ea-color-link-callout-active: var(--ea-color-link-callout-dark-active);
+  --ea-color-link-bold: var(--ea-color-link-bold-dark);
+  --ea-color-domain: var(--ea-color-domain-dark);
 }
 
 @mixin theme-flat {
@@ -160,8 +125,7 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 }
 
 // Common styles default to most themes
-[data-ea-publisher].loaded,
-[data-ea-type].loaded {
+[data-ea-publisher].loaded {
   font-size: var(--ea-font-size);
   font-family: var(--ea-font-family);
   font-weight: normal;
@@ -248,8 +212,41 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
   }
 }
 
-[data-ea-publisher].loaded,
-[data-ea-type].loaded {
+// Explicit adaptive color mode via CSS classes
+// Bootstrap uses data-bs-theme: https://getbootstrap.com/docs/5.3/customize/color-modes/
+// Tailwind can use either a data attribute or a class: https://tailwindcss.com/docs/dark-mode
+html.dark,
+body.dark,
+html[data-theme="dark"],
+body[data-theme="dark"],
+html[data-bs-theme="dark"],
+body[data-bs-theme="dark"] {
+  [data-ea-publisher].loaded {
+    &.adaptive-css {
+      @include theme-dark;
+    }
+  }
+}
+
+// Used by 3-way toggles between light mode, dark mode and "auto" which uses the system's prefers-color-scheme
+html.auto,
+body.auto,
+html.system,
+body.system,
+html[data-theme="auto"],
+body[data-theme="auto"],
+html[data-bs-theme="auto"],
+body[data-bs-theme="auto"] {
+  [data-ea-publisher].loaded {
+    &.adaptive-css {
+      @media (prefers-color-scheme: dark) {
+        @include theme-dark;
+      }
+    }
+  }
+}
+
+[data-ea-publisher].loaded {
   @include theme-raised;
 
   &.raised {
@@ -402,16 +399,6 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
     .ea-type-image .ea-content {
       background: var(--ea-stylefixed-bgcolor);
     }
-    &.dark .ea-type-image .ea-content {
-      background: var(--ea-stylefixed-bgcolor-dark);
-    }
-    &.adaptive {
-      @media (prefers-color-scheme: dark) {
-        .ea-type-image .ea-content {
-          background: var(--ea-stylefixed-bgcolor-dark);
-        }
-      }
-    }
   }
 }
 
@@ -482,30 +469,6 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
   .ea-type-image {
     // Fixed footer is for text-only ads (for now)
     display: none !important;
-  }
-
-  &.dark {
-    .ea-type-text {
-      background: var(--ea-stylefixed-bgcolor-dark);
-
-      .ea-fixedfooter-hide span {
-        color: var(--ea-color-link-dark);
-        border-color: var(--ea-color-link-dark);
-      }
-    }
-  }
-
-  &.adaptive {
-    @media (prefers-color-scheme: dark) {
-      .ea-type-text {
-        background: var(--ea-stylefixed-bgcolor-dark);
-
-        .ea-fixedfooter-hide span {
-          color: var(--ea-color-link-dark);
-          border-color: var(--ea-color-link-dark);
-        }
-      }
-    }
   }
 }
 
@@ -589,15 +552,5 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 
   // Text-only
   .ea-type-text {
-  }
-
-  &.dark {
-    background-color: var(--ea-stylefixed-bgcolor-dark);
-  }
-
-  &.adaptive {
-    @media (prefers-color-scheme: dark) {
-      background-color: var(--ea-stylefixed-bgcolor-dark);
-    }
   }
 }
