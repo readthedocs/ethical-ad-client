@@ -6,6 +6,20 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v2.1.0
+---------------
+
+This release adds a new opt-in version of a dark/light mode
+that handles using a user toggle on the UI rather than only using ``prefers-color-scheme``.
+Users must set the ``adaptive-css`` class on their placement to use it.
+See the docs for more details.
+I expect this release will be in beta for a day or two before being rolled out to prod.
+
+:date: August 27, 2025
+
+ * @davidfischer: Pure CSS implementation of togglable dark mode (#229)
+
+
 Version v2.0.0
 ---------------
 

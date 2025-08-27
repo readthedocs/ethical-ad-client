@@ -1,6 +1,6 @@
 {
   "name": "ethical-ad-client",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "EthicalAds client",
   "main": "dist/client.js",
   "engines": {
