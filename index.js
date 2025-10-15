@@ -27,7 +27,7 @@ import verge from "verge";
 
 import "./styles.scss";
 
-const AD_CLIENT_VERSION = "2.1.0"; // Sent with the ad request
+const AD_CLIENT_VERSION = "2.2.0-alpha"; // Sent with the ad request
 
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
@@ -461,7 +461,7 @@ const MAX_ROTATIONS = 3;
 const HASHCHANGE_ROTATION_ENABLE = true;
 
 // Seconds after a tab comes back into focus to rotate an ad.
-const VISIBILITYCHANGE_ROTATION_ENABLE = false;
+const VISIBILITYCHANGE_ROTATION_ENABLE = true;
 const VISIBILITYCHANGE_ROTATION_DELAY = 3; // seconds
 
 /* Placement object to query decision API and return an Element node
