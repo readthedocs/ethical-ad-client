@@ -6,6 +6,18 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v2.2.0
+---------------
+
+This release contained a small change re-enabling ad rotations
+when an tab or window comes back into focus and certain other conditions
+are met.
+
+:date: October 16, 2025
+
+ * @davidfischer: Re-enable ad rotation on visibilitychange (#231)
+
+
 Version v2.1.0
 ---------------
 
