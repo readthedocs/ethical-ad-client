@@ -3,6 +3,7 @@
 // Sizes
 $width-image-horizontal: 320px;
 $width-image-vertical: 180px;
+$width-image-logo: 80px;
 
 // Z-index used to ensure these custom ad styles are above the main content.
 // but below most modals
@@ -38,6 +39,7 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 
     --ea-image-placement-width: #{$width-image-vertical};
     --ea-image-placement-width-horizontal: #{$width-image-horizontal};
+    --ea-image-logo-width: #{$width-image-logo};
     --ea-fixedheader-height: 50px;
 
     --ea-font-size: 14px;
@@ -48,6 +50,9 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
     // Backgrounds for image or text-only ads
     --ea-bgcolor: #{$color-background};
     --ea-bgcolor-dark: #{$color-background-dark};
+
+    // Header size for large text-only ad
+    --ea-font-size-text-only-header: 18px;
 
     // Background colors for ad styles (stickybox, fixedheader, fixedfooter)
     --ea-stylefixed-bgcolor: #{$color-link-dark};
@@ -74,6 +79,10 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
 
     --ea-color-domain: #{lighten($color-link-callout, 20%)};
     --ea-color-domain-dark: #{darken($color-link-callout-dark, 20%)};
+
+    // Filter to apply on the large text-only logo
+    --ea-image-logo-filter: grayscale(1);
+    --ea-image-logo-filter-dark: grayscale(1) invert(1);
   }
 }
 
@@ -87,6 +96,7 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
   --ea-color-link-callout-active: var(--ea-color-link-callout-dark-active);
   --ea-color-link-bold: var(--ea-color-link-bold-dark);
   --ea-color-domain: var(--ea-color-domain-dark);
+  --ea-image-logo-filter: var(--ea-image-logo-filter-dark);
 }
 
 @mixin theme-flat {
@@ -329,6 +339,58 @@ body[data-bs-theme="auto"] {
 
   .ea-content {
     text-align: left;
+  }
+
+  .ea-callout {
+    margin: 0.5em 1em 1em 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    text-align: right;
+    font-style: italic;
+  }
+}
+
+// Large text-only placement (text-only-large-v1)
+// -------------------------------------------------------------------------
+[data-ea-type="text-only-large-v1"].loaded,
+.ea-type-text-large {
+  font-size: var(--ea-font-size);
+  margin: 1em 0;
+
+  .ea-logo {
+    float: right;
+    margin-left: 1em;
+    margin-bottom: 1em;
+  }
+
+  img {
+    width: var(--ea-image-logo-width);
+    height: auto;
+    filter: var(--ea-image-logo-filter);
+  }
+
+  .ea-headline {
+    font-size: var(--ea-font-size-text-only-header);
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    text-align: left;
+  }
+
+  .ea-body {
+    margin-bottom: 0.5em;
+    text-align: left;
+  }
+
+  .ea-cta {
+    border-radius: 0.5em;
+    border: 1px solid var(--ea-color-link);
+    color: var(--ea-color-link);
+    display: inline-block;
+    font-weight: bold;
+    padding: 0.25em 0.5em;
+  }
+  .ea-cta::after {
+    content: " ↗";
   }
 
   .ea-callout {
