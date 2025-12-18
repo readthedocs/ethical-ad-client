@@ -181,7 +181,45 @@ used with the ``dark`` class:
             :ad_type: image
             :classes: dark bordered
 
-If your site varies based on the user's color scheme (using ``prefers-color-scheme``),
+
+Adaptive color scheme
+~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: v2.1.0
+
+The ad client supports two different methods of having the color scheme adapt between a dark and light mode.
+
+If your site varies the color scheme based on setting a class or data attribute
+on the ``<html>`` or ``<body>`` elements set from a user-facing toggle,
+set the ``adaptive-css`` class.
+This specifically looks for CSS selectors like ``html.dark``, ``body.dark``,
+and ``html[data-theme="dark"]`` in order to set dark mode.
+This method also detects if your site uses a 3-way toggle between light mode, dark mode, and an auto mode
+which uses ``prefers-color-scheme``.
+
+
+.. code:: html
+
+    <div class="adaptive-css raised" data-ea-publisher="..."></div>
+
+.. container:: row adaptive-css
+
+    .. container:: column
+
+        .. example::
+            :ad_type: image
+            :classes: adaptive-css raised
+
+    .. container:: column
+
+        .. example::
+            :ad_type: image
+            :classes: adaptive-css bordered
+
+
+
+
+If your site varies based on the user's system color scheme alone (using ``prefers-color-scheme``),
 set the ``adaptive`` class:
 
 .. code:: html
