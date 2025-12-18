@@ -6,6 +6,20 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v2.3.0
+---------------
+
+This release contained a minor bugfix when there's no available ads
+as well as a new style (mostly unused) for a new ad format we are testing
+but isn't yet in being sold.
+
+:date: December 18, 2025
+
+ * @davidfischer: Fix for null placements when manually loading (#226)
+ * @logocomune: `ethicalads.wait` does not correctly handle cases with no available ads (#217)
+ * @davidfischer: Styles for large text format (#233)
+
+
 Version v2.2.0
 ---------------
 
