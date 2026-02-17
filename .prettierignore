@@ -3,3 +3,5 @@
 /docs/_build/
 /docs/_static/ethicalads.js
 index.html
+.venv/
+node_modules/
