@@ -316,6 +316,35 @@ Text placements can be defined using ``data-ea-type="text"``:
         :classes: dark raised
 
 
+Large format placement
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.4
+
+.. note::
+    Currently, this placement requires approval for your publisher account.
+    This placement is larger than our standard ad placements and is intended to be placed in the footer of your site.
+    This ad is charged to advertisers at a higher rate than our `normal rates <https://www.ethicalads.io/advertisers/pricing/>`_ and earns more money for publishers with extra space.
+    See our `blog post <https://www.ethicalads.io/blog/2026/01/announcing-a-new-larger-ad-format/>`_ on the release and launch.
+
+Large format placements can be defined using ``data-ea-type="logo-large-v1"``.
+
+.. code:: html
+
+    <div data-ea-publisher="..." data-ea-type="logo-large-v1"></div>
+
+.. example::
+    :ad_type: large
+    :classes: raised
+
+.. container:: row dark
+
+    .. example::
+        :ad_type: large
+        :classes: dark raised
+
+
+
 .. _placement-styles:
 
 Placement style
