@@ -2,7 +2,6 @@
 
 This is the JavaScript client for [EthicalAds](https://www.ethicalads.io/). It is responsible for detecting ad placements on publisher websites, fetching ads from the EthicalAds decision API, and rendering them.
 
-
 ## 1. Project Overview
 
 - **Language:** Vanilla JavaScript (ES6+)
@@ -25,7 +24,6 @@ This is the JavaScript client for [EthicalAds](https://www.ethicalads.io/). It i
 - `verge`: Used for viewport calculations.
 - `webpack`: Bundles JS and SCSS into a single file for distribution.
 - `babel`: Transpiles ES6+ code for browser compatibility.
-
 
 ## 2. Development Workflow
 
@@ -56,7 +54,6 @@ To generate the production-ready files in `dist/`:
 npm run build
 ```
 
-
 ## 3. Testing Procedures
 
 Tests must pass before tasks are considered complete.
@@ -66,7 +63,6 @@ npm run test       # Run all tests
 npm run test:dev   # Run tests in watch mode
 npm run test:debug # Run tests with a manual browser for debugging
 ```
-
 
 ## 4. Agent Workflow Instructions
 
