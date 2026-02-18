@@ -1,5 +1,6 @@
 /node_modules/
 /docs/build/
+/docs/_static/ethicalads.min.js
 /docs/_build/
 .ropeproject/
 *.pyc

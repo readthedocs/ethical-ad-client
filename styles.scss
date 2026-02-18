@@ -121,6 +121,7 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
     border-radius: 3px;
     box-shadow: none;
   }
+
   &.dark .ea-content {
     border: 1px solid opacify($color-background-dark, 0.02);
   }
@@ -160,42 +161,53 @@ $color-link-bold-dark: lighten($color-link-bold, 20%);
     color: var(--ea-color-link);
 
     color: var(--ea-color-link);
+
     a {
       &:link {
         color: var(--ea-color-link);
       }
+
       &:visited {
         color: var(--ea-color-link);
       }
+
       &:hover {
         color: var(--ea-color-link-active);
       }
+
       &:active {
         color: var(--ea-color-link-active);
       }
+
       strong,
       b {
         color: var(--ea-color-link-bold);
       }
     }
   }
+
   .ea-callout {
     color: var(--ea-color-link-callout);
+
     a {
       font-size: 0.8em;
 
       &:link {
         color: var(--ea-color-link-callout);
       }
+
       &:visited {
         color: var(--ea-color-link-callout);
       }
+
       &:hover {
         color: var(--ea-color-link-callout-active);
       }
+
       &:active {
         color: var(--ea-color-link-callout-active);
       }
+
       strong,
       b {
         color: var(--ea-color-link-callout);
@@ -262,9 +274,11 @@ body[data-bs-theme="auto"] {
   &.raised {
     @include theme-raised;
   }
+
   &.bordered {
     @include theme-bordered;
   }
+
   &.flat {
     @include theme-flat;
   }
@@ -350,9 +364,10 @@ body[data-bs-theme="auto"] {
   }
 }
 
-// Large text-only placement (text-only-large-v1)
+// Large text-only placement (logo-large-v1)
 // -------------------------------------------------------------------------
 [data-ea-type="text-only-large-v1"].loaded,
+[data-ea-type="logo-large-v1"].loaded,
 .ea-type-text-large {
   font-size: var(--ea-font-size);
   margin: 1em 0;
@@ -389,6 +404,7 @@ body[data-bs-theme="auto"] {
     font-weight: bold;
     padding: 0.25em 0.5em;
   }
+
   .ea-cta::after {
     content: " ↗";
   }
@@ -564,6 +580,7 @@ body[data-bs-theme="auto"] {
     @media (max-width: $breakpoint-lg) {
       width: var(--ea-container-md);
     }
+
     @media (max-width: $breakpoint-xl) {
       width: var(--ea-container-lg);
     }

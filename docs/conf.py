@@ -53,7 +53,8 @@ html_show_sourcelink = True
 if not os.environ.get("READTHEDOCS", False):
     # The client is needed just for styling some of the sample ad blocks
     # Ads aren't loaded on these docs outside of RTD
-    html_js_files.append("https://media.ethicalads.io/media/client/beta/ethicalads.min.js")
+    html_static_path.append("../dist")
+    html_js_files.append("ethicalads.min.js")
 
 htmlhelp_basename = slug
 
@@ -100,6 +101,32 @@ class ExampleDirective(Directive):
         <strong>EthicalAds</strong> is a developer-focused, privacy-obsessed ad
         network from the fine folks at Read the Docs
       </a>
+    </div>
+  </div>
+  <div class="ea-callout">
+    <a href="https://ethicalads.io/">Ad by EthicalAds</a>
+  </div>
+</div>
+        """,
+        'large': """
+<div class="loaded {classes}" data-ea-type="logo-large-v1" data-ea-publisher>
+  <div class="ea-content">
+    <div class="ea-logo">
+      <a href="#" rel="nofollow" target="_blank">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+CiAgPHJlY3QgZmlsbD0iI2RkZCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiLz4KICA8dGV4dCBmaWxsPSJyZ2JhKDAsMCwwLDAuNSkiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjIwIiBkeT0iNyIgZm9udC13ZWlnaHQ9ImJvbGQiIHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Mb2dvPC90ZXh0Pgo8L3N2Zz4=" />
+      </a>
+    </div>
+    <div class="ea-headline">
+      <a href="#" rel="nofollow" target="_blank">EthicalAds: Ads for Devs</a>
+    </div>
+    <div class="ea-body">
+      <a href="#" rel="nofollow" target="_blank">
+        EthicalAds is a developer-focused, privacy-obsessed ad network
+        that uses machine learning for powerful contextual targeting without creepy tracking.
+      </a>
+    </div>
+    <div class="ea-cta">
+      <a href="#" rel="nofollow" target="_blank">Learn more</a>
     </div>
   </div>
   <div class="ea-callout">
