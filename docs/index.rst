@@ -53,6 +53,11 @@ The following data attributes are supported on the ad placement element:
     A placement identifier. If you define an ``id`` and :ref:`enable placements reporting <placements>`,
     this will allow you to see reports for each ``id``.
 
+``data-ea-priority`` (optional)
+    A numerical priority for the placement. If multiple placements on a page define a priority,
+    the server will choose only one ad to return for the group based on the priority and available inventory.
+    Setting a priority when the page has a single placement will have no effect.
+
 ``data-ea-style`` (optional)
     Use a custom :ref:`placement style <placement-styles>`.
 

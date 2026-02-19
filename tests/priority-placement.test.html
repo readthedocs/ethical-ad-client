@@ -1,0 +1,71 @@
+<html>
+  <body>
+    <!-- 3 placements, two with priorities -->
+    <!-- There will be 2 calls to the ad server: one for ad1 and ad2, and one for ad3 -->
+
+    <div id="ad1" data-ea-publisher="test" data-ea-priority="1"></div>
+    <div id="ad2" data-ea-publisher="test" data-ea-priority="2"></div>
+    <!-- standalone ad -->
+    <div id="ad3" data-ea-publisher="test"></div>
+
+    <script type="module">
+      import { expect } from "@open-wc/testing";
+      import { runTests } from "@web/test-runner-mocha";
+      import { default as sinon } from "sinon";
+
+      import { wait, Placement } from "../index";
+      import { mockAdDecision } from "./common.inc.js";
+
+      // Mock the regular fetch for ad3
+      let fetchStub = mockAdDecision();
+
+      // Mock the fetchGroup for ad1 and ad2
+      let groupStub = sinon
+        .stub(Placement, "fetchGroup")
+        .callsFake((placements) => {
+          // Let's declare the second one as the winner, as if its priority won
+          let winner = placements.find((p) => p.target.id === "ad2");
+          placements.forEach((p) => {
+            p.fetchPromise = Promise.resolve().then(() => {
+              if (p === winner) {
+                const response_html =
+                  "<div class='ad-rendered'><!-- A real ad would be here normally --></div>";
+                const elem_placement = document.createElement("div");
+                elem_placement.innerHTML = response_html;
+                return elem_placement.firstChild;
+              }
+              return null;
+            });
+          });
+        });
+
+      runTests(async () => {
+        describe("EthicalAds library", () => {
+          it("loads prioritized placements correctly", async () => {
+            const placements = await wait;
+            // Placements that resolved with ads: only ad2 and ad3
+            expect(placements.length).to.equal(2);
+            expect(placements[0].target.id).to.equal("ad2");
+            expect(placements[1].target.id).to.equal("ad3");
+
+            // Look at DOM directly
+            const ad1 = document.getElementById("ad1");
+            const ad2 = document.getElementById("ad2");
+            const ad3 = document.getElementById("ad3");
+
+            // ad1 should NOT have the loaded class
+            expect(ad1.className).to.not.include("loaded");
+
+            // ad2 and ad3 should have the loaded class
+            expect(ad2.className).to.include("loaded");
+            expect(ad3.className).to.include("loaded");
+
+            // fetchGroup should have been called once with a group of 2
+            expect(groupStub.calledOnce).to.be.true;
+            expect(groupStub.firstCall.args[0].length).to.equal(2);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

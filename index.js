@@ -490,6 +490,12 @@ export class Placement {
       this.campaign_types = ["paid", "publisher-house", "community", "house"];
     }
 
+    this.priority = options.priority || null;
+    this.div_id =
+      target.id ||
+      "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000000);
+    this.fetchPromise = null;
+
     // Initialized and will be used in the future
     this.view_time = 0;
     this.view_time_sent = false; // true once the view time is sent to the server
@@ -531,6 +537,7 @@ export class Placement {
     const style = element.getAttribute(ATTR_PREFIX + "style");
     const force_ad = element.getAttribute(ATTR_PREFIX + "force-ad");
     const force_campaign = element.getAttribute(ATTR_PREFIX + "force-campaign");
+    const priority = element.getAttribute(ATTR_PREFIX + "priority");
 
     // Add version to ad type to verison the HTML return
     if (ad_type === "image" || ad_type === "text") {
@@ -558,6 +565,7 @@ export class Placement {
       load_manually,
       force_ad,
       force_campaign,
+      priority,
     });
   }
 
@@ -574,7 +582,9 @@ export class Placement {
     // Detect the keywords
     this.keywords = this.keywords.concat(this.detectKeywords());
 
-    return this.fetch()
+    let fetchPromise = this.fetchPromise || this.fetch();
+
+    return fetchPromise
       .then((element) => {
         if (element === undefined) {
           throw new EthicalAdsWarning(
@@ -782,10 +792,7 @@ export class Placement {
     // Make sure callbacks don't collide even with multiple placements
     const callback =
       "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000);
-    var div_id = callback;
-    if (this.target.id) {
-      div_id = this.target.id;
-    }
+    var div_id = this.div_id;
 
     // There's no hard maximum on URL lengths (all of these get added to the query params)
     // but ideally we want to keep our URLs below ~2k which should work basically everywhere
@@ -838,6 +845,93 @@ export class Placement {
         return resolve();
       });
       document.getElementsByTagName("head")[0].appendChild(script);
+    });
+  }
+
+  /* Fetch multiple grouped placements from the decision API
+   *
+   * @param {Array<Placement>} placements - Placements to fetch
+   */
+  static fetchGroup(placements) {
+    if (!placements || !placements.length) return;
+    const callback =
+      "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000);
+
+    const publisher = placements[0].publisher;
+
+    let group_keywords = [];
+    placements.forEach((p) => {
+      p.keywords = p.keywords.concat(p.detectKeywords());
+      group_keywords = group_keywords.concat(p.keywords);
+    });
+    group_keywords = [...new Set(group_keywords)];
+
+    let params = {
+      publisher: publisher,
+      ad_types: placements.map((p) => p.ad_type).join("|"),
+      div_ids: placements.map((p) => p.div_id).join("|"),
+      priorities: placements.map((p) => p.priority).join("|"),
+      callback: callback,
+      keywords: group_keywords.join("|"),
+      campaign_types: [
+        ...new Set(
+          placements.reduce((acc, p) => acc.concat(p.campaign_types), [])
+        ),
+      ].join("|"),
+      format: "jsonp",
+      client_version: AD_CLIENT_VERSION,
+      placement_index: placements.map((p) => p.index).join("|"),
+      url: (window.location.origin + window.location.pathname).slice(0, 256),
+    };
+
+    const force_ad = placements.find((p) => p.force_ad)?.force_ad;
+    if (force_ad) params["force_ad"] = force_ad;
+    const force_campaign = placements.find(
+      (p) => p.force_campaign
+    )?.force_campaign;
+    if (force_campaign) params["force_campaign"] = force_campaign;
+
+    const max_rotations = Math.max(...placements.map((p) => p.rotations));
+    if (max_rotations > 1) params["rotations"] = max_rotations;
+
+    const url_params = new URLSearchParams(params);
+    const url = new URL(AD_DECISION_URL + "?" + url_params.toString());
+
+    const promise = new Promise((resolve, reject) => {
+      window[callback] = (response) => {
+        resolve(response);
+      };
+
+      var script = document.createElement("script");
+      script.src = url;
+      script.type = "text/javascript";
+      script.async = true;
+      script.addEventListener("error", (err) => {
+        resolve();
+      });
+      document.getElementsByTagName("head")[0].appendChild(script);
+    });
+
+    placements.forEach((placement, idx) => {
+      placement.fetchPromise = promise.then((response) => {
+        let is_winner = false;
+        if (response && response.html && response.view_url) {
+          if (response.div_id) {
+            is_winner = response.div_id === placement.div_id;
+          } else {
+            is_winner = idx === 0;
+          }
+        }
+
+        if (is_winner) {
+          placement.response = response;
+          const node_convert = document.createElement("div");
+          node_convert.innerHTML = response.html;
+          return node_convert.firstChild;
+        } else {
+          return null;
+        }
+      });
     });
   }
 
@@ -1029,39 +1123,61 @@ export function load_placements(force_load = false) {
     logger.warn("No ad placements found.");
   }
 
-  // Create main promise. Iterator `all()` Promise will surround array of found
-  // elements. If any of these elements have issues, this main promise will
-  // reject.
+  let placements = elements.map((element, index) => {
+    const placement = Placement.from_element(element);
+    if (!placement) return null;
+    placement.index = index;
+    return placement;
+  });
+
+  // Run AcceptableAds detection code once for the first valid placement
+  const first_placement = placements.find((p) => p !== null);
+  if (first_placement && !force_load) {
+    first_placement.detectABP(ABP_DETECTION_PX, function (usesABP) {
+      uplifted = usesABP;
+      if (usesABP) {
+        logger.debug(
+          "Acceptable Ads enabled. Thanks for allowing our non-tracking ads :)"
+        );
+      }
+    });
+  }
+
+  // Group prioritized placements
+  let priority_groups = {};
+  placements.forEach((placement) => {
+    if (
+      placement &&
+      placement.priority !== null &&
+      (force_load || !placement.load_manually)
+    ) {
+      if (!priority_groups[placement.publisher]) {
+        priority_groups[placement.publisher] = [];
+      }
+      priority_groups[placement.publisher].push(placement);
+    }
+  });
+
+  Object.values(priority_groups).forEach((group) => {
+    if (group.length > 0) {
+      Placement.fetchGroup(group);
+    }
+  });
+
+  // Create main promise. Iterator `all()` Promise will surround array of
+  // placements.
   return Promise.all(
-    elements.map((element, index) => {
-      const placement = Placement.from_element(element);
-
-      if (!placement) {
-        // Placement has already been loaded
-        return null;
-      }
-
-      placement.index = index;
-
-      // Run AcceptableAds detection code
-      // This lets us know how many impressions are attributed to AceeptableAds
-      // Only run this once even for multiple placements
-      // All impressions will be correctly attributed
-      if (index === 0 && placement && !force_load) {
-        placement.detectABP(ABP_DETECTION_PX, function (usesABP) {
-          uplifted = usesABP;
-          if (usesABP) {
-            logger.debug(
-              "Acceptable Ads enabled. Thanks for allowing our non-tracking ads :)"
-            );
-          }
-        });
-      }
-
+    placements.map((placement) => {
       if (placement && (force_load || !placement.load_manually)) {
-        return placement.load();
+        return placement.load().catch((err) => {
+          if (err instanceof EthicalAdsWarning) {
+            logger.warn(err.message);
+          } else {
+            logger.error(err.message);
+          }
+          return null;
+        });
       } else {
-        // This will be manually loaded later or has already been loaded
         return null;
       }
     })
@@ -1090,7 +1206,7 @@ export function set_verbosity() {
 }
 
 // An error class that we will not surface to clients normally.
-class EthicalAdsWarning extends Error {}
+class EthicalAdsWarning extends Error { }
 
 /* Wrapping Promise to allow for handling of errors by user
  *
