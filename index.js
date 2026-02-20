@@ -541,7 +541,11 @@ export class Placement {
     let priority;
     if (priorityAttr !== null && priorityAttr !== "") {
       const parsedPriority = parseInt(priorityAttr, 10);
-      if (!Number.isNaN(parsedPriority)) {
+      if (
+        !Number.isNaN(parsedPriority) &&
+        parsedPriority >= 1 &&
+        parsedPriority <= 10
+      ) {
         priority = parsedPriority;
       } else {
         logger.warn(
@@ -867,7 +871,7 @@ export class Placement {
   static fetchGroup(placements) {
     if (!placements || !placements.length) return;
     const callback =
-      "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000);
+      "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000000);
 
     const publisher = placements[0].publisher;
 
