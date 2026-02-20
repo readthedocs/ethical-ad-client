@@ -873,7 +873,13 @@ export class Placement {
 
     let group_keywords = [];
     placements.forEach((p) => {
-      p.keywords = p.keywords.concat(p.detectKeywords());
+      // Only detect keywords if they haven't already been detected
+      if (!Array.isArray(p.keywords)) {
+        p.keywords = [];
+      }
+      if (p.keywords.length === 0) {
+        p.keywords = p.keywords.concat(p.detectKeywords());
+      }
       group_keywords = group_keywords.concat(p.keywords);
     });
     group_keywords = [...new Set(group_keywords)];
