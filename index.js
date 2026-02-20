@@ -1243,7 +1243,7 @@ export function set_verbosity() {
 }
 
 // An error class that we will not surface to clients normally.
-class EthicalAdsWarning extends Error { }
+class EthicalAdsWarning extends Error {}
 
 /* Wrapping Promise to allow for handling of errors by user
  *
