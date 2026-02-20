@@ -537,7 +537,19 @@ export class Placement {
     const style = element.getAttribute(ATTR_PREFIX + "style");
     const force_ad = element.getAttribute(ATTR_PREFIX + "force-ad");
     const force_campaign = element.getAttribute(ATTR_PREFIX + "force-campaign");
-    const priority = element.getAttribute(ATTR_PREFIX + "priority");
+    const priorityAttr = element.getAttribute(ATTR_PREFIX + "priority");
+    let priority;
+    if (priorityAttr !== null && priorityAttr !== "") {
+      const parsedPriority = parseInt(priorityAttr, 10);
+      if (!Number.isNaN(parsedPriority)) {
+        priority = parsedPriority;
+      } else {
+        logger.warn(
+          "EthicalAd: Invalid numerical priority '%s' provided; ignoring.",
+          priorityAttr
+        );
+      }
+    }
 
     // Add version to ad type to verison the HTML return
     if (ad_type === "image" || ad_type === "text") {
