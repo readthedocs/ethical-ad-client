@@ -54,7 +54,7 @@ The following data attributes are supported on the ad placement element:
     this will allow you to see reports for each ``id``.
 
 ``data-ea-priority`` (optional)
-    A numerical priority for the placement. If multiple placements on a page define a priority,
+    A numerical priority for the placement in range [1, 10]. If multiple placements on a page define a priority,
     the server will choose only one ad to return for the group based on the priority and available inventory.
     Setting a priority when the page has a single placement will have no effect.
 
