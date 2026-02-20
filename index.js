@@ -27,7 +27,7 @@ import verge from "verge";
 
 import "./styles.scss";
 
-const AD_CLIENT_VERSION = "2.3.0"; // Sent with the ad request
+const AD_CLIENT_VERSION = "2.4.0-alpha"; // Sent with the ad request
 
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
@@ -870,10 +870,19 @@ export class Placement {
    */
   static fetchGroup(placements) {
     if (!placements || !placements.length) return;
-    const callback =
-      "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000000);
 
     const publisher = placements[0].publisher;
+    const all_same_publisher = placements.every(
+      (p) => p.publisher === publisher
+    );
+    if (!all_same_publisher) {
+      throw new Error(
+        "Multiple ad placements with different publishers are not allowed."
+      );
+    }
+
+    const callback =
+      "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000000);
 
     let group_keywords = [];
     placements.forEach((p) => {
@@ -902,8 +911,8 @@ export class Placement {
       ].join("|"),
       format: "jsonp",
       client_version: AD_CLIENT_VERSION,
-      placement_index: placements.map((p) => p.index).join("|"),
       url: (window.location.origin + window.location.pathname).slice(0, 256),
+      // placement_index is not used for grouped/prioritized placements
     };
 
     const force_ad = placements.find((p) => p.force_ad)?.force_ad;
@@ -1141,6 +1150,17 @@ export function load_placements(force_load = false) {
   const node_list = document.querySelectorAll("[" + ATTR_PREFIX + "publisher]");
   let elements = Array.prototype.slice.call(node_list);
 
+  let publishers = new Set();
+  elements.forEach((el) => {
+    const pub = el.getAttribute(ATTR_PREFIX + "publisher");
+    if (pub) publishers.add(pub);
+  });
+  if (publishers.size > 1) {
+    throw new Error(
+      "Multiple ad placements with different publishers are not allowed."
+    );
+  }
+
   if (elements.length === 0) {
     logger.warn("No ad placements found.");
   }
@@ -1166,25 +1186,20 @@ export function load_placements(force_load = false) {
   }
 
   // Group prioritized placements
-  let priority_groups = {};
+  let priority_group = [];
   placements.forEach((placement) => {
     if (
       placement &&
       placement.priority !== null &&
       (force_load || !placement.load_manually)
     ) {
-      if (!priority_groups[placement.publisher]) {
-        priority_groups[placement.publisher] = [];
-      }
-      priority_groups[placement.publisher].push(placement);
+      priority_group.push(placement);
     }
   });
 
-  Object.values(priority_groups).forEach((group) => {
-    if (group.length > 0) {
-      Placement.fetchGroup(group);
-    }
-  });
+  if (priority_group.length > 0) {
+    Placement.fetchGroup(priority_group);
+  }
 
   // Create main promise. Iterator `all()` Promise will surround array of
   // placements.
@@ -1228,7 +1243,7 @@ export function set_verbosity() {
 }
 
 // An error class that we will not surface to clients normally.
-class EthicalAdsWarning extends Error {}
+class EthicalAdsWarning extends Error { }
 
 /* Wrapping Promise to allow for handling of errors by user
  *
