@@ -517,6 +517,11 @@ export class Placement {
   static from_element(element) {
     // Get attributes from DOM node
     const publisher = element.getAttribute(ATTR_PREFIX + "publisher");
+    if (!publisher) {
+      logger.debug("Missing publisher value. Skipping...");
+      return null;
+    }
+
     let ad_type = element.getAttribute(ATTR_PREFIX + "type");
     if (!ad_type) {
       ad_type = "image";
@@ -1186,16 +1191,25 @@ export function load_placements(force_load = false) {
   }
 
   // Group prioritized placements
-  let priority_group = [];
+  let has_priority = false;
   placements.forEach((placement) => {
-    if (
-      placement &&
-      placement.priority !== null &&
-      (force_load || !placement.load_manually)
-    ) {
-      priority_group.push(placement);
+    if (placement && placement.priority !== null) {
+      has_priority = true;
     }
   });
+
+  let priority_group = [];
+  if (has_priority) {
+    placements.forEach((placement) => {
+      if (placement && (force_load || !placement.load_manually)) {
+        if (placement.priority === null) {
+          // Set default priority for non-prioritized placements
+          placement.priority = 1;
+        }
+        priority_group.push(placement);
+      }
+    });
+  }
 
   if (priority_group.length > 0) {
     Placement.fetchGroup(priority_group);
