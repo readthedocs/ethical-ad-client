@@ -494,7 +494,6 @@ export class Placement {
     this.div_id =
       target.id ||
       "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000000);
-    this.fetchPromise = null;
 
     // Initialized and will be used in the future
     this.view_time = 0;
@@ -599,11 +598,11 @@ export class Placement {
    *
    * @returns {Promise}
    */
-  load() {
+  load(fetchPromise = null) {
     // Detect the keywords
     this.keywords = this.keywords.concat(this.detectKeywords());
 
-    let fetchPromise = this.fetchPromise || this.fetch();
+    fetchPromise = fetchPromise || this.fetch();
 
     return fetchPromise
       .then((element) => {
@@ -773,6 +772,8 @@ export class Placement {
     if (!this.canRotate()) {
       return;
     }
+
+    logger.debug("Rotating ad");
     this.clearListeners();
 
     this.view_time = 0;
@@ -873,10 +874,12 @@ export class Placement {
    *
    * @param {Array<Placement>} placements - Placements to fetch
    */
-  static fetchGroup(placements) {
-    if (!placements || !placements.length) return;
+  static loadGroup(placements) {
+    if (!placements || !placements.length) return Promise.resolve([]);
 
     const publisher = placements[0].publisher;
+
+    // Make sure all placements are from the same publisher
     const all_same_publisher = placements.every(
       (p) => p.publisher === publisher
     );
@@ -948,27 +951,40 @@ export class Placement {
       document.getElementsByTagName("head")[0].appendChild(script);
     });
 
-    placements.forEach((placement, idx) => {
-      placement.fetchPromise = promise.then((response) => {
-        let is_winner = false;
-        if (response && response.html && response.view_url) {
-          if (response.div_id) {
-            is_winner = response.div_id === placement.div_id;
-          } else {
-            is_winner = idx === 0;
+    return Promise.all(
+      placements.map((placement, idx) => {
+        const fetchPromise = promise.then((response) => {
+          let is_winner = false;
+          if (response && response.html && response.view_url) {
+            if (response.div_id) {
+              is_winner = response.div_id === placement.div_id;
+            } else {
+              // This should only happen if there are no ads for this request
+              // In this case, we'll assign the first placement to be the winner
+              is_winner = idx === 0;
+            }
           }
-        }
 
-        if (is_winner) {
-          placement.response = response;
-          const node_convert = document.createElement("div");
-          node_convert.innerHTML = response.html;
-          return node_convert.firstChild;
-        } else {
+          if (is_winner) {
+            placement.response = response;
+            const node_convert = document.createElement("div");
+            node_convert.innerHTML = response.html;
+            return node_convert.firstChild;
+          } else {
+            return null;
+          }
+        });
+
+        return placement.load(fetchPromise).catch((err) => {
+          if (err instanceof EthicalAdsWarning) {
+            logger.warn(err.message);
+          } else {
+            logger.error(err.message);
+          }
           return null;
-        }
-      });
-    });
+        });
+      })
+    );
   }
 
   /* Sends the view time of the ad to the server
@@ -1191,15 +1207,10 @@ export function load_placements(force_load = false) {
   }
 
   // Group prioritized placements
-  let has_priority = false;
-  placements.forEach((placement) => {
-    if (placement && placement.priority !== null) {
-      has_priority = true;
-    }
-  });
+  const has_priority = placements.some((p) => p && p.priority !== null);
 
-  let priority_group = [];
   if (has_priority) {
+    let priority_group = [];
     placements.forEach((placement) => {
       if (placement && (force_load || !placement.load_manually)) {
         if (placement.priority === null) {
@@ -1209,30 +1220,32 @@ export function load_placements(force_load = false) {
         priority_group.push(placement);
       }
     });
-  }
 
-  if (priority_group.length > 0) {
-    Placement.fetchGroup(priority_group);
-  }
-
-  // Create main promise. Iterator `all()` Promise will surround array of
-  // placements.
-  return Promise.all(
-    placements.map((placement) => {
-      if (placement && (force_load || !placement.load_manually)) {
-        return placement.load().catch((err) => {
-          if (err instanceof EthicalAdsWarning) {
-            logger.warn(err.message);
-          } else {
-            logger.error(err.message);
-          }
+    if (priority_group.length > 0) {
+      return Placement.loadGroup(priority_group);
+    } else {
+      return Promise.resolve([]);
+    }
+  } else {
+    // Create main promise. Iterator `all()` Promise will surround array of
+    // placements.
+    return Promise.all(
+      placements.map((placement) => {
+        if (placement && (force_load || !placement.load_manually)) {
+          return placement.load().catch((err) => {
+            if (err instanceof EthicalAdsWarning) {
+              logger.warn(err.message);
+            } else {
+              logger.error(err.message);
+            }
+            return null;
+          });
+        } else {
           return null;
-        });
-      } else {
-        return null;
-      }
-    })
-  );
+        }
+      })
+    );
+  }
 }
 
 export function unload_placements() {

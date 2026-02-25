@@ -19,24 +19,27 @@
       // Mock the regular fetch
       let fetchStub = mockAdDecision();
 
-      // Mock the fetchGroup for ad1, ad2, and ad3
+      // Mock the loadGroup for ad1, ad2, and ad3
       let groupStub = sinon
-        .stub(Placement, "fetchGroup")
+        .stub(Placement, "loadGroup")
         .callsFake((placements) => {
           // Let's declare the second one as the winner, as if its priority won
           let winner = placements.find((p) => p.target.id === "ad2");
-          placements.forEach((p) => {
-            p.fetchPromise = Promise.resolve().then(() => {
-              if (p === winner) {
-                const response_html =
-                  "<div class='ad-rendered'><!-- A real ad would be here normally --></div>";
-                const elem_placement = document.createElement("div");
-                elem_placement.innerHTML = response_html;
-                return elem_placement.firstChild;
-              }
-              return null;
-            });
-          });
+          return Promise.all(
+            placements.map((p) => {
+              const fetchPromise = Promise.resolve().then(() => {
+                if (p === winner) {
+                  const response_html =
+                    "<div class='ad-rendered'><!-- A real ad would be here normally --></div>";
+                  const elem_placement = document.createElement("div");
+                  elem_placement.innerHTML = response_html;
+                  return elem_placement.firstChild;
+                }
+                return null;
+              });
+              return p.load(fetchPromise).catch(() => null);
+            })
+          );
         });
 
       runTests(async () => {

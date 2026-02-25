@@ -1,6 +1,8 @@
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
+  <meta charset="UTF-8" />
   <script async src="dist/ethicalads.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
   <style>
@@ -26,12 +28,13 @@
   <div class="container">
     <h1>EthicalAds</h1>
 
-    <div data-ea-publisher="ethicaladsio" data-ea-type="text" id="ad"></div>
+    <div data-ea-publisher="ethicaladsio" data-ea-campaign-types="house" data-ea-type="text" data-ea-verbosity="verbose"
+      data-ea-priority="1" id="ad-top"></div>
 
     <script>
       var fn = (placements) => {
         if (!placements.length) {
-          var elem = document.querySelector("#ad");
+          var elem = document.querySelector("#ad-top");
           elem.innerHTML =
             "Requests to ethicalads.io are blocked. Check your ad blocker";
         }
@@ -241,9 +244,13 @@
     </div>
   </div>
 
+  <!--
   <div class="container">
-    <p></p>
+    <h3>Large format footer ad</h3>
+    <div data-ea-publisher="ethicaladsio" data-ea-campaign-types="house" data-ea-type="logo-large-v1"
+      data-ea-priority="10" id="ad-footer"></div>
   </div>
+  -->
 </body>
 
 </html>
