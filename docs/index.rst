@@ -348,6 +348,20 @@ Large format placements can be defined using ``data-ea-type="logo-large-v1"``.
         :ad_type: large
         :classes: dark raised
 
+The large format placement can be used with a priority to prioritize this placement
+but fallback to a normal ad if no large format ad is available
+or if the server is prioritizing smaller format ads.
+Only one ad will be chosen to be displayed on the page.
+
+.. code:: html
+
+    <!-- Place a low-priority normal ad in the sidebar if no large format ad is available -->
+    <div data-ea-publisher="..." data-ea-type="image" data-ea-priority="1"></div>
+
+    <!-- ... More page content ... -->
+
+    <!-- Large format placement in the footer (if available) -->
+    <div data-ea-publisher="..." data-ea-type="logo-large-v1" data-ea-priority="10"></div>
 
 
 .. _placement-styles:
