@@ -951,11 +951,13 @@ export class Placement {
       document.getElementsByTagName("head")[0].appendChild(script);
     });
 
+    let group_has_winner = false;
     return Promise.all(
       placements.map((placement, idx) => {
         const fetchPromise = promise.then((response) => {
           let is_winner = false;
           if (response && response.html && response.view_url) {
+            group_has_winner = true;
             if (response.div_id) {
               is_winner = response.div_id === placement.div_id;
             } else {
@@ -977,7 +979,9 @@ export class Placement {
 
         return placement.load(fetchPromise).catch((err) => {
           if (err instanceof EthicalAdsWarning) {
-            logger.warn(err.message);
+            if (!group_has_winner) {
+              logger.warn(err.message);
+            }
           } else {
             logger.error(err.message);
           }
