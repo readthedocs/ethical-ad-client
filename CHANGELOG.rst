@@ -6,6 +6,20 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v2.4.0
+--------------
+
+This release was all about the large ad format.
+It documents the format more explicitly and states how that format
+can be requested but fallback to the normal format if it isn't available.
+
+:date: April 28, 2026
+
+ * @davidfischer: Handle placement priority (#239)
+ * @davidfischer: Document the large format ad (#238)
+ * @davidfischer: Proof of Concept - Large format text ad (#235)
+
+
 Version v2.3.0
 ---------------
 
