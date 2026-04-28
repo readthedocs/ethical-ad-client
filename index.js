@@ -27,7 +27,7 @@ import verge from "verge";
 
 import "./styles.scss";
 
-const AD_CLIENT_VERSION = "2.3.0"; // Sent with the ad request
+const AD_CLIENT_VERSION = "2.4.0-alpha"; // Sent with the ad request
 
 // For local testing, set this
 // const AD_DECISION_URL = "http://ethicaladserver:5000/api/v1/decision/";
@@ -490,6 +490,11 @@ export class Placement {
       this.campaign_types = ["paid", "publisher-house", "community", "house"];
     }
 
+    this.priority = options.priority || null;
+    this.div_id =
+      target.id ||
+      "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000000);
+
     // Initialized and will be used in the future
     this.view_time = 0;
     this.view_time_sent = false; // true once the view time is sent to the server
@@ -511,6 +516,11 @@ export class Placement {
   static from_element(element) {
     // Get attributes from DOM node
     const publisher = element.getAttribute(ATTR_PREFIX + "publisher");
+    if (!publisher) {
+      logger.debug("Missing publisher value. Skipping...");
+      return null;
+    }
+
     let ad_type = element.getAttribute(ATTR_PREFIX + "type");
     if (!ad_type) {
       ad_type = "image";
@@ -531,6 +541,23 @@ export class Placement {
     const style = element.getAttribute(ATTR_PREFIX + "style");
     const force_ad = element.getAttribute(ATTR_PREFIX + "force-ad");
     const force_campaign = element.getAttribute(ATTR_PREFIX + "force-campaign");
+    const priorityAttr = element.getAttribute(ATTR_PREFIX + "priority");
+    let priority;
+    if (priorityAttr !== null && priorityAttr !== "") {
+      const parsedPriority = parseInt(priorityAttr, 10);
+      if (
+        !Number.isNaN(parsedPriority) &&
+        parsedPriority >= 1 &&
+        parsedPriority <= 10
+      ) {
+        priority = parsedPriority;
+      } else {
+        logger.warn(
+          "EthicalAd: Invalid numerical priority '%s' provided; ignoring.",
+          priorityAttr
+        );
+      }
+    }
 
     // Add version to ad type to verison the HTML return
     if (ad_type === "image" || ad_type === "text") {
@@ -558,6 +585,7 @@ export class Placement {
       load_manually,
       force_ad,
       force_campaign,
+      priority,
     });
   }
 
@@ -570,11 +598,13 @@ export class Placement {
    *
    * @returns {Promise}
    */
-  load() {
+  load(fetchPromise = null) {
     // Detect the keywords
     this.keywords = this.keywords.concat(this.detectKeywords());
 
-    return this.fetch()
+    fetchPromise = fetchPromise || this.fetch();
+
+    return fetchPromise
       .then((element) => {
         if (element === undefined) {
           throw new EthicalAdsWarning(
@@ -742,6 +772,8 @@ export class Placement {
     if (!this.canRotate()) {
       return;
     }
+
+    logger.debug("Rotating ad");
     this.clearListeners();
 
     this.view_time = 0;
@@ -782,10 +814,7 @@ export class Placement {
     // Make sure callbacks don't collide even with multiple placements
     const callback =
       "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000);
-    var div_id = callback;
-    if (this.target.id) {
-      div_id = this.target.id;
-    }
+    var div_id = this.div_id;
 
     // There's no hard maximum on URL lengths (all of these get added to the query params)
     // but ideally we want to keep our URLs below ~2k which should work basically everywhere
@@ -839,6 +868,127 @@ export class Placement {
       });
       document.getElementsByTagName("head")[0].appendChild(script);
     });
+  }
+
+  /* Fetch multiple grouped placements from the decision API
+   *
+   * @param {Array<Placement>} placements - Placements to fetch
+   */
+  static loadGroup(placements) {
+    if (!placements || !placements.length) return Promise.resolve([]);
+
+    const publisher = placements[0].publisher;
+
+    // Make sure all placements are from the same publisher
+    const all_same_publisher = placements.every(
+      (p) => p.publisher === publisher
+    );
+    if (!all_same_publisher) {
+      throw new Error(
+        "Multiple ad placements with different publishers are not allowed."
+      );
+    }
+
+    const callback =
+      "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000000);
+
+    let group_keywords = [];
+    placements.forEach((p) => {
+      // Only detect keywords if they haven't already been detected
+      if (!Array.isArray(p.keywords)) {
+        p.keywords = [];
+      }
+      if (p.keywords.length === 0) {
+        p.keywords = p.keywords.concat(p.detectKeywords());
+      }
+      group_keywords = group_keywords.concat(p.keywords);
+    });
+    group_keywords = [...new Set(group_keywords)];
+
+    let params = {
+      publisher: publisher,
+      ad_types: placements.map((p) => p.ad_type).join("|"),
+      div_ids: placements.map((p) => p.div_id).join("|"),
+      priorities: placements.map((p) => p.priority).join("|"),
+      callback: callback,
+      keywords: group_keywords.join("|"),
+      campaign_types: [
+        ...new Set(
+          placements.reduce((acc, p) => acc.concat(p.campaign_types), [])
+        ),
+      ].join("|"),
+      format: "jsonp",
+      client_version: AD_CLIENT_VERSION,
+      url: (window.location.origin + window.location.pathname).slice(0, 256),
+      // placement_index is not used for grouped/prioritized placements
+    };
+
+    const force_ad = placements.find((p) => p.force_ad)?.force_ad;
+    if (force_ad) params["force_ad"] = force_ad;
+    const force_campaign = placements.find(
+      (p) => p.force_campaign
+    )?.force_campaign;
+    if (force_campaign) params["force_campaign"] = force_campaign;
+
+    const max_rotations = Math.max(...placements.map((p) => p.rotations));
+    if (max_rotations > 1) params["rotations"] = max_rotations;
+
+    const url_params = new URLSearchParams(params);
+    const url = new URL(AD_DECISION_URL + "?" + url_params.toString());
+
+    const promise = new Promise((resolve, reject) => {
+      window[callback] = (response) => {
+        resolve(response);
+      };
+
+      var script = document.createElement("script");
+      script.src = url;
+      script.type = "text/javascript";
+      script.async = true;
+      script.addEventListener("error", (err) => {
+        resolve();
+      });
+      document.getElementsByTagName("head")[0].appendChild(script);
+    });
+
+    let group_has_winner = false;
+    return Promise.all(
+      placements.map((placement, idx) => {
+        const fetchPromise = promise.then((response) => {
+          let is_winner = false;
+          if (response && response.html && response.view_url) {
+            group_has_winner = true;
+            if (response.div_id) {
+              is_winner = response.div_id === placement.div_id;
+            } else {
+              // This should only happen if there are no ads for this request
+              // In this case, we'll assign the first placement to be the winner
+              is_winner = idx === 0;
+            }
+          }
+
+          if (is_winner) {
+            placement.response = response;
+            const node_convert = document.createElement("div");
+            node_convert.innerHTML = response.html;
+            return node_convert.firstChild;
+          } else {
+            return null;
+          }
+        });
+
+        return placement.load(fetchPromise).catch((err) => {
+          if (err instanceof EthicalAdsWarning) {
+            if (!group_has_winner) {
+              logger.warn(err.message);
+            }
+          } else {
+            logger.error(err.message);
+          }
+          return null;
+        });
+      })
+    );
   }
 
   /* Sends the view time of the ad to the server
@@ -1025,47 +1175,81 @@ export function load_placements(force_load = false) {
   const node_list = document.querySelectorAll("[" + ATTR_PREFIX + "publisher]");
   let elements = Array.prototype.slice.call(node_list);
 
+  let publishers = new Set();
+  elements.forEach((el) => {
+    const pub = el.getAttribute(ATTR_PREFIX + "publisher");
+    if (pub) publishers.add(pub);
+  });
+  if (publishers.size > 1) {
+    throw new Error(
+      "Multiple ad placements with different publishers are not allowed."
+    );
+  }
+
   if (elements.length === 0) {
     logger.warn("No ad placements found.");
   }
 
-  // Create main promise. Iterator `all()` Promise will surround array of found
-  // elements. If any of these elements have issues, this main promise will
-  // reject.
-  return Promise.all(
-    elements.map((element, index) => {
-      const placement = Placement.from_element(element);
+  let placements = elements.map((element, index) => {
+    const placement = Placement.from_element(element);
+    if (!placement) return null;
+    placement.index = index;
+    return placement;
+  });
 
-      if (!placement) {
-        // Placement has already been loaded
-        return null;
+  // Run AcceptableAds detection code once for the first valid placement
+  const first_placement = placements.find((p) => p !== null);
+  if (first_placement && !force_load) {
+    first_placement.detectABP(ABP_DETECTION_PX, function (usesABP) {
+      uplifted = usesABP;
+      if (usesABP) {
+        logger.debug(
+          "Acceptable Ads enabled. Thanks for allowing our non-tracking ads :)"
+        );
       }
+    });
+  }
 
-      placement.index = index;
+  // Group prioritized placements
+  const has_priority = placements.some((p) => p && p.priority !== null);
 
-      // Run AcceptableAds detection code
-      // This lets us know how many impressions are attributed to AceeptableAds
-      // Only run this once even for multiple placements
-      // All impressions will be correctly attributed
-      if (index === 0 && placement && !force_load) {
-        placement.detectABP(ABP_DETECTION_PX, function (usesABP) {
-          uplifted = usesABP;
-          if (usesABP) {
-            logger.debug(
-              "Acceptable Ads enabled. Thanks for allowing our non-tracking ads :)"
-            );
-          }
-        });
-      }
-
+  if (has_priority) {
+    let priority_group = [];
+    placements.forEach((placement) => {
       if (placement && (force_load || !placement.load_manually)) {
-        return placement.load();
-      } else {
-        // This will be manually loaded later or has already been loaded
-        return null;
+        if (placement.priority === null) {
+          // Set default priority for non-prioritized placements
+          placement.priority = 1;
+        }
+        priority_group.push(placement);
       }
-    })
-  );
+    });
+
+    if (priority_group.length > 0) {
+      return Placement.loadGroup(priority_group);
+    } else {
+      return Promise.resolve([]);
+    }
+  } else {
+    // Create main promise. Iterator `all()` Promise will surround array of
+    // placements.
+    return Promise.all(
+      placements.map((placement) => {
+        if (placement && (force_load || !placement.load_manually)) {
+          return placement.load().catch((err) => {
+            if (err instanceof EthicalAdsWarning) {
+              logger.warn(err.message);
+            } else {
+              logger.error(err.message);
+            }
+            return null;
+          });
+        } else {
+          return null;
+        }
+      })
+    );
+  }
 }
 
 export function unload_placements() {
