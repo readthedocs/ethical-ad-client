@@ -1,0 +1,143 @@
+<html>
+  <body>
+    <script type="module">
+      import { expect } from "@open-wc/testing";
+      import { runTests } from "@web/test-runner-mocha";
+
+      import { Placement, unload_placements } from "../index";
+      import { mockAdDecision } from "./common.inc";
+
+      let stub = mockAdDecision();
+
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      runTests(async () => {
+        describe("Dark selector option", () => {
+          afterEach(() => {
+            document.body.removeAttribute("data-md-color-scheme");
+            document.documentElement.removeAttribute("data-theme");
+            unload_placements();
+          });
+
+          it("applies dark mode on initial load if selector matches", async () => {
+            document.body.setAttribute("data-md-color-scheme", "slate");
+            const el = document.createElement("div");
+            el.setAttribute("data-ea-publisher", "test");
+            el.setAttribute(
+              "data-ea-dark-selector",
+              "body[data-md-color-scheme='slate']"
+            );
+            document.body.appendChild(el);
+
+            const placement = Placement.from_element(el);
+            await placement.load();
+
+            expect(el.classList.contains("dark")).to.be.true;
+          });
+
+          it("does not apply dark mode if selector does not match", async () => {
+            document.body.setAttribute("data-md-color-scheme", "default");
+            const el = document.createElement("div");
+            el.setAttribute("data-ea-publisher", "test");
+            el.setAttribute(
+              "data-ea-dark-selector",
+              "body[data-md-color-scheme='slate']"
+            );
+            document.body.appendChild(el);
+
+            const placement = Placement.from_element(el);
+            await placement.load();
+
+            expect(el.classList.contains("dark")).to.be.false;
+          });
+
+          it("reacts dynamically to body attribute changes via MutationObserver", async () => {
+            document.body.setAttribute("data-md-color-scheme", "default");
+            const el = document.createElement("div");
+            el.setAttribute("data-ea-publisher", "test");
+            el.setAttribute(
+              "data-ea-dark-selector",
+              "body[data-md-color-scheme='slate']"
+            );
+            document.body.appendChild(el);
+
+            const placement = Placement.from_element(el);
+            await placement.load();
+            expect(el.classList.contains("dark")).to.be.false;
+
+            // Switch to dark theme
+            document.body.setAttribute("data-md-color-scheme", "slate");
+            await sleep(20);
+            expect(el.classList.contains("dark")).to.be.true;
+
+            // Switch back to light theme
+            document.body.setAttribute("data-md-color-scheme", "default");
+            await sleep(20);
+            expect(el.classList.contains("dark")).to.be.false;
+
+            placement.clearListeners();
+          });
+
+          it("reacts dynamically to html (documentElement) attribute changes", async () => {
+            const el = document.createElement("div");
+            el.setAttribute("data-ea-publisher", "test");
+            el.setAttribute("data-ea-dark-selector", "html[data-theme='dark']");
+            document.body.appendChild(el);
+
+            const placement = Placement.from_element(el);
+            await placement.load();
+            expect(el.classList.contains("dark")).to.be.false;
+
+            // Switch to dark
+            document.documentElement.setAttribute("data-theme", "dark");
+            await sleep(20);
+            expect(el.classList.contains("dark")).to.be.true;
+
+            // Switch back
+            document.documentElement.removeAttribute("data-theme");
+            await sleep(20);
+            expect(el.classList.contains("dark")).to.be.false;
+
+            placement.clearListeners();
+          });
+
+          it("handles invalid selectors gracefully without throwing", async () => {
+            const el = document.createElement("div");
+            el.setAttribute("data-ea-publisher", "test");
+            el.setAttribute("data-ea-dark-selector", "[invalid[[selector");
+            document.body.appendChild(el);
+
+            const placement = Placement.from_element(el);
+            await placement.load();
+
+            expect(el.classList.contains("dark")).to.be.false;
+            expect(el.classList.contains("loaded")).to.be.true;
+          });
+
+          it("cleans up observer on clearListeners", async () => {
+            document.body.setAttribute("data-md-color-scheme", "default");
+            const el = document.createElement("div");
+            el.setAttribute("data-ea-publisher", "test");
+            el.setAttribute(
+              "data-ea-dark-selector",
+              "body[data-md-color-scheme='slate']"
+            );
+            document.body.appendChild(el);
+
+            const placement = Placement.from_element(el);
+            await placement.load();
+            expect(placement.dark_observer).to.not.be.null;
+
+            placement.clearListeners();
+            expect(placement.dark_observer).to.be.null;
+
+            // Mutation after disconnect should not update class
+            document.body.setAttribute("data-md-color-scheme", "slate");
+            await sleep(20);
+            expect(el.classList.contains("dark")).to.be.false;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

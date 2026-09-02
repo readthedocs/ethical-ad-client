@@ -491,6 +491,8 @@ export class Placement {
     }
 
     this.priority = options.priority || null;
+    this.dark_selector = options.dark_selector || null;
+    this.dark_observer = null;
     this.div_id =
       target.id ||
       "ad_" + Date.now() + "_" + Math.floor(Math.random() * 1000000000);
@@ -541,6 +543,7 @@ export class Placement {
     const style = element.getAttribute(ATTR_PREFIX + "style");
     const force_ad = element.getAttribute(ATTR_PREFIX + "force-ad");
     const force_campaign = element.getAttribute(ATTR_PREFIX + "force-campaign");
+    const dark_selector = element.getAttribute(ATTR_PREFIX + "dark-selector");
     const priorityAttr = element.getAttribute(ATTR_PREFIX + "priority");
     let priority;
     if (priorityAttr !== null && priorityAttr !== "") {
@@ -586,6 +589,7 @@ export class Placement {
       force_ad,
       force_campaign,
       priority,
+      dark_selector,
     });
   }
 
@@ -628,6 +632,8 @@ export class Placement {
 
         // Apply any styles based on the specified styling
         this.applyStyles(element);
+
+        this.applyDarkSelector();
 
         this.target.appendChild(element);
 
@@ -734,6 +740,15 @@ export class Placement {
   clearListeners() {
     if (this.view_time_counter) {
       clearInterval(this.view_time_counter);
+    }
+
+    if (this.dark_observer) {
+      this.dark_observer.disconnect();
+      this.dark_observer = null;
+    }
+    if (this.target && this.target._ea_dark_observer) {
+      this.target._ea_dark_observer.disconnect();
+      this.target._ea_dark_observer = null;
     }
 
     if (this.hashchange_listener && HASHCHANGE_ROTATION_ENABLE) {
@@ -1140,6 +1155,57 @@ export class Placement {
     // FixedHeader: https://ethical-ad-client.readthedocs.io/en/latest/#fixedheader
     // No special elements required
   }
+
+  /* Applies dark mode if data-ea-dark-selector matches and sets up a MutationObserver
+   * to watch for theme changes on html or body.
+   */
+  applyDarkSelector() {
+    if (!this.dark_selector) {
+      return;
+    }
+
+    if (this.dark_observer) {
+      this.dark_observer.disconnect();
+      this.dark_observer = null;
+    }
+    if (this.target && this.target._ea_dark_observer) {
+      this.target._ea_dark_observer.disconnect();
+      this.target._ea_dark_observer = null;
+    }
+
+    const checkDark = () => {
+      try {
+        const isDark = Boolean(document.querySelector(this.dark_selector));
+        this.target.classList.toggle("dark", isDark);
+      } catch (err) {
+        logger.warn(
+          "EthicalAds: Invalid selector '%s' provided; ignoring.",
+          this.dark_selector
+        );
+        if (this.dark_observer) {
+          this.dark_observer.disconnect();
+          this.dark_observer = null;
+        }
+      }
+    };
+
+    checkDark();
+
+    if (typeof MutationObserver !== "undefined") {
+      this.dark_observer = new MutationObserver(() => {
+        checkDark();
+      });
+
+      const observerOptions = { attributes: true };
+      if (document.documentElement) {
+        this.dark_observer.observe(document.documentElement, observerOptions);
+      }
+      if (document.body) {
+        this.dark_observer.observe(document.body, observerOptions);
+      }
+      this.target._ea_dark_observer = this.dark_observer;
+    }
+  }
 }
 
 /* Detects whether the browser supports the necessary JS APIs to support the ad client
@@ -1259,6 +1325,10 @@ export function unload_placements() {
   elements.forEach((div) => {
     div.innerHTML = "";
     div.classList.remove("loaded");
+    if (div._ea_dark_observer) {
+      div._ea_dark_observer.disconnect();
+      div._ea_dark_observer = null;
+    }
   });
 }
 
