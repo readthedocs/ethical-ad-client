@@ -271,6 +271,10 @@ Selectors should generally target ``html`` or ``body`` directly for precision, f
 * ``html:not([data-theme='light'])`` (for sites that default to dark and toggle light)
 * ``body.dark`` or ``html.dark``
 
+.. note::
+    With a custom dark selector, there's no need to set the ``adaptive`` or ``adaptive-css`` classes.
+
+
 
 Ad Types
 --------

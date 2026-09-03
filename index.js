@@ -1196,6 +1196,10 @@ export class Placement {
         checkDark();
       });
 
+      // Only watch attribute changes directly on html and body elements.
+      // subtree defaults to false, so mutations on descendant elements are not observed.
+      // This should keep performance fast, but if theme attributes aren't on body/html,
+      // then this toggle won't work.
       const observerOptions = { attributes: true };
       if (document.documentElement) {
         this.dark_observer.observe(document.documentElement, observerOptions);
