@@ -6,6 +6,18 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v2.5.0
+--------------
+
+This release allows publishers to specify a custom selector for specifying
+how their site sets dark mode. By using this and setting the selector
+as a data attribute on the ad placement, the ad client can detect
+when the site toggles to dark mode and update the ad placement to match.
+
+:date: September 11, 2026
+
+ * @davidfischer: Add a custom selector for dark mode (#243)
+
 Version v2.4.0
 --------------
 
