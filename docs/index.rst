@@ -93,6 +93,11 @@ The following data attributes are supported on the ad placement element:
     Set to a valid value for the CSS bottom property (eg. '40px') to have a custom position.
     This must be used with ``data-ea-style`` to have any effect.
 
+``data-ea-dark-selector`` (optional)
+    A CSS selector (such as ``body[data-md-color-scheme="slate"]`` or ``html[data-theme="dark"]``)
+    used to detect dark mode for custom themes. If the selector matches in the document, the ad will render
+    in dark mode and dynamically adapt if the theme changes.
+
 
 Themes
 ------
@@ -244,6 +249,31 @@ set the ``adaptive`` class:
         .. example::
             :ad_type: image
             :classes: adaptive bordered
+
+
+Custom dark selector
+````````````````````
+
+.. versionadded:: v2.5.0
+
+If your site uses a custom or framework-specific theme toggle attributes or classes,
+you can specify a CSS selector with ``data-ea-dark-selector``.
+The client will check the selector across the document and dynamically adapt when attributes on ``<html>`` or ``<body>`` change:
+
+.. code:: html
+
+    <div class="raised" data-ea-publisher="..." data-ea-dark-selector="body[data-md-color-scheme='slate']"></div>
+
+Selectors should generally target ``html`` or ``body`` directly for precision, for example:
+
+* ``body[data-md-color-scheme='slate']`` (Material for MkDocs)
+* ``html[data-theme='dark']``
+* ``html:not([data-theme='light'])`` (for sites that default to dark and toggle light)
+* ``body.dark`` or ``html.dark``
+
+.. note::
+    With a custom dark selector, there's no need to set the ``adaptive`` or ``adaptive-css`` classes.
+
 
 
 Ad Types
