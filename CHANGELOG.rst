@@ -6,6 +6,18 @@ CHANGELOG
 .. This is included by docs/changelog.rst
 
 
+Version v2.6.0
+--------------
+
+This release contained a minor change to the fixedheader placement.
+
+:date: November 11, 2026
+
+ * @davidfischer: Don't pre-allocate space by default with fixedheader (#245)
+ * @piclaw-bot: Chromium blocks v2.4 JSONP decision response as NotSameOrigin (#242)
+ * @agjohnson: Use NPM minimum age (#241)
+
+
 Version v2.5.0
 --------------
 
