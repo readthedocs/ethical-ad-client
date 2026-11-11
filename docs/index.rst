@@ -477,7 +477,7 @@ There's a few notes and strong recommendations when using this ad style:
 * This ad is hidden on mobile. It isn't well suited for sites with a lot of mobile users.
 * There are a few breakpoint widths on this ad style and corresponding container sizes.
   If needed, these are customizable by setting CSS variables (eg. ``--ea-container-lg``) on the placement div.
-* In your CSS styles, you want a style like `[data-ea-style="fixedheader"] { height: 50px; }`.
+* In your CSS styles, you may want a style like ``[data-ea-style="fixedheader"] { height: 50px; }``.
   This ensures the space is pre-allocated for the ad slot so the content isn't pushed down when the ad loads.
   We set this on the ad client but there can be a flash where the space isn't allocated before the client loads.
 * We recommend you set up :ref:`fallback ads <fallback-ads>`.

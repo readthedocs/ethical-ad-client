@@ -553,7 +553,8 @@ body[data-bs-theme="auto"] {
 // Fixed Header ad
 // -------------------------------------------------------------------------
 // https://ethical-ad-client.readthedocs.io/en/latest/#fixedheader
-[data-ea-style="fixedheader"] {
+[data-ea-style="fixedheader"].loaded {
+  // The outer div containing data-ea-publisher and data-ea-type
   height: var(--ea-fixedheader-height);
   width: 100%;
   max-width: 100%;
@@ -565,10 +566,6 @@ body[data-bs-theme="auto"] {
   @media (max-width: $breakpoint-md) {
     display: none !important;
   }
-}
-
-[data-ea-style="fixedheader"].loaded {
-  // The outer div containing data-ea-publisher and data-ea-type
 
   // Text-only or text+image
   .ea-type-image,
